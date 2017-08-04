@@ -8,8 +8,13 @@
 
 import UIKit
 
+@available(iOS 9.0, *)
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate{
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    static var sharedApplication:AppDelegate = {
+            return UIApplication.sharedApplication().delegate as? AppDelegate
+        }()!
     
     var window: UIWindow?
     
@@ -20,16 +25,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return nvc
         }()
     
-    lazy var menu:UIView = {
-        let v = UIView()
-        //v.backgroundColor = UIColor.whiteColor()
-        let b = UIButton(type: .System)
-        b.backgroundColor = UIColor.redColor()
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.addTarget(self, action: "pat", forControlEvents: .TouchUpInside)
-        b.frame = CGRect(x: 10, y: 10, width: 50, height: 50)
-        v.addSubview(b)
-        return v
+    let imageSet:[(ToggleImages,TapAction)] = {
+        var arr:[(ToggleImages,TapAction)] = []
+        arr.append((ToggleImages(UIImage(named: "004-shuffle-1")!,UIImage(named: "005-shuffle")!), {(sender)in print("shuffle")}))
+        arr.append((ToggleImages(UIImage(named: "001-repeat-1")!,UIImage(named: "006-repeat")!), {(sender)in print("repeat")}))
+        arr.append((ToggleImages(UIImage(named: "003-like-1")!,UIImage(named: "007-like")!), {(sender)in print("like")}))
+        return arr
+        }()
+    
+    lazy var menu:CBMenu = {
+        let cbMenu = CBMenu(withDataSource: self, delegate: self, animator: CBMenuLinearAnimator(), frame: CGRect(x: 0, y: 0, width: 100, height: UIScreen.mainScreen().bounds.height))
+        return cbMenu
         }()
     
     func pat(){
@@ -46,14 +52,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         self.window?.rootViewController = navigationVC
         
-        let frame = CGRect(x: 0, y: 0, width: 100, height: UIScreen.mainScreen().bounds.height)
-        menu.frame = frame
         
-        window?.rootViewController?.view.addSubview(menu)
+        addMenu()
         
         self.window?.makeKeyAndVisible()
         
         return true
+    }
+    func addMenu(){
+        if let rootView = window?.rootViewController?.view {
+            rootView.addSubview(menu)
+            menu.backgroundColor = UIColor.redColor()
+            rootView.addConstraintsWithFormat("V:|[V0(300)]", views: menu)
+            rootView.addConstraintsWithFormat("H:|[V0(70)]", views: menu)
+        }
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -79,6 +91,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     
+}
+@available(iOS 9.0, *)
+extension AppDelegate : CBMenuDataSource,CBMenuDelegate {
+    func actionForSegment(at indexPath: NSIndexPath) -> TapAction {
+        return imageSet[indexPath.item].1
+    }
+    func sizeForSegments() -> CGSize {
+        return CGSize(width: 32, height: 32)
+    }
+    func sizeForMenuButton()->CGSize
+    {
+        return CGSize(width: 40, height: 40)
+    }
+    func imagesForMenuButtonStates() -> ToggleImages
+    {
+        return (UIImage(named: "008-mark-1")!,UIImage(named: "002-mark")!)
+    }
+    
+    func numberOfSegments() -> Int
+    {
+        return imageSet.count
+    }
+    func imageForSegment(at indexPath:NSIndexPath) -> ToggleImages
+    {
+        return imageSet[indexPath.item].0
+    }
 }
 
 

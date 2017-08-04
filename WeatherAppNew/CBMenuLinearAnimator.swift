@@ -11,7 +11,7 @@ import UIKit
 @available(iOS 9.0, *)
 @objc class CBMenuLinearAnimator: NSObject {
     //MARK:- parameters for linear placement of segments
-    let xOffset:CGFloat = 40.0
+    let yOffset:CGFloat = 40.0
     var curOffset:CGPoint = CGPointZero
     
     
@@ -21,10 +21,10 @@ import UIKit
 @available(iOS 9.0, *)
 extension CBMenuLinearAnimator : CBMenuAnimatorDelegate {
     func destenationPositionForSegment(menu:CBMenu, at indexPath:NSIndexPath)->CGPoint{
-        let direction:CGFloat = indexPath.item % 2 == 0 ? 1 : -1
-        curOffset = direction > 0 ? CGPointMake(curOffset.x + xOffset, 0) : curOffset
-        
-        return menu.origin + curOffset * direction
+        //let direction:CGFloat = indexPath.item % 2 == 0 ? 1 : -1
+        //curOffset = direction > 0 ? CGPointMake(curOffset.x + xOffset, 0) : curOffset
+        curOffset = CGPoint(x: curOffset.x, y: curOffset.x + yOffset)
+        return menu.origin + curOffset
     }
     func showBackground(menu: CBMenu, background: UIView, params:NSDictionary?) {
         var delay = 0.0

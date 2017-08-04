@@ -28,7 +28,7 @@ extension Double {
     }
     var degrees:Double {
         get {
-            return self / M_PI * 180.0
+            return self / 180.0 * M_PI
         }
     }
 }

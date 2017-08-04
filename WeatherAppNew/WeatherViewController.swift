@@ -8,6 +8,7 @@
 
 import UIKit
 
+@available(iOS 9.0, *)
 class WeatherViewController: UIViewController {
     
     lazy var collectionView:UICollectionView! = {
@@ -28,6 +29,8 @@ class WeatherViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.setupView()
+        let instance = UIApplication.sharedApplication().delegate as? AppDelegate
+        instance?.menu.setupView()
     }
     
     func setupView(){
@@ -44,6 +47,7 @@ class WeatherViewController: UIViewController {
     }
 }
 
+@available(iOS 9.0, *)
 extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
@@ -53,10 +57,12 @@ extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSou
         return cell
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+      
+ return 8
     }
     
 }
+@available(iOS 9.0, *)
 extension WeatherViewController :UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var size = CGSizeZero
