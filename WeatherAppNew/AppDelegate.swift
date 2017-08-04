@@ -17,7 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        let weatherVC = WeatherViewController()
+        self.window?.backgroundColor = UIColor.yellowColor()
+        
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .Vertical
+        
+        let weatherVC = WeatherViewController(collectionViewLayout: layout)
+        
         let navigationVC = UINavigationController(rootViewController: weatherVC)
         navigationVC.setNavigationBarHidden(true, animated: true)
         

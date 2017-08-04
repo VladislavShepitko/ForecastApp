@@ -9,19 +9,21 @@
 /* Begin PBXBuildFile section */
 		8766AB221F3486D900AABF22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB211F3486D900AABF22 /* AppDelegate.swift */; };
 		8766AB241F3486D900AABF22 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB231F3486D900AABF22 /* WeatherViewController.swift */; };
-		8766AB271F3486D900AABF22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8766AB251F3486D900AABF22 /* Main.storyboard */; };
 		8766AB291F3486D900AABF22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8766AB281F3486D900AABF22 /* Assets.xcassets */; };
 		8766AB2C1F3486D900AABF22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8766AB2A1F3486D900AABF22 /* LaunchScreen.storyboard */; };
+		8766AB371F34894A00AABF22 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB361F34894A00AABF22 /* Weather.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB391F3489E000AABF22 /* WeatherForDayView.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8766AB1E1F3486D900AABF22 /* WeatherAppNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherAppNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8766AB211F3486D900AABF22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8766AB231F3486D900AABF22 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
-		8766AB261F3486D900AABF22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8766AB281F3486D900AABF22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8766AB2B1F3486D900AABF22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8766AB2D1F3486D900AABF22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8766AB361F34894A00AABF22 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		8766AB391F3489E000AABF22 /* WeatherForDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherForDayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +56,47 @@
 		8766AB201F3486D900AABF22 /* WeatherAppNew */ = {
 			isa = PBXGroup;
 			children = (
-				8766AB211F3486D900AABF22 /* AppDelegate.swift */,
-				8766AB231F3486D900AABF22 /* WeatherViewController.swift */,
-				8766AB251F3486D900AABF22 /* Main.storyboard */,
 				8766AB281F3486D900AABF22 /* Assets.xcassets */,
+				8766AB351F34892B00AABF22 /* Models */,
+				8766AB341F34891F00AABF22 /* Views */,
+				8766AB381F3489AE00AABF22 /* Common */,
+				8766AB331F34890A00AABF22 /* Controllers */,
+			);
+			path = WeatherAppNew;
+			sourceTree = "<group>";
+		};
+		8766AB331F34890A00AABF22 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8766AB231F3486D900AABF22 /* WeatherViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8766AB341F34891F00AABF22 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8766AB391F3489E000AABF22 /* WeatherForDayView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		8766AB351F34892B00AABF22 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8766AB361F34894A00AABF22 /* Weather.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		8766AB381F3489AE00AABF22 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8766AB211F3486D900AABF22 /* AppDelegate.swift */,
 				8766AB2A1F3486D900AABF22 /* LaunchScreen.storyboard */,
 				8766AB2D1F3486D900AABF22 /* Info.plist */,
 			);
-			path = WeatherAppNew;
+			name = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,7 +159,6 @@
 			files = (
 				8766AB2C1F3486D900AABF22 /* LaunchScreen.storyboard in Resources */,
 				8766AB291F3486D900AABF22 /* Assets.xcassets in Resources */,
-				8766AB271F3486D900AABF22 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +170,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8766AB241F3486D900AABF22 /* WeatherViewController.swift in Sources */,
+				8766AB371F34894A00AABF22 /* Weather.swift in Sources */,
+				8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */,
 				8766AB221F3486D900AABF22 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,14 +179,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		8766AB251F3486D900AABF22 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8766AB261F3486D900AABF22 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		8766AB2A1F3486D900AABF22 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -250,7 +278,7 @@
 				INFOPLIST_FILE = WeatherAppNew/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = VladyslavShepitko.WeatherAppNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.VSApps.WeatherAppNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -262,7 +290,7 @@
 				INFOPLIST_FILE = WeatherAppNew/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = VladyslavShepitko.WeatherAppNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.VSApps.WeatherAppNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
