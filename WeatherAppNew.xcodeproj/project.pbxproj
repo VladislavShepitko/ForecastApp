@@ -13,6 +13,8 @@
 		8766AB2C1F3486D900AABF22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8766AB2A1F3486D900AABF22 /* LaunchScreen.storyboard */; };
 		8766AB371F34894A00AABF22 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB361F34894A00AABF22 /* Weather.swift */; settings = {ASSET_TAGS = (); }; };
 		8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB391F3489E000AABF22 /* WeatherForDayView.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3B1F34911E00AABF22 /* Extensions.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB3E1F3494AF00AABF22 /* BackgroundedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		8766AB2D1F3486D900AABF22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8766AB361F34894A00AABF22 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		8766AB391F3489E000AABF22 /* WeatherForDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherForDayView.swift; sourceTree = "<group>"; };
+		8766AB3B1F34911E00AABF22 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundedViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,7 @@
 				8766AB341F34891F00AABF22 /* Views */,
 				8766AB381F3489AE00AABF22 /* Common */,
 				8766AB331F34890A00AABF22 /* Controllers */,
+				8766AB3B1F34911E00AABF22 /* Extensions.swift */,
 			);
 			path = WeatherAppNew;
 			sourceTree = "<group>";
@@ -77,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				8766AB391F3489E000AABF22 /* WeatherForDayView.swift */,
+				8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -169,7 +175,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */,
 				8766AB241F3486D900AABF22 /* WeatherViewController.swift in Sources */,
+				8766AB3E1F3494AF00AABF22 /* BackgroundedViewController.swift in Sources */,
 				8766AB371F34894A00AABF22 /* Weather.swift in Sources */,
 				8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */,
 				8766AB221F3486D900AABF22 /* AppDelegate.swift in Sources */,

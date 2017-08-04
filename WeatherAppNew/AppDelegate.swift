@@ -12,7 +12,11 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
-
+    lazy var menu:UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor.redColor()
+        return v
+        }()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -20,15 +24,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         self.window?.backgroundColor = UIColor.yellowColor()
         
         
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Vertical
-        
-        let weatherVC = WeatherViewController(collectionViewLayout: layout)
+        let weatherVC = WeatherViewController()
         
         let navigationVC = UINavigationController(rootViewController: weatherVC)
-        navigationVC.setNavigationBarHidden(true, animated: true)
+
+        navigationVC.setNavigationBarHidden(true, animated: false)
+        navigationVC.title = "weather app "
         
         self.window?.rootViewController = navigationVC
+        
+        let frame = CGRect(x: 0, y: 0, width: 100, height: UIScreen.mainScreen().bounds.height)
+        menu.frame = frame
+        self.window?.insertSubview(menu, aboveSubview: navigationVC.view)
+        
         self.window?.makeKeyAndVisible()
         
         return true
