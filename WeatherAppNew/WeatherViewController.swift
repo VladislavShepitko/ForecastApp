@@ -32,7 +32,7 @@ class WeatherViewController: UIViewController {
     
     func setupView(){
         self.view.addSubview(collectionView)
-        collectionView.backgroundColor = UIColor.whiteColor()
+        //collectionView.backgroundColor = UIColor.whiteColor()
         collectionView.backgroundView = UIImageView(image: UIImage(named: "4"))
         self.view.addConstraintsWithFormat("H:|[V0]|", views: collectionView)
         self.view.addConstraintsWithFormat("V:|[V0]|", views: collectionView)

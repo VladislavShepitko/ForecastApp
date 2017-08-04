@@ -15,6 +15,11 @@
 		8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB391F3489E000AABF22 /* WeatherForDayView.swift */; settings = {ASSET_TAGS = (); }; };
 		8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3B1F34911E00AABF22 /* Extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		8766AB3E1F3494AF00AABF22 /* BackgroundedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB401F349FF900AABF22 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3F1F349FF900AABF22 /* SettingsViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB461F34A7D800AABF22 /* CBMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB411F34A7D800AABF22 /* CBMenu.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB471F34A7D800AABF22 /* CBMenuAnimatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB421F34A7D800AABF22 /* CBMenuAnimatorDelegate.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB491F34A7D800AABF22 /* CBMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB441F34A7D800AABF22 /* CBMenuItem.swift */; settings = {ASSET_TAGS = (); }; };
+		8766AB4A1F34A7D800AABF22 /* CBMenuLinearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB451F34A7D800AABF22 /* CBMenuLinearAnimator.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +33,11 @@
 		8766AB391F3489E000AABF22 /* WeatherForDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherForDayView.swift; sourceTree = "<group>"; };
 		8766AB3B1F34911E00AABF22 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundedViewController.swift; sourceTree = "<group>"; };
+		8766AB3F1F349FF900AABF22 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		8766AB411F34A7D800AABF22 /* CBMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBMenu.swift; sourceTree = "<group>"; };
+		8766AB421F34A7D800AABF22 /* CBMenuAnimatorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBMenuAnimatorDelegate.swift; sourceTree = "<group>"; };
+		8766AB441F34A7D800AABF22 /* CBMenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBMenuItem.swift; sourceTree = "<group>"; };
+		8766AB451F34A7D800AABF22 /* CBMenuLinearAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBMenuLinearAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				8766AB231F3486D900AABF22 /* WeatherViewController.swift */,
+				8766AB3F1F349FF900AABF22 /* SettingsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -81,6 +92,10 @@
 		8766AB341F34891F00AABF22 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8766AB411F34A7D800AABF22 /* CBMenu.swift */,
+				8766AB421F34A7D800AABF22 /* CBMenuAnimatorDelegate.swift */,
+				8766AB441F34A7D800AABF22 /* CBMenuItem.swift */,
+				8766AB451F34A7D800AABF22 /* CBMenuLinearAnimator.swift */,
 				8766AB391F3489E000AABF22 /* WeatherForDayView.swift */,
 				8766AB3D1F3494AF00AABF22 /* BackgroundedViewController.swift */,
 			);
@@ -176,9 +191,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */,
+				8766AB461F34A7D800AABF22 /* CBMenu.swift in Sources */,
 				8766AB241F3486D900AABF22 /* WeatherViewController.swift in Sources */,
+				8766AB401F349FF900AABF22 /* SettingsViewController.swift in Sources */,
+				8766AB491F34A7D800AABF22 /* CBMenuItem.swift in Sources */,
 				8766AB3E1F3494AF00AABF22 /* BackgroundedViewController.swift in Sources */,
+				8766AB471F34A7D800AABF22 /* CBMenuAnimatorDelegate.swift in Sources */,
 				8766AB371F34894A00AABF22 /* Weather.swift in Sources */,
+				8766AB4A1F34A7D800AABF22 /* CBMenuLinearAnimator.swift in Sources */,
 				8766AB3A1F3489E000AABF22 /* WeatherForDayView.swift in Sources */,
 				8766AB221F3486D900AABF22 /* AppDelegate.swift in Sources */,
 			);
