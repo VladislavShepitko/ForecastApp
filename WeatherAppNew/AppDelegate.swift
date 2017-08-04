@@ -9,13 +9,21 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let weatherVC = WeatherViewController()
+        let navigationVC = UINavigationController(rootViewController: weatherVC)
+        navigationVC.setNavigationBarHidden(true, animated: true)
+        
+        self.window?.rootViewController = navigationVC
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
 
@@ -43,4 +51,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
+
 
