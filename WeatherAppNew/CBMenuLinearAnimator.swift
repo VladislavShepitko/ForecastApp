@@ -25,8 +25,11 @@ extension CBMenuLinearAnimator : CBMenuAnimatorDelegate {
         //curOffset = direction > 0 ? CGPointMake(curOffset.x + xOffset, 0) : curOffset
         curOffset = CGPoint(x: curOffset.x, y: curOffset.y + yOffset)
         print(curOffset)
-        return menu.showHideButton.center + curOffset
+        let pos = menu.buttonOrigin + curOffset
+        let convertedPos = menu.convertPoint(pos, toView: menu.superview!)
+        return convertedPos
     }
+    
     func showBackground(menu: CBMenu, background: UIView, params:NSDictionary?) {
         var delay = 0.0
         if let data = params?.objectForKey("delay"){
@@ -42,7 +45,7 @@ extension CBMenuLinearAnimator : CBMenuAnimatorDelegate {
             delay = data as! Double
         }
         UIView.animateWithDuration(0.4, delay: delay, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: { () -> Void in
-            background.frame = CGRectMake(menu.bounds.width, 0, 0, menu.bounds.height)
+            background.frame = CGRectMake(0, 0, menu.bounds.width, 0)
             }, completion: nil)        
     }
     

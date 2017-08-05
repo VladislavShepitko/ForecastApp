@@ -29,7 +29,6 @@ class MenuNavigationViewController: UINavigationController {
 
         if let rootView = self.view {
             rootView.addSubview(menu)
-            menu.backgroundColor = UIColor.redColor()
             rootView.addConstraintsWithFormat("V:|[V0(200)]", views: menu)
             rootView.addConstraintsWithFormat("H:|[V0(50)]", views: menu)
            
@@ -67,7 +66,7 @@ extension MenuNavigationViewController : CBMenuDataSource,CBMenuDelegate {
     }
     func sizeForMenuButton()->CGSize
     {
-        return CGSize(width: 40, height: 40)
+        return CGSize(width: 32, height: 32)
     }
     func imagesForMenuButtonStates() -> ToggleImages
     {

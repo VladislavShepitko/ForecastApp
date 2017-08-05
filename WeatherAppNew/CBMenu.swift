@@ -79,7 +79,7 @@ class CBMenu: UIView {
                 let newSegment = CBMenuItem(active: images.active, unactive: images.unactive, destenation: destenationPosition, onTap: self.onTapSegment)
                 newSegment.tag = item
                
-                newSegment.frame = CGRect(origin: self.origin, size: self.segmentSize)
+                newSegment.frame = CGRect(origin: self.buttonOrigin, size: self.segmentSize)
                 
                 
                 let w = newSegment.widthAnchor.constraintEqualToConstant(self.segmentSize.width)
@@ -108,6 +108,22 @@ class CBMenu: UIView {
         //расчитать ориджин поинт на основании ширины высоты и анкор поинта,
         //но так как оно найдет только верхний угол обьекта то нужно еще отнять половину ширины и высоты
         let pos = CGPointMake(self.bounds.size.width * self.layer.anchorPoint.x - self.segmentSize.width / 2.0, self.bounds.size.height * self.layer.anchorPoint.y - self.segmentSize.height / 2.0)
+        //Ну а в итоге конвертировать из своей системы координат в родительскую
+        let convertedPos = self.convertPoint(pos, toView: self.superview!)
+        print("origin: \(pos)")
+        
+        print("conv origin: \(convertedPos)")
+        
+        return convertedPos
+        }()
+    lazy var buttonOrigin:CGPoint = {
+        //Для того что бы расчитать корректный центр объекта не зависимо от анкор поинта нужно:
+        //расчитать ориджин поинт на основании ширины высоты и анкор поинта,
+        //но так как оно найдет только верхний угол обьекта то нужно еще отнять половину ширины и высоты
+        //но так как оно найдет только верхний угол обьекта то нужно еще отнять половину ширины и высоты
+        /*let pos = CGPointMake(self.showHideButton.bounds.size.width * self.showHideButton.layer.anchorPoint.x - self.showHideButton.bounds.width / 2.0, self.showHideButton.bounds.size.height * self.showHideButton.layer.anchorPoint.y - self.showHideButton.bounds.height / 2.0)*/
+        
+        let pos = CGPointMake(self.showHideButton.center.x  - self.showHideButton.bounds.width / 2.0, self.showHideButton.center.y - self.showHideButton.bounds.height / 2.0)
         //Ну а в итоге конвертировать из своей системы координат в родительскую
         let convertedPos = self.convertPoint(pos, toView: self.superview!)
         print("origin: \(pos)")
@@ -151,14 +167,7 @@ class CBMenu: UIView {
     }
     
     func initializeAdditionlViews(){
-        /*func targetToSelfCenter(targetView:UIView) -> (centerX:NSLayoutConstraint, centerY:NSLayoutConstraint) {
-            //make button's constraint
-            let centerX = targetView.centerXAnchor.constraintEqualToAnchor(self.centerXAnchor)
-            let centerY = targetView.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor)
-            
-            return (centerX,centerY)
-        }*/
-        
+
         //add button to view and make it's constraints
         self.addSubview(showHideButton)
         var sizeForMenuButton = CGSize(width: 32, height: 32)
@@ -173,9 +182,9 @@ class CBMenu: UIView {
         let buttonWidth = showHideButton.widthAnchor.constraintEqualToConstant(sizeForMenuButton.width)
         let buttonHeight = showHideButton.heightAnchor.constraintEqualToConstant(sizeForMenuButton.height)
         self.addConstraints([buttonCenterX,buttonY,buttonWidth,buttonHeight])
-        
+        backgroundView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.1)
         backgroundView.backgroundColor = UIColor.whiteColor()
-        backgroundView.frame = CGRectMake(self.bounds.width, 0, 0, self.bounds.height)
+        backgroundView.frame = CGRectMake(0, 0, self.bounds.width, 0)
         //add background view to view and make it's constraints
         self.insertSubview(backgroundView, belowSubview: showHideButton)
         self.insertSubview(container, belowSubview: showHideButton)

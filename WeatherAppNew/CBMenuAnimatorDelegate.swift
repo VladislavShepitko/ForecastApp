@@ -45,7 +45,7 @@ extension CBMenuAnimatorDelegate {
     func willShowSegment(menu:CBMenu, at indexPath:NSIndexPath, segment: CBMenuItem){
 
         segment.alpha = 0
-        let point = menu.convertPoint(menu.origin, toView: menu.container)
+        let point = menu.convertPoint(menu.buttonOrigin, toView: menu.container)
         
         segment.frame = CGRect(origin: point, size:menu.segmentSize)
         menu.container.addSubview(segment)
@@ -69,7 +69,8 @@ extension CBMenuAnimatorDelegate {
             delay = _dict.objectForKey("delay") as! Double
         }
         UIView.animateWithDuration(0.3, delay: delay, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [.AllowUserInteraction, .CurveEaseOut ], animations: { () -> Void in
-            segment.transform = CGAffineTransformMakeTranslation(menu.origin.x, menu.origin.y)
+            let convertedPos = menu.buttonOrigin
+            segment.transform = CGAffineTransformMakeTranslation(convertedPos.x, convertedPos.y)
             segment.alpha = 0
             }, completion: {(_)in
                 print("hide element \(indexPath.item)")
