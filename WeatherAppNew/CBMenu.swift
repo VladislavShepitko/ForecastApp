@@ -36,7 +36,6 @@ class CBMenu: UIView {
     
     lazy var backgroundView:UIView! = {
         let view = UIView()
-        view.layer.cornerRadius = self.halfSize.height
         return view
         }()
     
@@ -56,6 +55,7 @@ class CBMenu: UIView {
         }
         return _dataSource.numberOfSegments()
         }()
+    
     lazy private(set) var container:UIView = {
         let view = UIView(frame: self.bounds)
         view.backgroundColor = UIColor.clearColor()
@@ -151,13 +151,13 @@ class CBMenu: UIView {
     }
     
     func initializeAdditionlViews(){
-        func targetToSelfCenter(targetView:UIView) -> (centerX:NSLayoutConstraint, centerY:NSLayoutConstraint) {
+        /*func targetToSelfCenter(targetView:UIView) -> (centerX:NSLayoutConstraint, centerY:NSLayoutConstraint) {
             //make button's constraint
             let centerX = targetView.centerXAnchor.constraintEqualToAnchor(self.centerXAnchor)
             let centerY = targetView.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor)
             
             return (centerX,centerY)
-        }
+        }*/
         
         //add button to view and make it's constraints
         self.addSubview(showHideButton)
@@ -166,14 +166,16 @@ class CBMenu: UIView {
             sizeForMenuButton = _delegate.sizeForMenuButton()
         }
         //make button's constraint
-        let buttonCenter = targetToSelfCenter(showHideButton)
+        //let buttonCenter = targetToSelfCenter(showHideButton)
+        let buttonCenterX = showHideButton.centerXAnchor.constraintEqualToAnchor(self.centerXAnchor)
+        let buttonY = showHideButton.topAnchor.constraintEqualToAnchor(self.topAnchor, constant: 20)
         
         let buttonWidth = showHideButton.widthAnchor.constraintEqualToConstant(sizeForMenuButton.width)
         let buttonHeight = showHideButton.heightAnchor.constraintEqualToConstant(sizeForMenuButton.height)
-        self.addConstraints([buttonCenter.centerX,buttonCenter.centerY,buttonWidth,buttonHeight])
+        self.addConstraints([buttonCenterX,buttonY,buttonWidth,buttonHeight])
         
         backgroundView.backgroundColor = UIColor.whiteColor()
-        backgroundView.frame = CGRectMake(self.halfSize.width, 0, 0, self.bounds.height)
+        backgroundView.frame = CGRectMake(self.bounds.width, 0, 0, self.bounds.height)
         //add background view to view and make it's constraints
         self.insertSubview(backgroundView, belowSubview: showHideButton)
         self.insertSubview(container, belowSubview: showHideButton)

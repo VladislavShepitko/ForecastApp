@@ -20,27 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let weatherVC = WeatherViewController()
     
-    lazy var navigationVC:UINavigationController = {
-        let nvc = UINavigationController(rootViewController: self.weatherVC)
+    lazy var navigationVC:MenuNavigationViewController = {
+        let nvc = MenuNavigationViewController(rootViewController: self.weatherVC)
         return nvc
         }()
-    
-    let imageSet:[(ToggleImages,TapAction)] = {
-        var arr:[(ToggleImages,TapAction)] = []
-        arr.append((ToggleImages(UIImage(named: "004-shuffle-1")!,UIImage(named: "005-shuffle")!), {(sender)in print("shuffle")}))
-        arr.append((ToggleImages(UIImage(named: "001-repeat-1")!,UIImage(named: "006-repeat")!), {(sender)in print("repeat")}))
-        arr.append((ToggleImages(UIImage(named: "003-like-1")!,UIImage(named: "007-like")!), {(sender)in print("like")}))
-        return arr
-        }()
-    
-    lazy var menu:CBMenu = {
-        let cbMenu = CBMenu(withDataSource: self, delegate: self, animator: CBMenuLinearAnimator(), frame: CGRect(x: 0, y: 0, width: 100, height: UIScreen.mainScreen().bounds.height))
-        return cbMenu
-        }()
-    
-    func pat(){
-        self.navigationVC.pushViewController(SettingsViewController(), animated: true)
-    }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -53,20 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationVC
         
         
-        addMenu()
-        
         self.window?.makeKeyAndVisible()
         
         return true
     }
-    func addMenu(){
-        if let rootView = window?.rootViewController?.view {
-            rootView.addSubview(menu)
-            menu.backgroundColor = UIColor.redColor()
-            rootView.addConstraintsWithFormat("V:|[V0(300)]", views: menu)
-            rootView.addConstraintsWithFormat("H:|[V0(70)]", views: menu)
-        }
-    }
+    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -91,32 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-}
-@available(iOS 9.0, *)
-extension AppDelegate : CBMenuDataSource,CBMenuDelegate {
-    func actionForSegment(at indexPath: NSIndexPath) -> TapAction {
-        return imageSet[indexPath.item].1
-    }
-    func sizeForSegments() -> CGSize {
-        return CGSize(width: 32, height: 32)
-    }
-    func sizeForMenuButton()->CGSize
-    {
-        return CGSize(width: 40, height: 40)
-    }
-    func imagesForMenuButtonStates() -> ToggleImages
-    {
-        return (UIImage(named: "008-mark-1")!,UIImage(named: "002-mark")!)
-    }
-    
-    func numberOfSegments() -> Int
-    {
-        return imageSet.count
-    }
-    func imageForSegment(at indexPath:NSIndexPath) -> ToggleImages
-    {
-        return imageSet[indexPath.item].0
-    }
 }
 
 

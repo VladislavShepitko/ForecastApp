@@ -29,8 +29,6 @@ class WeatherViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.setupView()
-        let instance = UIApplication.sharedApplication().delegate as? AppDelegate
-        instance?.menu.setupView()
     }
     
     func setupView(){
@@ -53,7 +51,7 @@ extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSou
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
         
         cell.backgroundColor = UIColor.yellowColor()
-        
+        cell.alpha = 0.4
         return cell
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -67,7 +65,7 @@ extension WeatherViewController :UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var size = CGSizeZero
         if indexPath.item == 0 {
-            size = self.view.bounds.size
+            size = (self.view.superview?.bounds.size)!
         }else {
             size = CGSize(width: self.view.bounds.width, height: 200)
         }
