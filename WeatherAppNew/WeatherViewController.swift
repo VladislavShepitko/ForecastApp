@@ -10,6 +10,11 @@ import UIKit
 
 @available(iOS 9.0, *)
 class WeatherViewController: UIViewController {
+    enum WeatherCell:String {
+        case Main
+        case ForDay
+        case Default
+    }
     
     lazy var collectionView:UICollectionView! = {
         let layout = UICollectionViewFlowLayout()
@@ -18,13 +23,14 @@ class WeatherViewController: UIViewController {
         cv.dataSource = self
         cv.delegate = self
         return cv
-    }()
+        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView?.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        
+        self.collectionView?.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Default.rawValue)
+        self.collectionView.registerClass(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Main.rawValue)
+        self.collectionView.registerClass(WeatherForDayCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.ForDay.rawValue)
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -33,10 +39,9 @@ class WeatherViewController: UIViewController {
     
     func setupView(){
         self.view.addSubview(collectionView)
-        //collectionView.backgroundColor = UIColor.whiteColor()
-        collectionView.backgroundView = UIImageView(image: UIImage(named: "4"))
-        self.view.addConstraintsWithFormat("H:|[V0]|", views: collectionView)
-        self.view.addConstraintsWithFormat("V:|[V0]|", views: collectionView)
+        collectionView.backgroundView = UIImageView(image: UIImage(named: "background"))
+        self.view.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
+        self.view.addConstraintsWithFormat("V:|[v0]|", views: collectionView)
     }
     
     override func didReceiveMemoryWarning() {
@@ -48,15 +53,27 @@ class WeatherViewController: UIViewController {
 @available(iOS 9.0, *)
 extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
+        var cell:UICollectionViewCell
+        switch indexPath.item {
+        case 0:
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.Main.rawValue, forIndexPath: indexPath)
+            break
+        case 1:
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.ForDay.rawValue, forIndexPath: indexPath)
+            cell.backgroundColor = UIColor.greenColor()
+            break
+        default :
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.Default.rawValue, forIndexPath: indexPath)
+            
+            cell.backgroundColor = UIColor.yellowColor()
+            cell.alpha = 0.4
+        }
         
-        cell.backgroundColor = UIColor.yellowColor()
-        cell.alpha = 0.4
         return cell
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-      
- return 8
+        
+        return 8
     }
     
 }

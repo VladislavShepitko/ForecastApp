@@ -16,6 +16,10 @@ class MenuNavigationViewController: UINavigationController {
         arr.append((ToggleImages(UIImage(named: "004-shuffle-1")!,UIImage(named: "005-shuffle")!), {(sender)in print("shuffle")}))
         arr.append((ToggleImages(UIImage(named: "001-repeat-1")!,UIImage(named: "006-repeat")!), {(sender)in print("repeat")}))
         arr.append((ToggleImages(UIImage(named: "003-like-1")!,UIImage(named: "007-like")!), {(sender)in print("like")}))
+        arr.append((ToggleImages(UIImage(named: "004-shuffle-1")!,UIImage(named: "005-shuffle")!), {(sender)in print("shuffle")}))
+        arr.append((ToggleImages(UIImage(named: "001-repeat-1")!,UIImage(named: "006-repeat")!), {(sender)in print("repeat")}))
+        arr.append((ToggleImages(UIImage(named: "003-like-1")!,UIImage(named: "007-like")!), {(sender)in print("like")}))
+        
         return arr
         }()
     
@@ -29,9 +33,8 @@ class MenuNavigationViewController: UINavigationController {
 
         if let rootView = self.view {
             rootView.addSubview(menu)
-            rootView.addConstraintsWithFormat("V:|[V0(200)]", views: menu)
-            rootView.addConstraintsWithFormat("H:|[V0(50)]", views: menu)
-           
+            rootView.addConstraintsWithFormat("H:|[v0(50)]", views: menu)
+            rootView.addConstraintsWithFormat("V:|[v0(200)]", views: menu)
         }
     }
     override func viewWillAppear(animated: Bool) {

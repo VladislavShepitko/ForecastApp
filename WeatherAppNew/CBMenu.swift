@@ -182,8 +182,8 @@ class CBMenu: UIView {
         let buttonWidth = showHideButton.widthAnchor.constraintEqualToConstant(sizeForMenuButton.width)
         let buttonHeight = showHideButton.heightAnchor.constraintEqualToConstant(sizeForMenuButton.height)
         self.addConstraints([buttonCenterX,buttonY,buttonWidth,buttonHeight])
-        backgroundView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.1)
-        backgroundView.backgroundColor = UIColor.whiteColor()
+        backgroundView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.2)
+        //backgroundView.backgroundColor = UIColor.whiteColor()
         backgroundView.frame = CGRectMake(0, 0, self.bounds.width, 0)
         //add background view to view and make it's constraints
         self.insertSubview(backgroundView, belowSubview: showHideButton)

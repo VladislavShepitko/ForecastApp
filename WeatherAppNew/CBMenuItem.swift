@@ -10,36 +10,6 @@ import UIKit
 
 typealias ItemCallBack = (sender:UIButton)->()
 
-class TapButton:UIButton {
-    private var activeImage:UIImage?
-    private var unactiveImage:UIImage?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.translatesAutoresizingMaskIntoConstraints = false
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    convenience init(active:UIImage, unactive:UIImage, frame:CGRect = CGRectZero){
-        self.init(frame:frame)
-        
-        self.activeImage = active
-        self.unactiveImage = unactive
-        self.addTarget(self, action: "onTap:", forControlEvents: .TouchUpInside)
-    }
-    func onTap(sender:UIButton){
-        if let actImg = self.activeImage, let unactImg = self.unactiveImage {
-            if sender.imageView?.image == actImg {
-                sender.setImage(unactImg, forState: .Normal)
-            }else if sender.imageView?.image == unactImg {
-                sender.setImage(actImg, forState: .Normal)
-            }
-        }
-    }
-}
-
 class CBMenuItem: UIButton {
     
     private var activeImage:UIImage?
