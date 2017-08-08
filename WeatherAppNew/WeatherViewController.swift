@@ -14,6 +14,7 @@ class WeatherViewController: UIViewController {
         case Main
         case ForDay
         case Default
+        case ForWeak
     }
     
     lazy var collectionView:UICollectionView! = {
@@ -28,9 +29,11 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView?.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Default.rawValue)
+        self.collectionView?.registerClass(BaseWeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Default.rawValue)
         self.collectionView.registerClass(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Main.rawValue)
         self.collectionView.registerClass(WeatherForDayCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.ForDay.rawValue)
+        self.collectionView.registerClass(WeatherForWeakCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.ForWeak.rawValue)
+        
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -60,20 +63,19 @@ extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSou
             break
         case 1:
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.ForDay.rawValue, forIndexPath: indexPath)
-            cell.backgroundColor = UIColor.greenColor()
+            break
+        case 2:
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.ForWeak.rawValue, forIndexPath: indexPath)
             break
         default :
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.Default.rawValue, forIndexPath: indexPath)
             
-            cell.backgroundColor = UIColor.yellowColor()
-            cell.alpha = 0.4
         }
         
         return cell
     }
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return 8
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {        
+        return 4
     }
     
 }
@@ -84,12 +86,12 @@ extension WeatherViewController :UICollectionViewDelegateFlowLayout {
         if indexPath.item == 0 {
             size = (self.view.superview?.bounds.size)!
         }else {
-            size = CGSize(width: self.view.bounds.width, height: 200)
+            size = CGSize(width: self.view.bounds.width - 5, height: 200)
         }
         return size
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
+        return 2
     }
 }
 

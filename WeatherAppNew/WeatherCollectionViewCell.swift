@@ -40,7 +40,7 @@ class WeatherCollectionViewCell: BaseCollectionViewCell {
         }()
     let iconView:UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Fonts.Icon.rawValue, size: 50)
+        label.font = UIFont(name: Fonts.Icon.rawValue, size: 45)
         label.text = Climacon.SleetSun.rawValue
         //label.textColor = UIColor.grayColor()
         return label
@@ -60,8 +60,8 @@ class WeatherCollectionViewCell: BaseCollectionViewCell {
         self.addConstraintsWithFormat("H:[v0(32)]-10-[v1]-10-|", views: iconView, temperatureView)
         self.addConstraintsWithFormat("H:[v0]-10-|", views: descriptionView)
         
-        self.addConstraintsWithFormat("V:[v0]-5-[v1]-5-[v2]-50-|", views: descriptionView, temperatureView, minTemperatureView)
-        self.addConstraintsWithFormat("V:[v0(32)]-20-[v1]-50-|", views: iconView, maxTemperatureView)
+        self.addConstraintsWithFormat("V:[v0]-5-[v1]-5-[v2]-30-|", views: descriptionView, temperatureView, minTemperatureView)
+        self.addConstraintsWithFormat("V:[v0(32)]-20-[v1]-30-|", views: iconView, maxTemperatureView)
     }
     
 }
