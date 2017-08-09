@@ -11,6 +11,7 @@ import UIKit
 @available(iOS 9.0, *)
 class WeatherViewController: UIViewController {
     enum WeatherCell:String {
+        case Header
         case Main
         case ForDay
         case Default
@@ -29,9 +30,11 @@ class WeatherViewController: UIViewController {
         return cv
         }()
     
+    weak var headerView:UICollectionReusableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView.registerClass(WeatherHeaderSectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header")
+        self.collectionView.registerClass(WeatherHeaderSectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: WeatherCell.Header.rawValue)
         
         self.collectionView?.registerClass(BaseWeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Default.rawValue)
         self.collectionView.registerClass(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Main.rawValue)
@@ -45,15 +48,14 @@ class WeatherViewController: UIViewController {
         super.viewDidAppear(animated)
         self.setupView()
     }
-    
+    let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
     func setupView(){
         self.view.addSubview(collectionView)
         collectionView.backgroundView = UIImageView(image: UIImage(named: "background"))
-        /*let effect = UIBlurEffect(style: .Dark)
-        let visualEffectView = UIVisualEffectView(effect: effect)
+       
         visualEffectView.frame = (AppDelegate.sharedApplication.window?.bounds)!
         collectionView.backgroundView?.addSubview(visualEffectView)
-        */
+        
         self.view.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         self.view.addConstraintsWithFormat("V:|[v0]|", views: collectionView)
     }
@@ -91,11 +93,13 @@ extension WeatherViewController:UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 5
     }
+    
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         var view = UICollectionReusableView()
         if indexPath.item == 0 {
             if kind == UICollectionElementKindSectionHeader {
-                view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath)
+                view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: WeatherCell.Header.rawValue, forIndexPath: indexPath)
+                self.headerView = view
             }
         }
         return view
@@ -110,14 +114,14 @@ extension WeatherViewController :UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var size = CGSizeZero
         if indexPath.item == 0 {
-            size =  CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 45)
+            size =  CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 50)
         }else {
             size = CGSize(width: self.view.bounds.width - 5, height: 200)
         }
         return size
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: self.view.bounds.width, height: 45)
+        return CGSize(width: self.view.bounds.width, height: 50)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -127,9 +131,11 @@ extension WeatherViewController :UICollectionViewDelegateFlowLayout {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let offset = Double(scrollView.contentOffset.y / self.view.bounds.height)
         let opacity = CGFloat(offset.clamp(0, maxValue: 1))
-        
+        //self.visualEffectView.alpha = opacity
+        self.headerView.backgroundColor = UIColor(white: 0.1, alpha: opacity)
+        //collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "header", forIndexPath: NSIndexPath(forItem: 0, inSection: 0))
         //AppDelegate.sharedApplication.navigationVC.topMenu.alpha = opacity
-        print("offset: \(offset.clamp(0, maxValue: 1))")
+        //print("offset: \(offset.clamp(0, maxValue: 1))")
     }
 }
 

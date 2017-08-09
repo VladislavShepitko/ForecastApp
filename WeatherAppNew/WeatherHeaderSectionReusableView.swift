@@ -9,9 +9,18 @@
 import UIKit
 
 class WeatherHeaderSectionReusableView: UICollectionReusableView {
+    var menuButtonView:UIButton = {
+        let btn = UIButton (type: .System)
+        btn.setImage(UIImage(named: "002-mark")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
+        btn.tintColor = UIColor.whiteColor()
+        return btn
+        }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.redColor()
+        addSubview(menuButtonView)
+        addConstraintsWithFormat("H:|-[v0(30)]", views: menuButtonView)
+        addConstraintsWithFormat("V:|-20-[v0(30)]", views: menuButtonView)
     }
     
 
