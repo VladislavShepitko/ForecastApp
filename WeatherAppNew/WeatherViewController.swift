@@ -15,12 +15,14 @@ class WeatherViewController: UIViewController {
         case ForDay
         case Default
         case ForWeak
+        case DetailedForToday
     }
     
     lazy var collectionView:UICollectionView! = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Vertical
         let cv = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        cv.showsVerticalScrollIndicator = false
         cv.dataSource = self
         cv.delegate = self
         return cv
@@ -33,6 +35,8 @@ class WeatherViewController: UIViewController {
         self.collectionView.registerClass(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.Main.rawValue)
         self.collectionView.registerClass(WeatherForDayCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.ForDay.rawValue)
         self.collectionView.registerClass(WeatherForWeakCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.ForWeak.rawValue)
+        self.collectionView.registerClass(DetailedWeatherCollectionViewCell.self, forCellWithReuseIdentifier: WeatherCell.DetailedForToday.rawValue)
+        
         
     }
     override func viewDidAppear(animated: Bool) {
@@ -43,6 +47,11 @@ class WeatherViewController: UIViewController {
     func setupView(){
         self.view.addSubview(collectionView)
         collectionView.backgroundView = UIImageView(image: UIImage(named: "background"))
+        /*let effect = UIBlurEffect(style: .Dark)
+        let visualEffectView = UIVisualEffectView(effect: effect)
+        visualEffectView.frame = (AppDelegate.sharedApplication.window?.bounds)!
+        collectionView.backgroundView?.addSubview(visualEffectView)
+        */
         self.view.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         self.view.addConstraintsWithFormat("V:|[v0]|", views: collectionView)
     }
@@ -67,6 +76,9 @@ extension WeatherViewController:UICollectionViewDelegate, UICollectionViewDataSo
         case 2:
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.ForWeak.rawValue, forIndexPath: indexPath)
             break
+        case 3:
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.DetailedForToday.rawValue, forIndexPath: indexPath)
+            break
         default :
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(WeatherCell.Default.rawValue, forIndexPath: indexPath)
             
@@ -75,7 +87,7 @@ extension WeatherViewController:UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {        
-        return 4
+        return 5
     }
     
     

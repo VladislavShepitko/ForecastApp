@@ -40,7 +40,7 @@ class WeatherCollectionViewCell: BaseCollectionViewCell {
         }()
     let iconView:UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Fonts.Icon.rawValue, size: 45)
+        label.font = UIFont(name: Fonts.Icon.rawValue, size: 35)
         label.text = Climacon.SleetSun.rawValue
         //label.textColor = UIColor.grayColor()
         return label
