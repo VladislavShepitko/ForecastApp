@@ -7,7 +7,17 @@
 //
 
 import UIKit
-
+extension Double {
+    func clamp(minValue:Double,maxValue:Double) -> Double {
+        if self < minValue {
+            return minValue
+        }else if  self > maxValue {
+            return maxValue
+        }else {
+            return self
+        }
+    }
+}
 extension UIView {
     func addConstraintsWithFormat(format:String, views:UIView...) {
         var viewsDict:[String:UIView] = [:]

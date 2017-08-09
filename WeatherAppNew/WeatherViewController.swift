@@ -54,7 +54,7 @@ class WeatherViewController: UIViewController {
 }
 
 @available(iOS 9.0, *)
-extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSource {
+extension WeatherViewController:UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var cell:UICollectionViewCell
         switch indexPath.item {
@@ -78,6 +78,8 @@ extension WeatherViewController:UICollectionViewDelegate,UICollectionViewDataSou
         return 4
     }
     
+    
+    
 }
 @available(iOS 9.0, *)
 extension WeatherViewController :UICollectionViewDelegateFlowLayout {
@@ -92,6 +94,14 @@ extension WeatherViewController :UICollectionViewDelegateFlowLayout {
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 2
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let offset = Double(scrollView.contentOffset.y / self.view.bounds.height)
+        let opacity = CGFloat(offset.clamp(0, maxValue: 1))
+        
+        AppDelegate.sharedApplication.navigationVC.topMenu.alpha = opacity
+        print("offset: \(offset.clamp(0, maxValue: 1))")
     }
 }
 

@@ -27,14 +27,25 @@ class MenuNavigationViewController: UINavigationController {
         let m = CBMenu(withDataSource: self, delegate: self)
         return m
         }()
+    var topMenu:UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.2, alpha: 0.8)
+        let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        view.addSubview(visualEffect)
+        return view
+        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let rootView = self.view {
             rootView.addSubview(menu)
+            rootView.insertSubview(topMenu, belowSubview: menu)
             rootView.addConstraintsWithFormat("H:|[v0(50)]", views: menu)
             rootView.addConstraintsWithFormat("V:|[v0(200)]", views: menu)
+            
+            rootView.addConstraintsWithFormat("V:|[v0(55)]", views: topMenu)
+            rootView.addConstraintsWithFormat("H:|[v0]|", views: topMenu)
         }
     }
     override func viewWillAppear(animated: Bool) {
@@ -47,17 +58,6 @@ class MenuNavigationViewController: UINavigationController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 @available(iOS 9.0, *)
 extension MenuNavigationViewController : CBMenuDataSource,CBMenuDelegate {

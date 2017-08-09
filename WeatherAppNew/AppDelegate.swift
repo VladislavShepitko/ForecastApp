@@ -13,8 +13,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static var sharedApplication:AppDelegate = {
-            return UIApplication.sharedApplication().delegate as? AppDelegate
-        }()!
+            return UIApplication.sharedApplication().delegate as! AppDelegate
+        }()
     
     var window: UIWindow?
     
@@ -28,14 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        //self.window?.backgroundColor = UIColor.yellowColor()
-        
+
         navigationVC.setNavigationBarHidden(true, animated: false)
-        navigationVC.title = "weather app "
-        
         self.window?.rootViewController = navigationVC
-        
-        
         self.window?.makeKeyAndVisible()
         
         return true
