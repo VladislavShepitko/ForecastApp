@@ -12,12 +12,11 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    static var sharedApplication:AppDelegate = {
+    static let sharedApplication:AppDelegate = {
             return UIApplication.sharedApplication().delegate as! AppDelegate
         }()
     
     var window: UIWindow?
-    
     let weatherVC = WeatherViewController()
     
     lazy var navigationVC:MenuNavigationViewController = {
