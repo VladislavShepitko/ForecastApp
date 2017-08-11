@@ -48,13 +48,13 @@ class WeatherViewController: UIViewController {
         super.viewDidAppear(animated)
         self.setupView()
     }
-    let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
+    
     func setupView(){
         self.view.addSubview(collectionView)
         collectionView.backgroundView = UIImageView(image: UIImage(named: "background"))
        
-        visualEffectView.frame = (AppDelegate.sharedApplication.window?.bounds)!
-        collectionView.backgroundView?.addSubview(visualEffectView)
+        //visualEffectView.frame = (AppDelegate.sharedApplication.window?.bounds)!
+        //collectionView.backgroundView?.addSubview(visualEffectView)
         
         self.view.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         self.view.addConstraintsWithFormat("V:|[v0]|", views: collectionView)
