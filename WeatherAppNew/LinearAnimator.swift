@@ -19,10 +19,7 @@ class LinearAnimator: NSObject, MenuAnimator {
         let origin =  menu.origin + currentOffset
         item.layer.anchorPoint = CGPoint(x: 0, y: 0.5)
         let newRect = CGRect(origin: origin, size: menu.itemSize)
-        //print("newRect: \(newRect)")
-        
         item.frame = newRect
-        //print("item size: \(menu.itemSize)")
     }
     
     func prepareForHideItem(menu:Menu,at indexPath:NSIndexPath, item:Item)

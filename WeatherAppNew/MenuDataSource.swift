@@ -17,6 +17,10 @@ import UIKit
 }
 
 @objc protocol MenuDataSource : class {
+    //func useSettintgsMenu() -> Bool
+    //func numberOfItemsForSettingSection() -> Int
+    
+    
     func dataForItem(menu:Menu, at indexPath:NSIndexPath, item:Item)
     func numberOfItems() -> Int
     optional func indexesForEnumeration(menu:Menu) -> [NSIndexPath]
@@ -25,6 +29,8 @@ import UIKit
     func onItemTap(menu:Menu, at indexPath:NSIndexPath, item:Item)
     
     optional func sizeForItem() -> CGSize
+    optional func sizeForMenu() -> CGSize
+    
 }
 
 extension MenuDataSource {

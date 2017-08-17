@@ -8,8 +8,8 @@
 
 import UIKit
 
-class WeatherForDayCollectionViewCell: BaseWeatherCollectionViewCell {
-    
+class WeatherViewCell: UICollectionViewCell {
+    /*
     let cellIdentifier = String(self)
     var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -22,26 +22,40 @@ class WeatherForDayCollectionViewCell: BaseWeatherCollectionViewCell {
         let view = UIView()
         view.backgroundColor = UIColor.purpleColor()
         return view
-        }()
-    override func setupView() {
-        super.setupView()
+        }()*/
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        //setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.applyLayoutAttributes(layoutAttributes)
+        self.layer.anchorPoint.x = 0.5
+        self.layer.anchorPoint.y = 0.5
+    }
+    /*
+    func setupView() {
         self.collectionView.registerClass(WeatherForOneHourCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.clearColor()
         
-        self.containerView.addSubview(collectionView)
-        self.containerView.addSubview(detailsView)
-        self.titleView.text = "Forecast for today"
+        self.addSubview(collectionView)
+        self.addSubview(detailsView)
+        
         self.collectionView.showsHorizontalScrollIndicator = false
         
-        self.containerView.addConstraintsWithFormat("H:|[v0]|", views: detailsView)
-        self.containerView.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
-        self.containerView.addConstraintsWithFormat("V:|[v0][v1(70)]|", views: detailsView,collectionView)
-    }
+        self.addConstraintsWithFormat("H:|[v0]|", views: detailsView)
+        self.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
+        self.addConstraintsWithFormat("V:|-[v0][v1(70)]-|", views: detailsView,collectionView)
+    }*/
 }
-
-extension WeatherForDayCollectionViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+/*
+extension WeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //number of hours to end of the day
         return 12
@@ -66,9 +80,9 @@ extension WeatherForDayCollectionViewCell: UICollectionViewDataSource, UICollect
         return 0
     }
 }
-
-
-class WeatherForOneHourCollectionViewCell:BaseCollectionViewCell {
+*/
+/*
+class WeatherForOneHourCollectionViewCell:UICollectionViewCell {
     var timeView:UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Fonts.LightText.rawValue, size: 15)
@@ -96,8 +110,15 @@ class WeatherForOneHourCollectionViewCell:BaseCollectionViewCell {
         return label
         
         }()
-    
-    override func setupView() {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    func setupView() {
         addSubview(timeView)
         addSubview(temperatureView)
         addSubview(iconView)
@@ -110,3 +131,4 @@ class WeatherForOneHourCollectionViewCell:BaseCollectionViewCell {
     }
     
 }
+*/

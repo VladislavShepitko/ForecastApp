@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import WeatherAPIServiceInfo
 
-@available(iOS 9.0, *)
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedApplication:AppDelegate = {
-            return UIApplication.sharedApplication().delegate as! AppDelegate
+        return UIApplication.sharedApplication().delegate as! AppDelegate
         }()
     
     var window: UIWindow?
-    let weatherVC = WeatherViewController()
+    let weatherVC:WeatherViewController = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .Horizontal
+        let vc = WeatherViewController(collectionViewLayout: layout)
+        vc.collectionView?.pagingEnabled = true
+        return vc
+        }()
     
     lazy var navigationVC:MenuNavigationViewController = {
         let nvc = MenuNavigationViewController(rootViewController: self.weatherVC)
@@ -27,8 +34,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-
-        navigationVC.setNavigationBarHidden(true, animated: false)
+        
+        //get rid of black bar underneath navbar
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().translucent = true
+        //change background color of tint top bar
+        UINavigationBar.appearance().barTintColor = UIColor.clearColor()
+        
+        
         self.window?.rootViewController = navigationVC
         self.window?.makeKeyAndVisible()
         
@@ -59,6 +73,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+}
+extension AppDelegate: WeatherServiceDelegate {
+    func fetchWeather(result:WeatherResult){
+        
+    }
 }
 
 
