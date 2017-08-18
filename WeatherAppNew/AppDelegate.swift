@@ -19,10 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     let weatherVC:WeatherViewController = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Horizontal
-        let vc = WeatherViewController(collectionViewLayout: layout)
-        vc.collectionView?.pagingEnabled = true
+        let vc = WeatherViewController()
         return vc
         }()
     

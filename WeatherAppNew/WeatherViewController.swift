@@ -9,48 +9,83 @@
 import UIKit
 
 @available(iOS 9.0, *)
-class WeatherViewController: UICollectionViewController {
-    let cellIdentifier = String(self)
-    
+class WeatherViewController: UIViewController {
+    //MARK:- ui elements newded for view
     var backgroundView:UIView = {
         let view = UIImageView()
         view.image = UIImage(named: "background")
+        view.contentMode = .ScaleAspectFill
         return view
         }()
+    var titleView:TitleView = {
+        let view = TitleView()
+        view.frame = CGRect(x: 0, y: 0, width: 110, height: 30)
+        view.layer.anchorPoint = CGPoint(x: 0.8, y: 0.5)
+        return view
+        }()
+    var weatherContainerView:WeatherContainerView = {
+        let view = WeatherContainerView()
+        view.backgroundColor = UIColor.redColor()
+        return view
+        }()
+    var containerHeight:NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        //let layout = self.collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView?.backgroundView = self.backgroundView
-        self.collectionView?.registerClass(WeatherViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        self.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        createSubViews()
         
-        let menuButton =  UIButton(type: .System)
-        menuButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
-        menuButton.setImage(UIImage(named: "004-shuffle")!, forState: .Normal)
-        menuButton.addTarget(self, action: "tap", forControlEvents: .TouchUpInside)
+        createBarItems()
         
-        self.navigationItem.leftBarButtonItem?.customView = menuButton
-        
-        self.navigationItem.title = "Kharkiv"
     }
     
-    func tap(){
     
-    }
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.setupView()
-    }
-    
-    func setupView(){
+    func createSubViews(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationDidChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        
+        self.view.addSubview(backgroundView)
+        self.view.addSubview(weatherContainerView)
+        
         self.view.addConstraintsWithFormat("H:|[v0]|", views: backgroundView)
         self.view.addConstraintsWithFormat("V:|[v0]|", views: backgroundView)
-
+        
+        self.view.addConstraintsWithFormat("H:|[v0]|", views: weatherContainerView)
+        self.view.addConstraintsWithFormat("V:[v0]|", views: weatherContainerView)
+        self.containerHeight = NSLayoutConstraint(item: weatherContainerView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1, constant: 70)
+        self.view.addConstraint(containerHeight)
+    }
+    
+    func createBarItems(){
+        
+        let showMenuBut = UIBarButtonItem(title: "menu", style: .Plain, target: self, action: "showMenuAction")
+        let addCityBut = UIBarButtonItem(title: "add", style: .Plain, target: self, action: "addCityAction")
+        
+        self.navigationItem.leftBarButtonItem = showMenuBut
+        self.navigationItem.rightBarButtonItem = addCityBut
+        
+        self.navigationItem.titleView = self.titleView
+        
+    }
+    func orientationDidChange(data: NSNotification){
+        let device = UIDevice.currentDevice()
+        self.containerHeight.constant = device.orientation.isLandscape ? 40 : 70
+        self.view.layoutIfNeeded()
+    }
+    
+    func showMenuAction(){
+    
+    }
+    
+    func addCityAction(){
+    
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+     
     }
     
     override func didReceiveMemoryWarning() {
@@ -58,24 +93,4 @@ class WeatherViewController: UICollectionViewController {
         // Dispose of any resources that can be recreated.
     }
 }
-extension WeatherViewController : UICollectionViewDelegateFlowLayout {
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
-    }
-     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.redColor()
-        return cell
-    }
-    /*
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: self.view.frame.height - ((self.navigationController?.navigationBar.frame.height)! + 20))
-    }*/
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
-    }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
-    }
-    
-}
+

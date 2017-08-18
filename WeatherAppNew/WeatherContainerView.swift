@@ -1,56 +1,58 @@
 //
-//  WeatherForDayCollectionViewCell.swift
+//  WeatherContainer.swift
 //  WeatherAppNew
 //
-//  Created by Vladyslav Shepitko on 8/8/17.
+//  Created by Vladyslav Shepitko on 8/18/17.
 //  Copyright © 2017 Vladyslav Shepitko. All rights reserved.
 //
 
 import UIKit
 
-class WeatherViewCell: UICollectionViewCell {
-    /*
+class WeatherContainerView: UIView {
     let cellIdentifier = String(self)
-    var collectionView:UICollectionView = {
+    
+    let contantView:UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.greenColor()
+        return view
+        }()
+    
+    lazy var collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Horizontal
         let cv = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        cv.showsHorizontalScrollIndicator = false
+        cv.registerClass(WeatherForOneHourCollectionViewCell.self, forCellWithReuseIdentifier: self.cellIdentifier)
+        cv.delegate = self
+        cv.dataSource = self
         return cv
         }()
     
-    var detailsView:UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.purpleColor()
-        return view
-        }()*/
+    convenience init()
+    {
+        self.init(frame:CGRectZero)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //setupView()
+        setupView()
+    }
+    func setupView(){
+        addSubview(contantView)
+        addSubview(collectionView)
+        addConstraintsWithFormat("V:|[v0][v1(80)]|", views: contantView,collectionView)
+        addConstraintsWithFormat("H:|[v0]|", views: contantView)
+        addConstraintsWithFormat("H:|[v0]|", views: collectionView)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    /*
-    func setupView() {
-        self.collectionView.registerClass(WeatherForOneHourCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.clearColor()
-        
-        self.addSubview(collectionView)
-        self.addSubview(detailsView)
-        
-        self.collectionView.showsHorizontalScrollIndicator = false
-        
-        self.addConstraintsWithFormat("H:|[v0]|", views: detailsView)
-        self.addConstraintsWithFormat("H:|[v0]|", views: collectionView)
-        self.addConstraintsWithFormat("V:|-[v0][v1(70)]-|", views: detailsView,collectionView)
-    }*/
+    
+    
 }
-/*
-extension WeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension WeatherContainerView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //number of hours to end of the day
         return 12
@@ -59,7 +61,7 @@ extension WeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! WeatherForOneHourCollectionViewCell
         if indexPath.item == 0 {
             cell.timeView.text = "Now"
-        }else {            
+        }else {
             cell.timeView.text = "18:00"
         }
         return cell
@@ -75,8 +77,7 @@ extension WeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         return 0
     }
 }
-*/
-/*
+
 class WeatherForOneHourCollectionViewCell:UICollectionViewCell {
     var timeView:UILabel = {
         let label = UILabel()
@@ -109,7 +110,7 @@ class WeatherForOneHourCollectionViewCell:UICollectionViewCell {
         super.init(frame: frame)
         setupView()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -126,4 +127,3 @@ class WeatherForOneHourCollectionViewCell:UICollectionViewCell {
     }
     
 }
-*/
