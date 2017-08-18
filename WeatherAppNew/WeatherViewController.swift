@@ -30,15 +30,22 @@ class WeatherViewController: UIViewController {
         }()
     var containerHeight:NSLayoutConstraint!
     
+    
+    //MARK:-datasource for viewconrtroller
+
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //create ui elements
         createSubViews()
-        
         createBarItems()
+        
+        //load data
+        
         
     }
     
@@ -76,7 +83,7 @@ class WeatherViewController: UIViewController {
     }
     
     func showMenuAction(){
-    
+        
     }
     
     func addCityAction(){

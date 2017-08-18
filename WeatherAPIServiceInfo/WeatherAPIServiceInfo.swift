@@ -27,7 +27,17 @@ public enum Units:String {
     case Fahreinheit = "imperial"
 }
 
-public class WeatherAPIServiceInfo: NSObject {
+public final class WeatherAPIServiceInfo: NSObject {
+    public class var sharedService:WeatherAPIServiceInfo {
+        struct SingletonServiceWrapper{
+            static let singleton = WeatherAPIServiceInfo()
+        }
+        return SingletonServiceWrapper.singleton
+    }
+    
+    private override init(){
+        super.init()
+    }
     static var unitSystem:Units = .Celsius
     static var language:Language = .English
     
@@ -39,7 +49,7 @@ public class WeatherAPIServiceInfo: NSObject {
     static let APP_KEY = "19e47aa5161a4692b93fdc510cf800ff"
     static let BASE_URL = "http://api.openweathermap.org/data/2.5/"
     
-    weak var delegate:WeatherServiceDelegate?
+    public weak var delegate:WeatherServiceDelegate?
     
     private static func weatherFromJSON(data:NSData) -> WeatherResult {
         do {

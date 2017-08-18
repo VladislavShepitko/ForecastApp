@@ -7,24 +7,23 @@
 //
 
 import UIKit
-import WeatherAPIServiceInfo
+
 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    static let weatherService = WeatherServiceWrapper()
     
     static let sharedApplication:AppDelegate = {
         return UIApplication.sharedApplication().delegate as! AppDelegate
         }()
     
     var window: UIWindow?
-    let weatherVC:WeatherViewController = {
-        let vc = WeatherViewController()
-        return vc
-        }()
     
     lazy var navigationVC:MenuNavigationViewController = {
-        let nvc = MenuNavigationViewController(rootViewController: self.weatherVC)
+        let vc = WeatherViewController()
+        let nvc = MenuNavigationViewController(rootViewController: vc)
         return nvc
         }()
     
@@ -32,19 +31,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
+        //customize navigation bar
         //get rid of black bar underneath navbar
         UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().translucent = true
         //change background color of tint top bar
         UINavigationBar.appearance().barTintColor = UIColor.clearColor()
-        
-        
+        //display window
         self.window?.rootViewController = navigationVC
         self.window?.makeKeyAndVisible()
         
+        //application.setMinimumBackgroundFetchInterval(UIMinimumKeepAliveTimeout)
+        
         return true
     }
+    /*
+    func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        
+        completionHandler(.NewData)
+    }*/
     
     
     func applicationWillResignActive(application: UIApplication) {
@@ -70,11 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-}
-extension AppDelegate: WeatherServiceDelegate {
-    func fetchWeather(result:WeatherResult){
-        
-    }
 }
 
 

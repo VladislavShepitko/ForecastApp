@@ -24,6 +24,7 @@
 		8766AB371F34894A00AABF22 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB361F34894A00AABF22 /* Weather.swift */; settings = {ASSET_TAGS = (); }; };
 		8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3B1F34911E00AABF22 /* Extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		8766AB401F349FF900AABF22 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8766AB3F1F349FF900AABF22 /* SettingsViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		87A25B061F46F00B0051CE21 /* WeatherServiceWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A25B051F46F00B0051CE21 /* WeatherServiceWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		87D7DCA71F46337C006D942E /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7DCA61F46337C006D942E /* TitleView.swift */; settings = {ASSET_TAGS = (); }; };
 		87D7DCA91F463D8E006D942E /* WeatherContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7DCA81F463D8E006D942E /* WeatherContainerView.swift */; settings = {ASSET_TAGS = (); }; };
 		87E170791F39DDC2008222C8 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E170781F39DDC2008222C8 /* Fonts.swift */; settings = {ASSET_TAGS = (); }; };
@@ -76,6 +77,7 @@
 		8766AB361F34894A00AABF22 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		8766AB3B1F34911E00AABF22 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8766AB3F1F349FF900AABF22 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		87A25B051F46F00B0051CE21 /* WeatherServiceWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherServiceWrapper.swift; sourceTree = "<group>"; };
 		87D7DCA61F46337C006D942E /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		87D7DCA81F463D8E006D942E /* WeatherContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherContainerView.swift; sourceTree = "<group>"; };
 		87E170781F39DDC2008222C8 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				8766AB2A1F3486D900AABF22 /* LaunchScreen.storyboard */,
 				8766AB2D1F3486D900AABF22 /* Info.plist */,
 				87E170781F39DDC2008222C8 /* Fonts.swift */,
+				87A25B051F46F00B0051CE21 /* WeatherServiceWrapper.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				87E170791F39DDC2008222C8 /* Fonts.swift in Sources */,
 				8753B7F81F41D70800443903 /* LinearAnimator.swift in Sources */,
 				8766AB3C1F34911E00AABF22 /* Extensions.swift in Sources */,
+				87A25B061F46F00B0051CE21 /* WeatherServiceWrapper.swift in Sources */,
 				8753B7FB1F41D70800443903 /* SettingSectionView.swift in Sources */,
 				8766AB241F3486D900AABF22 /* WeatherViewController.swift in Sources */,
 				8766AB401F349FF900AABF22 /* SettingsViewController.swift in Sources */,

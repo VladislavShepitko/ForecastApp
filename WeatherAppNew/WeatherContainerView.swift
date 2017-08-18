@@ -125,5 +125,6 @@ class WeatherForOneHourCollectionViewCell:UICollectionViewCell {
         self.addConstraintsWithFormat("V:|-[v0(13)]-[v1]-[v2(13)]-|", views: timeView,iconView,temperatureView)
         
     }
+
     
 }
