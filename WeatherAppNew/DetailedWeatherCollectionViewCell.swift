@@ -17,6 +17,10 @@ class DetailedWeatherCollectionViewCell: UICollectionViewCell {
         weatherForHoursCollectionView.dataSource = self
         
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        weatherForHoursCollectionView.collectionViewLayout.invalidateLayout()
+    }
 }
 extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -30,7 +34,7 @@ extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UIColl
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         //print("bounds: \(self.frame)")
-        return CGSize(width: 50, height: weatherForHoursCollectionView.bounds.height)
+        return CGSize(width: 50, height: weatherForHoursCollectionView.frame.height)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1

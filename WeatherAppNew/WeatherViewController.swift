@@ -30,8 +30,19 @@ class WeatherViewController: UIViewController {
     }
     func updateFrame(sender:UIPanGestureRecognizer){
         print("current Size: \(pageSize)")
-        print("bounds: \(self.view.frame)")
+        //print("bounds: \(self.pages.cont)")
+        /*
+        pageSize = CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
+        self.view.layoutIfNeeded()*/
     }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.pages.collectionViewLayout.invalidateLayout()
+        /*if let layout = self.pages.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.collectionView.si
+        }*/
+    }
+    
 }
 
 extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -45,13 +56,15 @@ extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return self.pageSize
+        return CGSize(width: self.pages.frame.width, height: self.pages.frame.height)
     }
+    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 0
     }
+    
 }
 
