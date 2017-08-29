@@ -21,6 +21,7 @@ class MenuNavigationViewController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.navigationBarHidden = true
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)

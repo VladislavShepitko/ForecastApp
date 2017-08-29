@@ -13,7 +13,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    static let weatherService = WeatherServiceWrapper()
+    let weatherService = WeatherServiceWrapper.sharedService
     
     static let sharedApplication:AppDelegate = {
         return UIApplication.sharedApplication().delegate as! AppDelegate
@@ -24,13 +24,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var navigationVC:MenuNavigationViewController = {
         let vc = WeatherViewController()
         let nvc = MenuNavigationViewController(rootViewController: vc)
+        
         return nvc
         }()
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {/*
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
+        
+        //display window
+        self.window?.rootViewController = navigationVC
+        self.window?.makeKeyAndVisible()
+        
+        
+        weatherService.preloadCitiesFromFile()*/
         //customize navigation bar
         //get rid of black bar underneath navbar
         UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
@@ -38,11 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().translucent = true
         //change background color of tint top bar
         UINavigationBar.appearance().barTintColor = UIColor.clearColor()
-        //display window
-        self.window?.rootViewController = navigationVC
-        self.window?.makeKeyAndVisible()
-        
-        //application.setMinimumBackgroundFetchInterval(UIMinimumKeepAliveTimeout)
         
         return true
     }

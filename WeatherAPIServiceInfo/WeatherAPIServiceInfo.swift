@@ -27,27 +27,18 @@ public enum Units:String {
     case Fahreinheit = "imperial"
 }
 
-public final class WeatherAPIServiceInfo: NSObject {
-    public class var sharedService:WeatherAPIServiceInfo {
-        struct SingletonServiceWrapper{
-            static let singleton = WeatherAPIServiceInfo()
-        }
-        return SingletonServiceWrapper.singleton
-    }
+public class WeatherAPIServiceInfo: NSObject {
     
-    private override init(){
-        super.init()
-    }
-    static var unitSystem:Units = .Celsius
-    static var language:Language = .English
+    public static var unitSystem:Units = .Celsius
+    public static var language:Language = .English
     
     let sharedSesion:NSURLSession = {
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         return NSURLSession(configuration: sessionConfig)
         }()
     
-    static let APP_KEY = "19e47aa5161a4692b93fdc510cf800ff"
-    static let BASE_URL = "http://api.openweathermap.org/data/2.5/"
+    public static let APP_KEY = "19e47aa5161a4692b93fdc510cf800ff"
+    public static let BASE_URL = "http://api.openweathermap.org/data/2.5/"
     
     public weak var delegate:WeatherServiceDelegate?
     
@@ -104,7 +95,7 @@ public final class WeatherAPIServiceInfo: NSObject {
 }
 extension WeatherAPIServiceInfo {
     
-    func updateWeather(forCity city:String){
+    public func updateWeather(forCity city:String){
         if let cityName = city.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet()){
             let params = [
                 "q":cityName
@@ -116,7 +107,7 @@ extension WeatherAPIServiceInfo {
         }
     }
     
-    func updateWeather(forCityID id:Int){
+    public func updateWeather(forCityID id:Int){
         let params = [
             "id":String(id)
         ]
@@ -125,7 +116,7 @@ extension WeatherAPIServiceInfo {
         updateWeather(forURL: url)
     }
     
-    func updateWeather(forCityZipCode code:Int, countryCode:String){
+    public func updateWeather(forCityZipCode code:Int, countryCode:String){
         let params = [
             "zip":"\(code),\(countryCode)"
         ]
@@ -133,7 +124,7 @@ extension WeatherAPIServiceInfo {
         print(url)
         updateWeather(forURL: url)
     }
-    func updateWeather(forSeveralCityIds ids:[Int], countryCode:String){
+    public func updateWeather(forSeveralCityIds ids:[Int], countryCode:String){
         let idsString = ids.flatMap({String($0)}).joinWithSeparator(",")
         let params = [
             "id":idsString
@@ -142,7 +133,7 @@ extension WeatherAPIServiceInfo {
         print(url)
         updateWeather(forURL: url)
     }
-    func updateWeather(forecastForCity id:Int, numberOfDays:Int){
+    public func updateWeather(forecastForCity id:Int, numberOfDays:Int){
         let params = [
             "id":String(id),
             "cnt":String(numberOfDays)

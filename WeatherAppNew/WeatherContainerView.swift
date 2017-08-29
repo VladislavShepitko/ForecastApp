@@ -11,6 +11,14 @@ import UIKit
 class WeatherContainerView: UIView {
     let cellIdentifier = String(self)
     
+    let weatherDetailsView:StackOfStacks = {
+        let sv = StackOfStacks()
+        sv.axis = .Vertical
+        sv.distribution = .FillEqually
+        
+        return sv
+        }()
+    
     let contantView:UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.greenColor()
@@ -40,6 +48,43 @@ class WeatherContainerView: UIView {
     func setupView(){
         addSubview(contantView)
         addSubview(collectionView)
+        contantView.addSubview(weatherDetailsView)
+        /*
+        weatherDetailsView.addArrangedSubview(TitleView())
+        weatherDetailsView.addArrangedSubview(TitleView())
+        weatherDetailsView.addArrangedSubview(TitleView())
+        weatherDetailsView.addArrangedSubview(TitleView())
+        */
+        let v = TitleView()
+        v.titleView.text = String(20)
+        v.timeView.text = String(20)
+        
+        let v1 = TitleView()
+        v1.titleView.text = String(20)
+        v1.timeView.text = String(20)
+        
+        let v2 = TitleView()
+        v2.titleView.text = String(20)
+        v2.timeView.text = String(20)
+        
+        let v3 = TitleView()
+        v3.titleView.text = String(20)
+        v3.timeView.text = String(20)
+        
+        let v4 = TitleView()
+        v4.titleView.text = String(20)
+        v4.timeView.text = String(20)
+        
+        let v5 = TitleView()
+        v5.titleView.text = String(20)
+        v5.timeView.text = String(20)
+        
+        weatherDetailsView.addItems([v,v1,v2])
+        weatherDetailsView.addItems([v3,v4,v5])
+        
+        contantView.addConstraintsWithFormat("V:[v0(150)]|", views: weatherDetailsView)
+        contantView.addConstraintsWithFormat("H:|-[v0]-|", views: weatherDetailsView)
+        
         addConstraintsWithFormat("V:|[v0][v1(80)]|", views: contantView,collectionView)
         addConstraintsWithFormat("H:|[v0]|", views: contantView)
         addConstraintsWithFormat("H:|[v0]|", views: collectionView)
