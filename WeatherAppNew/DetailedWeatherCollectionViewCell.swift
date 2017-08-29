@@ -15,6 +15,7 @@ class DetailedWeatherCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         weatherForHoursCollectionView.delegate = self
         weatherForHoursCollectionView.dataSource = self
+        
     }
 }
 extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -23,18 +24,13 @@ extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UIColl
         return 12
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath) /*as! WeatherForOneHourCollectionViewCell
-        if indexPath.item == 0 {
-            cell.timeView.text = "Now"
-        }else {
-            cell.timeView.text = "18:00"
-        }*/
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath) 
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        print("bounds: \(self.frame)")
-        return CGSize(width: 50, height: 180)
+        //print("bounds: \(self.frame)")
+        return CGSize(width: 50, height: weatherForHoursCollectionView.bounds.height)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1

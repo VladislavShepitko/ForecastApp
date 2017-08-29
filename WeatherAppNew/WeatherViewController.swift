@@ -12,25 +12,30 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var pages: UICollectionView!
     
+    private lazy var pageSize:CGSize = CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
+    
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*pages.delegate = self
-        pages.dataSource = self*/
+        self.navigationController?.barHideOnSwipeGestureRecognizer.addTarget(self, action: "updateFrame:")
+
     }
-    override func 
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        //NSNotificationCenter.defaultCenter().addObserverForName(, object: self, queue: <#T##NSOperationQueue?#>, usingBlock: <#T##(NSNotification) -> Void#>)
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+    func updateFrame(sender:UIPanGestureRecognizer){
+        print("current Size: \(pageSize)")
+        print("bounds: \(self.view.frame)")
     }
 }
 
 extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //number of hours to end of the day
-        print("as")
         return 3
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -40,7 +45,7 @@ extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
+        return self.pageSize
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1
