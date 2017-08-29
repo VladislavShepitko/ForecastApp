@@ -1,46 +1,40 @@
 //
-//  ViewController.swift
+//  DetailedWeatherCollectionViewCell.swift
 //  WeatherAppNew
 //
-//  Created by Vladyslav Shepitko on 8/4/17.
+//  Created by Vladyslav Shepitko on 8/29/17.
 //  Copyright © 2017 Vladyslav Shepitko. All rights reserved.
 //
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+class DetailedWeatherCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var pages: UICollectionView!
-    
-    //MARK:- view controller functions
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        /*pages.delegate = self
-        pages.dataSource = self*/
-    }
-    override func 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
+    @IBOutlet weak var weatherForHoursCollectionView: UICollectionView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        weatherForHoursCollectionView.delegate = self
+        weatherForHoursCollectionView.dataSource = self
     }
 }
-
-extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //number of hours to end of the day
-        print("as")
-        return 3
+        return 12
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherDescriptionCell", forIndexPath: indexPath)
-
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath) /*as! WeatherForOneHourCollectionViewCell
+        if indexPath.item == 0 {
+            cell.timeView.text = "Now"
+        }else {
+            cell.timeView.text = "18:00"
+        }*/
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
+        print("bounds: \(self.frame)")
+        return CGSize(width: 50, height: 180)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 1
@@ -49,4 +43,3 @@ extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDe
         return 0
     }
 }
-
