@@ -12,12 +12,14 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var pages: UICollectionView!
     @IBOutlet weak var menu: MenuBar!
+    @IBOutlet weak var updateView: UpdateWeatherBar!
     
     
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
         menu.host = self
+        updateView.anotherHeight = menu.getConstraint(with: "height")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,15 +39,12 @@ class WeatherViewController: UIViewController {
         //setTitleForIndex(menuIndex)
     }
     
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewDidScrollToTop(scrollView: UIScrollView) {
+        print("asdasd")
     }
-    enum Direction{
-        case Up
-        case Down
-    }
-    var touchStartPoint:CGPoint!
+    
     @IBAction func pan(sender:UIPanGestureRecognizer){
-        var direction:Direction = .Up
+        /*var direction:Direction = .Up
         var offset:CGPoint = CGPointZero
         switch sender.state {
         case .Began:
@@ -56,14 +55,24 @@ class WeatherViewController: UIViewController {
         default:
             break
         }
-        let percent = offset.y / view.bounds.height
-        print(percent)
+        print("start at: \(touchStartPoint)")
+        print("now at: \(offset)")
+        
+        let percent = offset.y / pages.bounds.height
+        
+        print("percent: \(percent)")
         
         direction = offset.y < 0 ? .Down : .Up
-        
+
         if direction == .Down {
             
-        }
+        }*/
+        //let progress = MenuHelper.calculateProcess(sender.translationInView(view), viewBounds: pages.bounds, direction: .Down)
+        //updateView.progressView(progress) { () -> Void in
+            
+        //}
+        //print("progress: \(progress)")
+        //print("distance: \(progress * pages.bounds.height)")
         
     }
 }

@@ -24,8 +24,22 @@ extension Double {
             return self
         }
     }
+    
 }
 extension UIView {
+    func getConstraint(with name:String) -> NSLayoutConstraint?
+    {
+        var constraint:NSLayoutConstraint?
+        if self.constraints.count > 0 {
+            for c in self.constraints {
+                if (c.identifier?.containsString(name) != nil){
+                    constraint = c
+                    break
+                }
+            }
+        }
+        return constraint
+    }
     func addConstraintsWithFormat(format:String, views:UIView...) {
         var viewsDict:[String:UIView] = [:]
         
