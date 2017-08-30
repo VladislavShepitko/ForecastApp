@@ -12,14 +12,13 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var pages: UICollectionView!
     @IBOutlet weak var menu: MenuBar!
-    @IBOutlet weak var updateView: UpdateWeatherBar!
+    @IBOutlet weak var weatherRefreshView: UpdateWeatherBar!
     
     
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
         menu.host = self
-        updateView.anotherHeight = menu.getConstraint(with: "height")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -36,45 +35,47 @@ class WeatherViewController: UIViewController {
     func scrollToMenuIndex(menuIndex:Int){
         let indexPath = NSIndexPath(forItem: menuIndex, inSection: 0)
         pages?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-        //setTitleForIndex(menuIndex)
+        //menu?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
     }
-    
-    func scrollViewDidScrollToTop(scrollView: UIScrollView) {
-        print("asdasd")
+    /*
+    var isFinger:Bool = false
+    var halfSize:CGRect{
+        let size = CGSize(width: pages.bounds.width / 4.0, height: pages.bounds.height / 4.0)
+        return CGRect(origin: pages.bounds.origin, size: size)
     }
-    
+    var isRefresh = false
     @IBAction func pan(sender:UIPanGestureRecognizer){
-        /*var direction:Direction = .Up
-        var offset:CGPoint = CGPointZero
-        switch sender.state {
+        let progress = MenuHelper.calculateProcess(sender.translationInView(view), viewBounds: halfSize, direction: .Down )
+        print("progress: \(progress)")
+        switch sender.state{
         case .Began:
-            touchStartPoint = sender.locationInView(view)
-        case .Changed:
-            let current = sender.locationInView(view)
-            offset = CGPoint(x: abs(touchStartPoint.x - current.x), y: abs(touchStartPoint.y - current.y))
+            isFinger = true
+        case .Ended:
+            isFinger = false
+        case .Cancelled:
+            isFinger = false
         default:
             break
         }
-        print("start at: \(touchStartPoint)")
-        print("now at: \(offset)")
         
-        let percent = offset.y / pages.bounds.height
-        
-        print("percent: \(percent)")
-        
-        direction = offset.y < 0 ? .Down : .Up
-
-        if direction == .Down {
+        print("is finger touched \(isFinger)")
+        if progress > 0.15 && isFinger{
+            let _progress = 1 - progress
+            self.weatherRefreshView.alpha = _progress
+            print("progress: \(_progress)")
+            if _progress == 0 {
+                isRefresh = true
+                
+            }
             
-        }*/
-        //let progress = MenuHelper.calculateProcess(sender.translationInView(view), viewBounds: pages.bounds, direction: .Down)
-        //updateView.progressView(progress) { () -> Void in
-            
-        //}
-        //print("progress: \(progress)")
-        //print("distance: \(progress * pages.bounds.height)")
-        
+        }
+        if !isFinger && !isRefresh {
+            UIView.animateWithDuration(0.7, animations: { () -> Void in
+                self.weatherRefreshView.alpha = 1
+            })
+        }
     }
+    */
 }
 
 

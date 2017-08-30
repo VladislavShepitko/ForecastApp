@@ -9,7 +9,7 @@
 import UIKit
 
 enum Direction{
-    case Up
+    case Up 
     case Down
     case Left
     case Right

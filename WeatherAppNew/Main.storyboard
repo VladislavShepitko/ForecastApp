@@ -124,7 +124,7 @@
                                 <gestureRecognizers/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Axv-fL-NgS">
-                                <rect key="frame" x="0.0" y="93" width="600" height="507"/>
+                                <rect key="frame" x="0.0" y="94" width="600" height="506"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="2sY-lc-QpW">
                                     <size key="itemSize" width="597" height="499"/>
@@ -596,17 +596,10 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o1u-jh-EUc" customClass="MenuBar" customModule="WeatherAppNew" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="63" width="600" height="30"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" priority="500" constant="30" identifier="height" id="gzL-95-laG"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KX5-zY-Saw" customClass="UpdateWeatherBar" customModule="WeatherAppNew" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="0.0"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" identifier="height" id="NAd-Z2-BBh"/>
+                                    <constraint firstAttribute="height" constant="30" identifier="height" id="gzL-95-laG"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -618,18 +611,12 @@
                             <constraint firstItem="aVW-u8-7km" firstAttribute="top" secondItem="Axv-fL-NgS" secondAttribute="bottom" id="Fy1-nh-4kt"/>
                             <constraint firstItem="VDg-p9-qHe" firstAttribute="centerY" secondItem="1Ab-4R-XrQ" secondAttribute="centerY" id="JTJ-Ci-vJn"/>
                             <constraint firstItem="VDg-p9-qHe" firstAttribute="centerX" secondItem="1Ab-4R-XrQ" secondAttribute="centerX" id="KwH-ia-6S1"/>
-                            <constraint firstAttribute="trailing" secondItem="KX5-zY-Saw" secondAttribute="trailing" id="XMA-QZ-yKe"/>
-                            <constraint firstItem="KX5-zY-Saw" firstAttribute="top" secondItem="S7t-s5-SbR" secondAttribute="bottom" id="Yf8-Ni-SEe"/>
                             <constraint firstItem="VDg-p9-qHe" firstAttribute="height" secondItem="1Ab-4R-XrQ" secondAttribute="height" id="Yla-1x-LQn"/>
+                            <constraint firstItem="o1u-jh-EUc" firstAttribute="top" secondItem="S7t-s5-SbR" secondAttribute="bottom" id="cp5-NC-ceW"/>
                             <constraint firstItem="Axv-fL-NgS" firstAttribute="leading" secondItem="1Ab-4R-XrQ" secondAttribute="leading" id="f7T-lj-rKC"/>
                             <constraint firstItem="Axv-fL-NgS" firstAttribute="top" secondItem="o1u-jh-EUc" secondAttribute="bottom" id="nBP-jT-6Ap"/>
-                            <constraint firstItem="o1u-jh-EUc" firstAttribute="top" secondItem="KX5-zY-Saw" secondAttribute="bottom" constant="-1" id="nFH-UA-YVH"/>
-                            <constraint firstItem="KX5-zY-Saw" firstAttribute="leading" secondItem="1Ab-4R-XrQ" secondAttribute="leading" id="oJr-ki-PGq"/>
                             <constraint firstAttribute="trailing" secondItem="Axv-fL-NgS" secondAttribute="trailing" id="wx1-AB-gbF"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="7wy-nf-9tO" appends="YES" id="EMT-3s-sxV"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="i3D-eE-DMI">
                         <nil key="title"/>
@@ -688,15 +675,10 @@
                     <connections>
                         <outlet property="menu" destination="o1u-jh-EUc" id="atK-eX-cMN"/>
                         <outlet property="pages" destination="Axv-fL-NgS" id="0US-iJ-AzV"/>
-                        <outlet property="updateView" destination="KX5-zY-Saw" id="Nvz-2K-P4T"/>
+                        <outlet property="weatherRefreshView" destination="phF-vx-KM5" id="7ae-xB-uNF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dde-S4-w2M" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="7wy-nf-9tO">
-                    <connections>
-                        <action selector="pan:" destination="1cE-eJ-s2k" id="M8a-1c-8KM"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1162" y="179"/>
         </scene>
