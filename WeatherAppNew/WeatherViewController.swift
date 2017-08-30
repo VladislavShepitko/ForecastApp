@@ -11,47 +11,76 @@ import UIKit
 class WeatherViewController: UIViewController {
     
     @IBOutlet weak var pages: UICollectionView!
+    @IBOutlet weak var menu: MenuBar!
     
-    private lazy var pageSize:CGSize = CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
     
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.barHideOnSwipeGestureRecognizer.addTarget(self, action: "updateFrame:")
-
+        menu.host = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //NSNotificationCenter.defaultCenter().addObserverForName(, object: self, queue: <#T##NSOperationQueue?#>, usingBlock: <#T##(NSNotification) -> Void#>)
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
-    func updateFrame(sender:UIPanGestureRecognizer){
-        print("current Size: \(pageSize)")
-        //print("bounds: \(self.pages.cont)")
-        /*
-        pageSize = CGSize(width: self.pages.bounds.width, height: self.pages.bounds.height)
-        self.view.layoutIfNeeded()*/
-    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.pages.collectionViewLayout.invalidateLayout()
-        /*if let layout = self.pages.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.collectionView.si
-        }*/
+    }
+    func scrollToMenuIndex(menuIndex:Int){
+        let indexPath = NSIndexPath(forItem: menuIndex, inSection: 0)
+        pages?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
+        //setTitleForIndex(menuIndex)
     }
     
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    }
+    enum Direction{
+        case Up
+        case Down
+    }
+    var touchStartPoint:CGPoint!
+    @IBAction func pan(sender:UIPanGestureRecognizer){
+        var direction:Direction = .Up
+        var offset:CGPoint = CGPointZero
+        switch sender.state {
+        case .Began:
+            touchStartPoint = sender.locationInView(view)
+        case .Changed:
+            let current = sender.locationInView(view)
+            offset = CGPoint(x: abs(touchStartPoint.x - current.x), y: abs(touchStartPoint.y - current.y))
+        default:
+            break
+        }
+        let percent = offset.y / view.bounds.height
+        print(percent)
+        
+        direction = offset.y < 0 ? .Down : .Up
+        
+        if direction == .Down {
+            
+        }
+        
+    }
 }
+
+
 
 extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherDescriptionCell", forIndexPath: indexPath)
-
+        let cell:UICollectionViewCell!
+        if indexPath.item == 2 {
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForecastCell", forIndexPath: indexPath)
+        }else {
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherDescriptionCell", forIndexPath: indexPath)
+        }
         return cell
     }
     
@@ -60,7 +89,7 @@ extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
+        return 0
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 0

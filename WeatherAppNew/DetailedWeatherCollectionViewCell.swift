@@ -37,7 +37,7 @@ extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UIColl
         return CGSize(width: 50, height: weatherForHoursCollectionView.frame.height)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
+        return 0
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 0
