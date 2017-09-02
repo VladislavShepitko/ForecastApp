@@ -20,21 +20,21 @@ class AddCityViewController: UIViewController {
     
     private var isSearchingForCity:Bool = false
     private(set) var cityIsLoaded = false
-    private weak var weatherService = AppDelegate.sharedApplication.weatherService
+    //private weak var weatherService = AppDelegate.sharedApplication.weatherService
     
     private var result:[City] = []
     
     override func viewDidLoad() {
         addUIElements()
         super.viewDidLoad()
-        if !(weatherService!.areCitiesLoaded){
+        /*if !(weatherService!.areCitiesLoaded){
             weatherService!.loadAllCities { (res) -> Void in
                 if let _ = res {
                     self.cityIsLoaded = true
                 }
                 print("all cities are loaded")
             }
-        }
+        }*/
         searchBarView.delegate = self
         resultView.delegate = self
         resultView.dataSource = self
@@ -66,7 +66,7 @@ class AddCityViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        weatherService?.allCities = nil
+       // weatherService?.allCities = nil
     }
     deinit{
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -77,14 +77,14 @@ extension AddCityViewController: UISearchBarDelegate {
     {
         if !searchText.isEmpty && searchText.characters.count >= 2 {
             isSearchingForCity = true
-            weatherService?.filterCitiestForRequest(forName: searchText, completion: { (res) -> Void in
+            /*weatherService?.filterCitiestForRequest(forName: searchText, completion: { (res) -> Void in
                 if let result = res {
                     self.result = result
                 }else {
                     self.result = []
                 }
                 self.resultView.reloadData()
-            })
+            })*/
             
         }else if self.result.count > 0 {
             self.result = []
@@ -97,7 +97,7 @@ extension AddCityViewController: UISearchBarDelegate {
 extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete{
-            weatherService?.removeCity(withIndex: indexPath.row)
+            //weatherService?.removeCity(withIndex: indexPath.row)
             self.resultView.reloadData()
         }
     }
@@ -109,7 +109,7 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
             let resultCity = result[indexPath.row]
             searchBarView.resignFirstResponder()
             
-            weatherService?.addCity(resultCity)
+            //weatherService?.addCity(resultCity)
             navigationController?.popToRootViewControllerAnimated(true)
             print("close all")
         }
@@ -118,7 +118,7 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cityCell", forIndexPath: indexPath)
         if !isSearchingForCity {
-            cell.textLabel?.text = weatherService?.cities[indexPath.row].name
+            //cell.textLabel?.text = weatherService?.cities[indexPath.row].name
         }else {
             cell.textLabel?.text = result[indexPath.row].name
         }
@@ -126,7 +126,7 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return !isSearchingForCity ? (weatherService?.cities.count)! :result.count
+        return 0//!isSearchingForCity ? (weatherService?.cities.count)! :result.count
     }
 }
 

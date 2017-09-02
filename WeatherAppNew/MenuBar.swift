@@ -59,16 +59,18 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         horizontal.heightAnchor.constraintEqualToConstant(4).active = true
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {        
+        scrollTo(indexPath:indexPath)
+        self.host?.scrollToMenuIndex(indexPath.item)
+    }
+    func scrollTo(indexPath indexPath:NSIndexPath){
         let x  = CGFloat(indexPath.item) * (frame.width / CGFloat(self.numberOfSections))
         print(indexPath.item)
         
         horizontalBarLeftAnchorConstraint?.constant = x
         UIView.animateWithDuration(0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in
             self.layoutIfNeeded()
-        }, completion: nil)
-        self.host?.scrollToMenuIndex(indexPath.item)
+            }, completion: nil)
     }
     
     
@@ -94,6 +96,7 @@ class MenuCellView: UICollectionViewCell {
     let title:UILabel = {
         let iv = UILabel()
         iv.tintColor = UIColor.rgbColor(91, green: 14, blue: 13)
+        iv.font = UIFont(name: "Helvetica Neue", size: 16)
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()

@@ -3,11 +3,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="Climacons.ttf">
-            <string>Climacons-Font</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -21,18 +16,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="K" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EfD-Mp-lu3">
-                                <rect key="frame" x="225" y="199" width="150" height="201"/>
-                                <fontDescription key="fontDescription" name="Climacons-Font" family="Climacons-Font" pointSize="200"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background-1" translatesAutoresizingMaskIntoConstraints="NO" id="2Yi-61-Cmv">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pl-oH-xTA">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="del-4H-XF4">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="dark"/>
+                            </visualEffectView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weather App" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebd-nc-Oz9">
+                                <rect key="frame" x="109" y="209" width="381" height="83"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="70"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="45"/>
+                                </variation>
                             </label>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="EfD-Mp-lu3" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Q4h-6h-7fq"/>
-                            <constraint firstItem="EfD-Mp-lu3" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Uuy-MT-y0C"/>
+                            <constraint firstItem="6pl-oH-xTA" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6NN-bp-9s4"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="2Yi-61-Cmv" secondAttribute="bottom" id="Au1-ax-luq"/>
+                            <constraint firstAttribute="trailing" secondItem="2Yi-61-Cmv" secondAttribute="trailing" id="Cex-lw-3JR"/>
+                            <constraint firstItem="6pl-oH-xTA" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" id="DI8-dD-IiK"/>
+                            <constraint firstItem="ebd-nc-Oz9" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="F8l-Qm-tqO"/>
+                            <constraint firstItem="2Yi-61-Cmv" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="MW5-8j-OEU"/>
+                            <constraint firstItem="6pl-oH-xTA" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="QdN-CL-HZo"/>
+                            <constraint firstItem="2Yi-61-Cmv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="aYB-lg-O4O"/>
+                            <constraint firstItem="ebd-nc-Oz9" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-50" id="bR7-Zb-ahk"/>
+                            <constraint firstItem="6pl-oH-xTA" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="cEG-Yr-xSG"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -41,4 +58,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="background-1" width="1250" height="781"/>
+    </resources>
 </document>

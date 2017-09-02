@@ -10,6 +10,8 @@ import UIKit
 
 class DetailedWeatherCollectionViewCell: UICollectionViewCell {
     
+    var weather:Weather.Main?
+    
     @IBOutlet weak var weatherForHoursCollectionView: UICollectionView!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,18 +30,19 @@ extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UIColl
         return 12
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath) 
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath)
+        
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         //print("bounds: \(self.frame)")
-        return CGSize(width: 50, height: weatherForHoursCollectionView.frame.height)
+        return CGSize(width: 50, height: weatherForHoursCollectionView.frame.height - 1)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
+        return 1
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
+        return 1
     }
 }
