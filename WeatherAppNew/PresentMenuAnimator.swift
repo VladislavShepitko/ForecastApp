@@ -26,15 +26,16 @@ extension PresentMenuAnimator : UIViewControllerAnimatedTransitioning {
         let snapShot = fromVC.view.snapshotViewAfterScreenUpdates(false)
         snapShot.tag = MenuHelper.snapshotNumber
         snapShot.userInteractionEnabled = false
-        snapShot.layer.shadowOpacity = 0.7
-        snapShot.backgroundColor = UIColor.redColor()
+        snapShot.layer.shadowOpacity = 0.1
         containerView.insertSubview(snapShot, aboveSubview: toVC.view)
         fromVC.view.hidden = true
         
         UIView.animateWithDuration(transitionDuration(transitionContext), animations: { () -> Void in
             snapShot.center.x += UIScreen.mainScreen().bounds.width * MenuHelper.menuWidth
+
             }) { _ in
             fromVC.view.hidden = false
+            //fromVC.view.alpha = 0.6
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         }
         

@@ -16,7 +16,7 @@ enum Direction{
 }
 
 struct MenuHelper{
-    static let menuWidth:CGFloat = 0.8
+    static let menuWidth:CGFloat = 0.85
     static let percentThreshold:CGFloat = 0.0
     static let snapshotNumber = 12345
     

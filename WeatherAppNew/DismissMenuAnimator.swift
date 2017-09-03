@@ -31,6 +31,7 @@ extension DismissMenuAnimator : UIViewControllerAnimatedTransitioning {
             }) { _ in
                 let didTransitionComplete = !transitionContext.transitionWasCancelled()
                 if didTransitionComplete {
+                    //toVC.view.alpha = 1
                     containerView.insertSubview(toVC.view, aboveSubview: fromVC.view)
                     snapShot?.removeFromSuperview()
                 }

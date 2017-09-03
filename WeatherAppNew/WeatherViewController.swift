@@ -55,7 +55,9 @@ class WeatherViewController: UIViewController {
         menu?.scrollTo(indexPath:indexPath)
     }
     @IBAction func updateWeather(sender: UIBarButtonItem) {
-        updateWeatherView.show()
+        updateWeatherView.show(){
+            
+        }
         UIView.animateWithDuration(0.6) { () -> Void in
             self.pages.collectionViewLayout.invalidateLayout()
         }

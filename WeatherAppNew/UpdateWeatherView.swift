@@ -9,6 +9,7 @@
 import UIKit
 
 class UpdateWeatherView: UIView {
+    var activityIndicator:UIActivityIndicatorView?
     
     var height:NSLayoutConstraint!
     
@@ -17,6 +18,7 @@ class UpdateWeatherView: UIView {
     
     var timer: NSTimer!
     private var isOpened:Bool = false
+    private var indicator:UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,20 +26,30 @@ class UpdateWeatherView: UIView {
         height.constant = 0
         self.translatesAutoresizingMaskIntoConstraints = false
     }
+    func addIndicator(){
+        indicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        addSubview(indicator)
+        indicator.startAnimating()
+    }
     
-    func show(){
+    func show(onOpen:()->Void){
         if isOpened { return }
         self.height.constant = self.MAX_HEIGHT
-        UIView.animateWithDuration(0.7, animations: { () -> Void in
+        
+        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: [],   animations: { () -> Void in
             self.layoutIfNeeded()
             }) { _ in
                self.startTimer()
                self.isOpened = true
+               onOpen()
+               dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.addIndicator()
+               })
         }
     }
     func close(){
         self.height.constant = 0
-        UIView.animateWithDuration(0.6, animations: { () -> Void in
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
             self.layoutIfNeeded()
             })
         isOpened = false
@@ -49,6 +61,6 @@ class UpdateWeatherView: UIView {
     }
     func finishUpdate(timer:NSTimer){
         self.close()
-        //finish
+        self.indicator.stopAnimating()
     }
 }
