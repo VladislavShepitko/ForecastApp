@@ -39,7 +39,9 @@ extension Weather {
         var weather:Weather? = nil
         let forecast = forecastJSON(json)
         let mainJSON = json["main"]
+        let descriptionJSON = json["weather"]
         
+        let condition = (descriptionJSON["id"]).intValue
         let pressure = (mainJSON["pressure"]).doubleValue
         let humidity = (mainJSON["humidity"]).doubleValue
             //wind parameters
@@ -47,8 +49,8 @@ extension Weather {
         let wSpeed = (windJSON["speed"]).doubleValue
         let wDeg = (windJSON["speed"]).doubleValue
             
-        weather = Weather(icon:(forecast?.icon)!, description: (forecast?.description)!, time: (forecast?.time)!, temp: (forecast?.temp)!, tempMin: (forecast?.tempMin)!, tempMax: (forecast?.tempMax)!, pressure: pressure, humidity: humidity, speed: wSpeed, direction: wDeg)
-        weather.id = 0
+        weather = Weather(icon:(forecast?.icon)!, description: (forecast?.description)!, time: (forecast?.time)!, temp: (forecast?.temp)!, tempMin: (forecast?.tempMin)!, tempMax: (forecast?.tempMax)!, pressure: pressure, humidity: humidity, speed: wSpeed, direction: wDeg, condition:condition)
+        weather?.cityId = -1
         
         
         return weather

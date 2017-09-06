@@ -29,7 +29,7 @@ final class WeatherServiceWrapper: NSObject {
     //private queue for send requests
     private var weatherAPI:WeatherAPIServiceInfo = WeatherAPIServiceInfo()
 
-    //
+    //private queue for send async resuests for weather
     private let weatherQ: dispatch_queue_t = dispatch_queue_create("weatherQueue", DISPATCH_QUEUE_SERIAL)
     
     private override init(){
@@ -38,13 +38,19 @@ final class WeatherServiceWrapper: NSObject {
         weatherAPI.delegate = self
     }
     
+    //MARK:- update weather
+    
+    /*  
+        Update weather for all cities? send async request to server,
+        handle number of requests in time
+    */
     func updateWeather(){
-        for _ in 0..<1 {
+        for id in 0..<1 {
         //for city in  cities {
             dispatch_async(weatherQ, { () -> Void in
                 //let coords = city.coords
                 //self.weatherAPI.updateWeatherForLocation(lat: coords.latitude, lon: coords.longitude)
-                self.weatherAPI.updateWeatherForLocation(lat: 1.0, lon:  1.0)
+                self.weatherAPI.updateWeatherForLocation(id, lat: 1.0, lon:  1.0)
             })
         }
     }
@@ -62,11 +68,20 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
         
         switch result{
         case .Success(let weather):
-            let cityID = weather
-            //set view model
-            //print(weather)
+            /*
+            let cityID = weather?.cityId
+            let filtered = Array(self.cities.filter(){ $0.id == cityID })
+            guard let selectedCity = filtered.first else {
+                //throw becouse citi in not in array
+                break
+            }
+            
+            selectedCity.weather = weather
+            */
+            //or just update weather in db????
+            
             break
-        case .Failure(let error):break
+        case .Failure( _ /*error-*/):break
         }
         
     }

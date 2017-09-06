@@ -9,10 +9,21 @@
 import UIKit
 import CoreLocation
 import WeatherAPIServiceInfo
-struct City {
+
+class City:NSObject {
     let name:String
     let id:Int
     let country:String
     let coords:CLLocationCoordinate2D
-    let weather:Weather?
+    var weather:Weather?
+    
+    init(id:Int, name:String, country:String, coords:(Double,Double)){
+        self.name = name
+        self.id = id
+        self.country = country
+        self.coords = CLLocationCoordinate2D(latitude: coords.0, longitude: coords.1)
+        super.init()
+    }
 }
+
+

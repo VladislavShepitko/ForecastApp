@@ -826,7 +826,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dde-S4-w2M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1322" y="113"/>
+            <point key="canvasLocation" x="1246" y="113"/>
         </scene>
         <!--Weather-->
         <scene sceneID="WSG-bB-yjS">
