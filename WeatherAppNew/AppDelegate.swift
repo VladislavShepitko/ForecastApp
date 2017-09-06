@@ -18,13 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return SingletonWrapper.singleton
     }
+    let weatherService = WeatherServiceWrapper.shared
+    //let settings = AppSettings.sharedSettings
     
-    let weatherService = WeatherServiceWrapper.sharedService
-    let settings = AppSettings.sharedSettings
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        settings.load()
+        weatherService.updateWeather()
         
         customizeNavBar()
         return true
@@ -38,13 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().translucent = true
         //change background color of tint top bar
         UINavigationBar.appearance().barTintColor = UIColor.clearColor()
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
     }
     
     func applicationWillResignActive(application: UIApplication) {
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
-        settings.save()
+        
     }
     
     func applicationWillEnterForeground(application: UIApplication) {

@@ -9,6 +9,7 @@
 import UIKit
 
 class AddCityViewController: UIViewController {
+    /*
     var searchBarView:UISearchBar = {
         let sb = UISearchBar()
         return sb
@@ -70,10 +71,10 @@ class AddCityViewController: UIViewController {
     }
     deinit{
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
+    }*/
 }
 extension AddCityViewController: UISearchBarDelegate {
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
+    /*func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
     {
         if !searchText.isEmpty && searchText.characters.count >= 2 {
             isSearchingForCity = true
@@ -92,8 +93,9 @@ extension AddCityViewController: UISearchBarDelegate {
             //isSearchingForCity = false
         }
     }
-    
+    */
 }
+/*
 extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete{
@@ -129,4 +131,4 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
         return 0//!isSearchingForCity ? (weatherService?.cities.count)! :result.count
     }
 }
-
+*/

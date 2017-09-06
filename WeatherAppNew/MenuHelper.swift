@@ -46,7 +46,7 @@ struct MenuHelper{
             return CGFloat(-positiveMovementOnAxisPercent)
         }
     }
-    
+    /*
     static func mapGestureStateToInteractor(gestureState:UIGestureRecognizerState, progress:CGFloat, interactor:Interactor?, triggerSegue:()->Void){
         guard let interactor = interactor else {return}
         switch gestureState {
@@ -68,5 +68,5 @@ struct MenuHelper{
             break
         }
         print("shouldFinish: \(interactor.shouldFinish); progress: \(progress); state: \(gestureState.rawValue)")
-    }
+    }*/
 }

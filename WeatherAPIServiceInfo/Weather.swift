@@ -8,76 +8,62 @@
 
 import Foundation
 
-public struct Weather {
-    let description:String
-    let data:NSDate
-    let icon:String
+public class Forecast: NSCopying {
+    public let temp:Double
+    public let tempMin:Double
+    public let tempMax:Double
+    public let icon:String
+    public let description:String
+    public let time:NSDate
+    init(icon:String,
+        description:String,
+        time:NSDate,
+        temp:Double,
+        tempMin:Double,
+        tempMax:Double){
+        self.temp = temp
+            self.tempMax = tempMax
+            self.tempMin = tempMin
+            self.icon = icon
+            self.description = description
+            self.time = time
+    }
     
-    let main:Main
-    let wind:Wind
-    let system:System
-    let clouds:Clouds
+    @objc public func copyWithZone(zone: NSZone) -> AnyObject {
+        return Forecast(icon: self.icon, description: self.description, time: self.time, temp: self.temp, tempMin: self.tempMin, tempMax: self.tempMax)
+    }
+}
+
+public class Weather: Forecast{
+    public var cityId:Int = 0
+    public let condition:Int
+    public let pressure:Double
+    public let humidity:Double
+    public let speed:Double
+    public let direction:Double
     
+    public var forecast:[Forecast] = []
     
+    init(icon:String,
+        description:String,
+        time:NSDate,
+        temp:Double,
+        tempMin:Double,
+        tempMax:Double,
+        pressure:Double,
+        humidity:Double,
+        speed:Double,
+        direction:Double,
+        condition:Int
+        ){
+            self.pressure = pressure
+            self.humidity = humidity
+            self.speed = speed
+            self.direction = direction
+            self.condition = condition
+            super.init(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax)
+    }
+    override public func copyWithZone(zone: NSZone) -> AnyObject {
+        return Weather(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax, pressure: pressure, humidity: humidity, speed: speed, direction: direction, condition:condition)
+    }
 }
-struct System {
-    let countryCode:String
-    let sunRise:Double
-    let sunSet:Double
-}
-
-struct Main {
-    let temp:Double
-    let temp_min:Double
-    let temp_max:Double
-    let pressure:Double
-    let humidity:Double
-    let atmosphericLevel:Double
-}
-struct Wind
-{
-    let speed:Double
-    let direction:String
-}
-struct Clouds {
-    let value:String
-    let name:String
-}
-/*
-
-struct Weather {
-var main:Main
-var forecastForWeak:[ForecastItem]
-
-
-struct Main {
-var minTemp:Int
-var maxTemp:Int
-var currenTemp:Int
-
-var description:String
-
-var icon:String
-
-var humidity:Float
-
-var wind:Float
-var windDirection:Float
-
-var pressure:Float
-
-var forecastForDay:[ForecastItem]
-
-var lastUpdate:NSDate
-var location:(Double,Double)
-}
-
-struct ForecastItem {
-var temp:Int
-var icon:String
-var time:NSDate
-}
-}
-
-
-*/

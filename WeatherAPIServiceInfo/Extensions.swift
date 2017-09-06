@@ -1,0 +1,56 @@
+//
+//  Extensions.swift
+//  WeatherAppNew
+//
+//  Created by Vladyslav Shepitko on 9/6/17.
+//  Copyright © 2017 Vladyslav Shepitko. All rights reserved.
+//
+
+import UIKit
+import SwiftyJSON
+
+extension NSDate {
+    func isToday() -> Bool {
+        return NSCalendar.currentCalendar().isDateInToday(self)
+    }
+    func isTomorrow() -> Bool {
+        return NSCalendar.currentCalendar().isDateInTomorrow(self)
+    }
+}
+extension Forecast {
+    class func forecastJSON(json:JSON) -> Forecast? {
+        var forecast:Forecast? = nil
+        let descriptionJSON = json["weather"]
+        let mainJSON = json["main"]
+        
+        let time = NSDate(timeIntervalSince1970: json["dt"].doubleValue)
+        let description = (descriptionJSON["description"]).stringValue
+        let icon = (descriptionJSON["icon"]).stringValue
+        let temp = (mainJSON["temp"]).doubleValue
+        let tempMin = (mainJSON["temp_min"]).doubleValue
+        let tempMax = (mainJSON["temp_max"]).doubleValue
+        
+        forecast = Forecast(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax)
+        return forecast
+    }
+}
+extension Weather {
+     class func weatherFromJSON(json:JSON) -> Weather? {
+        var weather:Weather? = nil
+        let forecast = forecastJSON(json)
+        let mainJSON = json["main"]
+        
+        let pressure = (mainJSON["pressure"]).doubleValue
+        let humidity = (mainJSON["humidity"]).doubleValue
+            //wind parameters
+        let windJSON = json["wind"]
+        let wSpeed = (windJSON["speed"]).doubleValue
+        let wDeg = (windJSON["speed"]).doubleValue
+            
+        weather = Weather(icon:(forecast?.icon)!, description: (forecast?.description)!, time: (forecast?.time)!, temp: (forecast?.temp)!, tempMin: (forecast?.tempMin)!, tempMax: (forecast?.tempMax)!, pressure: pressure, humidity: humidity, speed: wSpeed, direction: wDeg)
+        weather.id = 0
+        
+        
+        return weather
+    }
+}

@@ -65,7 +65,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
     func scrollTo(indexPath indexPath:NSIndexPath){
         let x  = CGFloat(indexPath.item) * (frame.width / CGFloat(self.numberOfSections))
-        print(indexPath.item)
+        //print(indexPath.item)
         
         horizontalBarLeftAnchorConstraint?.constant = x
         UIView.animateWithDuration(0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in

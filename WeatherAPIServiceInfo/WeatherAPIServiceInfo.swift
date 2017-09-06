@@ -7,25 +7,34 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 public protocol WeatherServiceDelegate:class {
     func fetchWeather(result:WeatherResult)
 }
 
 public enum WeatherResult{
-    case Success(weatherForCities:[Weather])
+    case Success(weatherForCity:Weather?)
     case Failure(ErrorType)
+}
+public enum WeatherError:ErrorType {
+    case JSONConvertError
+    case BadRequestError
 }
 
 public enum WeatherMethod: String {
     case GetWeather = "weather"
     case SeveralCity = "group"
-    case Forecast = "forecast/daily"
+    case Forecast = "forecast"
 }
+
 public enum Units:String {
     case Celsius = "metric"
     case Fahreinheit = "imperial"
 }
+
+
+
 
 public class WeatherAPIServiceInfo: NSObject {
     
@@ -39,20 +48,52 @@ public class WeatherAPIServiceInfo: NSObject {
     
     public static let APP_KEY = "19e47aa5161a4692b93fdc510cf800ff"
     public static let BASE_URL = "http://api.openweathermap.org/data/2.5/"
+    public static var cityID:Int = -1
     
     public weak var delegate:WeatherServiceDelegate?
     
     private static func weatherFromJSON(data:NSData) -> WeatherResult {
-        do {
-            let _:AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options:[])
-            
-            let weathers = [Weather]()
-            
-            return .Success(weatherForCities:weathers)
-            
-        }catch let error {
-            return .Failure(error)
+        
+        print("printing response from server for city")
+        var weather:Weather? = nil
+        
+        let json = JSON(data: data)
+        
+        if json["cod"].intValue != 200 {
+            return .Failure(WeatherError.BadRequestError)
         }
+        if let forecastJSON = json["list"].array {
+            //extrat weather for today and for yesterday
+            for (index, forecastJSONItem) in forecastJSON.enumerate() {
+                
+                let interval = (forecastJSONItem["dt"]).doubleValue
+                let date = NSDate(timeIntervalSince1970: interval)
+                
+                if date.isToday() {
+                    if index == 0 {
+                        weather = Weather.weatherFromJSON(forecastJSONItem)
+                        print("today")
+                    }else {
+                        if let forecastObject = Forecast.forecastJSON(forecastJSONItem){
+                            weather?.forecast.append(forecastObject)
+                        }
+                        print("today forecast ")
+                    }
+                }else {
+                    if let forecastObject = Forecast.forecastJSON(forecastJSONItem){
+                        weather?.forecast.append(forecastObject)
+                    }
+                    print("forecast for other day")
+                }
+            }
+        }else {
+            //can't conver JSON
+            return .Failure(WeatherError.JSONConvertError)
+        }
+        
+        weather?.cityId = WeatherAPIServiceInfo.cityID
+        return .Success(weatherForCity:weather)
+        
     }
     
     private func processRecentWeatherResult(data data:NSData?, error:NSError?) -> WeatherResult {
@@ -78,6 +119,9 @@ public class WeatherAPIServiceInfo: NSObject {
         let components = NSURLComponents(string: self.BASE_URL + method.rawValue)!
         var queryItems = [NSURLQueryItem]()
         
+        let defaults = NSURLQueryItem(name: "APPID", value: APP_KEY)
+        queryItems.append(defaults)
+        
         if let parameters = params {
             for (key, value) in parameters {
                 let item = NSURLQueryItem(name: key, value: value)
@@ -101,7 +145,7 @@ extension WeatherAPIServiceInfo {
                 "q":cityName
             ]
             
-            let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.GetWeather, params: params)
+            let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
             print(url)
             updateWeather(forURL: url)
         }
@@ -111,32 +155,16 @@ extension WeatherAPIServiceInfo {
         let params = [
             "id":String(id)
         ]
-        let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.GetWeather, params: params)
+        let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
         print(url)
         updateWeather(forURL: url)
     }
     
-    public func updateWeather(forCityZipCode code:Int, countryCode:String){
+    public func updateWeatherForLocation(id:Int, lat:Double, lon:Double){
+        WeatherAPIServiceInfo.cityID = id
         let params = [
-            "zip":"\(code),\(countryCode)"
-        ]
-        let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.GetWeather, params: params)
-        print(url)
-        updateWeather(forURL: url)
-    }
-    public func updateWeather(forSeveralCityIds ids:[Int], countryCode:String){
-        let idsString = ids.flatMap({String($0)}).joinWithSeparator(",")
-        let params = [
-            "id":idsString
-        ]
-        let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.SeveralCity, params: params)
-        print(url)
-        updateWeather(forURL: url)
-    }
-    public func updateWeather(forecastForCity id:Int, numberOfDays:Int){
-        let params = [
-            "id":String(id),
-            "cnt":String(numberOfDays)
+            "lat":"\(lat)",
+            "lon":"\(lon)"
         ]
         let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
         print(url)

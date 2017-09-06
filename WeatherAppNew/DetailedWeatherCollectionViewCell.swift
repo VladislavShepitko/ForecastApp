@@ -10,8 +10,6 @@ import UIKit
 
 class DetailedWeatherCollectionViewCell: UICollectionViewCell {
     
-    var weather:Weather.Main?
-    
     @IBOutlet weak var weatherForHoursCollectionView: UICollectionView!
     override func awakeFromNib() {
         super.awakeFromNib()
