@@ -22,6 +22,7 @@ public enum WeatherError:ErrorType {
     case BadRequestError
 }
 
+
 public enum WeatherMethod: String {
     case GetWeather = "weather"
     case SeveralCity = "group"
@@ -74,15 +75,13 @@ public class WeatherAPIServiceInfo: NSObject {
                         weather = Weather.weatherFromJSON(forecastJSONItem)
                         print("today")
                     }else {
-                        if let forecastObject = Forecast.forecastJSON(forecastJSONItem){
-                            weather?.forecast.append(forecastObject)
-                        }
+                        let forecastObject = Forecast.forecastJSON(forecastJSONItem)
+                        weather?.forecast.append(forecastObject)
                         print("today forecast ")
                     }
                 }else {
-                    if let forecastObject = Forecast.forecastJSON(forecastJSONItem){
-                        weather?.forecast.append(forecastObject)
-                    }
+                    let forecastObject = Forecast.forecastJSON(forecastJSONItem)
+                    weather?.forecast.append(forecastObject)
                     print("forecast for other day")
                 }
             }
@@ -90,7 +89,6 @@ public class WeatherAPIServiceInfo: NSObject {
             //can't conver JSON
             return .Failure(WeatherError.JSONConvertError)
         }
-        
         weather?.cityId = WeatherAPIServiceInfo.cityID
         return .Success(weatherForCity:weather)
         
@@ -107,6 +105,8 @@ public class WeatherAPIServiceInfo: NSObject {
         guard let delegate = self.delegate else {
             return
         }
+        
+        
         let request = NSURLRequest(URL: url)
         let task = sharedSesion.dataTaskWithRequest(request) { [unowned self](data, response, error) -> Void in
             let result = self.processRecentWeatherResult(data: data, error: error)
@@ -137,6 +137,7 @@ public class WeatherAPIServiceInfo: NSObject {
     }
     
 }
+
 extension WeatherAPIServiceInfo {
     
     public func updateWeather(forCity city:String){

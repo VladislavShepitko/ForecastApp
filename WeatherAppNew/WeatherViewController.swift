@@ -16,11 +16,46 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     
+    @IBOutlet weak var cityView: UILabel!
+    @IBOutlet weak var timeView: UILabel!
+    
+    private var viewModel:WeatherViewModel?
+    private var weatherService = WeatherServiceWrapper.shared
+    
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
         addMenu()
         menu.host = self
+        
+        updateModel(weatherService.weatherModel)
+        //handle service errors
+        weatherService.error.subscribe {[unowned self] error in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let vc = UIAlertController(title: "Error", message: error!, preferredStyle: .Alert)
+                let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil)
+                vc.addAction(closeAction)
+                self.presentViewController(vc, animated: true, completion: nil)
+            })
+        }
+        
+        print("view did load")
+        weatherService.updateWeather()
+    }
+    func updateModel(newModel:WeatherViewModel?){
+        self.viewModel = newModel
+        viewModel?.city.subscribe { value in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.cityView.text = value
+            })
+            
+        }
+        viewModel?.updateTime.subscribe { value in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.timeView.text = value
+            })
+        }
+        print("model updated")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -85,8 +120,7 @@ extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDe
             return cell
         }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherDescriptionCell", forIndexPath: indexPath) as! DetailedWeatherCollectionViewCell
-            //cell.weather = self.model?.currentWeaher?.value?.main
-            
+            cell.model = self.viewModel
             return cell
         }
     }

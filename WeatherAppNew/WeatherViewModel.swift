@@ -9,36 +9,81 @@
 import UIKit
 import WeatherAPIServiceInfo
 
-class WeatherViewModel: NSObject {
+class WeatherViewModel: ForecastViewModel {
+    var city:Observable<String>
+    var updateTime:Observable<String>
     
-    var city:Observable<String>?
-    var updateTime:Observable<String>?
-    var temp:Observable<Double>
-    var tempMin:Observable<Double>
-    var tempMax:Observable<Double>
-    var icon:Observable<UIImage!>
     var weatherDescription:Observable<String>
-    var forecastForToday:[ForecastViewModel]?
+    var pressure:Observable<String>
+    var humidity:Observable<String>
+    var windSpeed:Observable<String>
+    var windDirection:Observable<String>
+    
+    var forecastForToday:Observable<[ForecastViewModel]>
     
     override init() {
-        super.init()
-        
         self.city = Observable<String>(value: "")
         self.updateTime = Observable<String>(value: "")
-        self.temp = Observable<Double>(value: 0.0)
-        
-        self.tempMin = Observable<Double>(value: 0.0)
-        self.tempMax = Observable<Double>(value: 0.0)
-        self.icon = Observable<UIImage!>(value: nil)
         self.weatherDescription = Observable<String>(value: "")
         
-        self.forecastForToday = Observable<ForecastViewModel>(value: nil)
+        self.pressure = Observable<String>(value: "")
+        self.humidity = Observable<String>(value: "")
+        self.windSpeed = Observable<String>(value: "")
+        self.windDirection = Observable<String>(value: "")
         
-    }
-    func update(weather:Weather){
+        self.forecastForToday = Observable<[ForecastViewModel]>(value: [])
         
+        super.init()
     }
-}
-class ForecastViewModel:NSObject{
+    
+    override func update(weatherForCity city:City){
+        super.update(weatherForCity: city)
+        if let weather = city.weather {
+            self.city.value = city.name
+            //self.updateTime?.value = weather.updateTime.toSinceTime()
+            self.updateTime.value = WeatherServiceWrapper.shared.updateTime.toSinceTime()
+            self.weatherDescription.value = weather.weatherDescription.capitalizedString
+            self.pressure.value = "\(weather.pressure) hPa"
+            self.humidity.value = "\(weather.humidity) %"
+            self.windSpeed.value = "\(weather.speed) KM/H"
+            self.windDirection.value =  weather.direction.toEarthDirection()
+        }
+    }
     
 }
+
+
+class ForecastViewModel:NSObject{
+    var time:Observable<String>?
+    var temp:Observable<String>
+    var tempMin:Observable<String>
+    var tempMax:Observable<String>
+    var icon:Observable<UIImage!>
+    
+    override init() {
+        
+        self.temp = Observable<String>(value: "")
+        self.time = Observable<String>(value: "")
+        self.tempMin = Observable<String>(value: "")
+        self.tempMax = Observable<String>(value: "")
+        self.icon = Observable<UIImage!>(value: nil)
+        super.init()
+    }
+    
+    func update(weatherForCity city :City){
+        if let weather = city.weather {
+            self.temp.value = "\(Int(floor(weather.temp)))º"
+            self.tempMin.value = "\(Int(floor(weather.tempMin)))º"
+            self.tempMax.value = "\(Int(floor(weather.tempMax)))º"
+            //self.icon.value = "\(weather.temp) º"
+        }
+    }
+    
+}
+
+
+
+
+
+
+

@@ -13,7 +13,7 @@ public class Forecast: NSCopying {
     public let tempMin:Double
     public let tempMax:Double
     public let icon:String
-    public let description:String
+    public var weatherDescription:String
     public let time:NSDate
     init(icon:String,
         description:String,
@@ -25,16 +25,17 @@ public class Forecast: NSCopying {
             self.tempMax = tempMax
             self.tempMin = tempMin
             self.icon = icon
-            self.description = description
+            self.weatherDescription = description
             self.time = time
     }
     
     @objc public func copyWithZone(zone: NSZone) -> AnyObject {
-        return Forecast(icon: self.icon, description: self.description, time: self.time, temp: self.temp, tempMin: self.tempMin, tempMax: self.tempMax)
+        return Forecast(icon: self.icon, description: self.weatherDescription, time: self.time, temp: self.temp, tempMin: self.tempMin, tempMax: self.tempMax)
     }
 }
 
-public class Weather: Forecast{
+public class Weather: Forecast {
+    
     public var cityId:Int = 0
     public let condition:Int
     public let pressure:Double
@@ -64,6 +65,6 @@ public class Weather: Forecast{
             super.init(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax)
     }
     override public func copyWithZone(zone: NSZone) -> AnyObject {
-        return Weather(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax, pressure: pressure, humidity: humidity, speed: speed, direction: direction, condition:condition)
+        return Weather(icon: icon, description: weatherDescription, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax, pressure: pressure, humidity: humidity, speed: speed, direction: direction, condition:condition)
     }
 }
