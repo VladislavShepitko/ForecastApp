@@ -37,9 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
-        let city = City(id: 519188, name: "Novinki", country: "RU", coords: (55.683334, 37.666668))
-        weatherService.cities.append(city)
-        weatherService.loadSettings()
+        //let city = City(id: 519188, name: "Novinki", country: "RU", coords: (55.683334, 37.666668))
+        //weatherService.cities.append(city)
+        
         
         
         customizeNavBar()

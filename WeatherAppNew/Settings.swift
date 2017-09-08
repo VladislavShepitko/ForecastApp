@@ -13,6 +13,8 @@ enum Notification {
     case On(from:NSDate, to:NSDate)
     case Off
 }
+
+//wrapper need becouse mapper doesn't work with enums with diffrent args
 class NotificationWrapper: Mappable {
     private var isOn:Bool = false
     private var from:NSDate = NSDate()

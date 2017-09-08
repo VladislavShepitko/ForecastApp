@@ -37,35 +37,7 @@ final class WeatherServiceWrapper: NSObject {
             print("set model to \(weatherModel)")
         }
     }
-    
-    /*
-    let file = "file.txt" //this is the file. we will write to and read from it
-    
-    let text = "some text" //just a text
-    
-    if let dir = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first {
-    let path = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(file)
-    
-    //writing
-    do {
-    try text.writeToURL(path, atomically: false, encoding: NSUTF8StringEncoding)
-    }
-    catch {/* error handling here */}
-    
-    //reading
-    do {
-    let text2 = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding)
-    }
-    catch {/* error handling here */}
-    }
-    */
-    private static let FILE = "settings.json"
-    static let DIRECTORY = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first
-    static let PATH = NSURL(fileURLWithPath: DIRECTORY!).URLByAppendingPathComponent(FILE)
-    
-    static var settings:Settings!
-    
-    
+    var settingsService = SaveService.shared
     //cities for forecast
     var cities:[City] = []
     
@@ -80,52 +52,6 @@ final class WeatherServiceWrapper: NSObject {
         super.init()
         weatherModel = WeatherViewModel()
         weatherAPI.delegate = self
-    }
-    
-    //MARK:- all for settings
-    func loadSettings(){
-        
-        //reading
-        do {
-            let path = WeatherServiceWrapper.PATH
-            let settings = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
-            print("from file: \(settings)")
-            if let deserializedSettings = Mapper<Settings>().map(settings){
-                print(deserializedSettings.lastUpdate)
-                WeatherServiceWrapper.settings = deserializedSettings
-            }else {
-                print("loading error")
-            }
-        }
-        catch {
-            let settingsToSave = Settings.byDefault
-            //so, file doesn't exist we need create new one
-            if let serializedSettings = Mapper().toJSONString(Settings.byDefault){
-                do {
-                    try serializedSettings.writeToURL(WeatherServiceWrapper.PATH, atomically: true, encoding: NSUTF8StringEncoding)
-                    WeatherServiceWrapper.settings = settingsToSave
-                }catch {
-                    print("cant write settings")
-                }
-            }
-            
-        }
-        /*dispatch_async(weatherQ) { () -> Void in
-        
-        }*/
-        
-    }
-    
-    func saveSettings(){
-        if WeatherServiceWrapper.settings != nil {
-            if let serializedSettings = Mapper().toJSONString(WeatherServiceWrapper.settings!){
-                do {
-                    try serializedSettings.writeToURL(WeatherServiceWrapper.PATH, atomically: true, encoding: NSUTF8StringEncoding)
-                }catch {
-                    print("cant write settings")
-                }
-            }
-        }
     }
     
     //MARK:- update weather

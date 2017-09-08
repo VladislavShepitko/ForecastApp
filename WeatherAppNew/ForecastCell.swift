@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailedWeatherCollectionViewCell: UICollectionViewCell {
+class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var tempView: UILabel!
     @IBOutlet weak var tempMinView: UILabel!
     @IBOutlet weak var tempMaxView: UILabel!
@@ -67,8 +67,6 @@ class DetailedWeatherCollectionViewCell: UICollectionViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        forecastForTodayView.delegate = self
-        forecastForTodayView.dataSource = self
         
     }
     override func layoutSubviews() {
@@ -76,25 +74,4 @@ class DetailedWeatherCollectionViewCell: UICollectionViewCell {
         forecastForTodayView.collectionViewLayout.invalidateLayout()
     }
 }
-extension DetailedWeatherCollectionViewCell : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //number of hours to end of the day
-        return 12
-    }
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForHourCell", forIndexPath: indexPath)
-        
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        //print("bounds: \(self.frame)")
-        return CGSize(width: 50, height: forecastForTodayView.frame.height - 1)
-    }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
-    }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1
-    }
-}
+

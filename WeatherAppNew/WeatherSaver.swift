@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ObjectMapper
 
 final class SaveService {
     class var shared:SaveService{
@@ -15,14 +16,21 @@ final class SaveService {
         }
         return SaveServiceWrapper.singleton
     }
-    private static let saveQ = dispatch_queue_create("saveQ",DISPATCH_QUEUE_CONCURRENT)
-    
+    //queue for loading and saving settings
+    private let saveQ = dispatch_queue_create("saveQ",DISPATCH_QUEUE_CONCURRENT)
+    //path to settings files
     private static let FILE = "settings.json"
     static let DIRECTORY = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first
     static let PATH = NSURL(fileURLWithPath: DIRECTORY!).URLByAppendingPathComponent(FILE)
     
+    //settings
+    private (set) var settings:Settings!
     
-    private (set) var settings:Settings?
+    
+    //cache for forecasts
+    
+    
+    
     
     private init(){
         settings = Settings.byDefault
@@ -32,18 +40,18 @@ final class SaveService {
         dispatch_async(saveQ,{ _ in
             do {
                 let path = SaveService.PATH
-                let settings = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
-                print("from file: \(settings)")
-                if let deserializedSettings = Mapper<Settings>().map(settings){
+                let settingsJSON = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
+                print("from file: \(settingsJSON)")
+                if let deserializedSettings = Mapper<Settings>().map(settingsJSON){
                     print(deserializedSettings.lastUpdate)
-                    settings = deserializedSettings
+                    self.settings = deserializedSettings
                 }else {
                     print("loading error")
                 }
             }
             catch {
                 let settingsToSave = Settings.byDefault
-                saveSettins(setting:settingsToSave)
+                self.saveSettins(settingsToSave)
             }
         })
     }
@@ -57,7 +65,9 @@ final class SaveService {
         }
     }
     func save(){
-        
+        dispatch_async(saveQ,{ _ in
+            self.saveSettins(self.settings)
+        })
     }
         
 }

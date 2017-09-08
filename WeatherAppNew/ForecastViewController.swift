@@ -8,16 +8,10 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+class ForecastViewController: UIViewController {
     
-    @IBOutlet weak var pages: UICollectionView!
-    @IBOutlet weak var menu: MenuBar!
-    @IBOutlet weak var updateWeatherView: UpdateWeatherView!
-    
-    @IBOutlet weak var menuBtn: UIBarButtonItem!
-    
-    @IBOutlet weak var cityView: UILabel!
-    @IBOutlet weak var timeView: UILabel!
+    @IBOutlet weak var forecast: UICollectionView!
+
     
     private var viewModel:WeatherViewModel?
     private var weatherService = WeatherServiceWrapper.shared
@@ -25,10 +19,15 @@ class WeatherViewController: UIViewController {
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        addMenu()
-        menu.host = self
+        if let layout = self.forecast.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionHeadersPinToVisibleBounds = true
+            //it doesn't working
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        }
+        
         
         updateModel(weatherService.weatherModel)
+        /*
         //handle service errors
         weatherService.error.subscribe {[unowned self] error in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -40,11 +39,11 @@ class WeatherViewController: UIViewController {
         }
         
         print("view did load")
-        weatherService.updateWeather()
+        weatherService.updateWeather()*/
     }
     func updateModel(newModel:WeatherViewModel?){
         self.viewModel = newModel
-        viewModel?.city.subscribe { value in
+        /*viewModel?.city.subscribe { value in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.cityView.text = value
             })
@@ -55,7 +54,7 @@ class WeatherViewController: UIViewController {
             self.timeView.text = value
             })
         }
-        print("model updated")
+        print("model updated")*/
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -66,35 +65,13 @@ class WeatherViewController: UIViewController {
         super.viewWillDisappear(animated)
         
     }
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.pages.collectionViewLayout.invalidateLayout()
-    }
-    func scrollToMenuIndex(menuIndex:Int){
-        let indexPath = NSIndexPath(forItem: menuIndex, inSection: 0)
-        pages?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .None, animated: true)
-        
-    }
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        let index = Int(round(scrollView.contentOffset.x / self.view.frame.width))
-        let indexPath = NSIndexPath(forItem: index, inSection: 0)
-        menu?.scrollTo(indexPath:indexPath)
-    }
-    @IBAction func updateWeather(sender: UIBarButtonItem) {
-        updateWeatherView.show(){
-            
-        }
-        
-    }
-    
-    func addMenu(){
-        if revealViewController() != nil {
-            menuBtn.target = self.revealViewController()
-            menuBtn.action = "revealToggle:"
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-
-        }
+        self.forecast.collectionViewLayout.invalidateLayout()
     }
     
     //MARK:- collectionViewDalegateFlowLayout properties
@@ -103,35 +80,35 @@ class WeatherViewController: UIViewController {
     private  let minimumLineSpacingForSection: CGFloat = 0.0
    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        self.pages.collectionViewLayout.invalidateLayout()
+        self.forecast.collectionViewLayout.invalidateLayout()
     }
     
 }
 
-extension WeatherViewController : UICollectionViewDataSource, UICollectionViewDelegate {
+extension ForecastViewController : UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 12
     }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.item == 2 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherForecastCell", forIndexPath: indexPath)
-            return cell
-        }else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("WeatherDescriptionCell", forIndexPath: indexPath) as! DetailedWeatherCollectionViewCell
-            cell.model = self.viewModel
-            return cell
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        var view = UICollectionReusableView()
+        if kind == UICollectionElementKindSectionHeader{
+            view = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier", forIndexPath: indexPath)
         }
+        return view
+    }
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath)
+        return cell
     }
     
     
 }
 
-extension WeatherViewController: UICollectionViewDelegateFlowLayout{
+extension ForecastViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.pages.frame.width, height: self.pages.frame.height)
+        return CGSize(width: self.forecast.frame.width, height: self.forecast.frame.height)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -139,7 +116,6 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout{
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return minimumInteritemSpacingForSection
-        
     }
 }
 
