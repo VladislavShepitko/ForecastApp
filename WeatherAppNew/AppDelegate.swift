@@ -41,20 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //weatherService.cities.append(city)
         
         
-        
-        customizeNavBar()
         return true
-    }
-    
-    func customizeNavBar(){
-        //customize navigation bar
-        //get rid of black bar underneath navbar
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().translucent = true
-        //change background color of tint top bar
-        UINavigationBar.appearance().barTintColor = UIColor.clearColor()
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
     }
     
     func applicationWillResignActive(application: UIApplication) {

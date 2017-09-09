@@ -14,10 +14,16 @@ class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var tempMaxView: UILabel!
     @IBOutlet weak var weatherDescriptionView: UILabel!
     @IBOutlet weak var weatherIconView: UIImageView!
+    
+    static var height:CGFloat = 0
+    static var alpha:CGFloat = 0
+    private var isExpanded = true
+    @IBOutlet weak var detailsView: UIView!
+    @IBOutlet weak var detailsHeight: NSLayoutConstraint!
+    
     @IBOutlet weak var humidityView: UILabel!
     @IBOutlet weak var windSpeedView: UILabel!
     @IBOutlet weak var windDirectionView: UILabel!
-    @IBOutlet weak var forecastForTodayView: UICollectionView!
     
     var model:WeatherViewModel? = nil {
         didSet{
@@ -67,11 +73,31 @@ class ForecastCell: UICollectionViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        let gestureRecogn = UITapGestureRecognizer(target: self, action: "onTap:")
+        gestureRecogn.numberOfTapsRequired = 2 
+        self.addGestureRecognizer(gestureRecogn)
+        //self.detailsHeight.constant = 0
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        forecastForTodayView.collectionViewLayout.invalidateLayout()
+    }
+    
+    func onTap(sender:UITapGestureRecognizer){
+        if sender.numberOfTouches() == 2 {
+            return
+        }
+        print("double tap")
+        
+        ForecastCell.height = isExpanded ? 0: 150
+        ForecastCell.alpha = isExpanded ? 0: 1
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: [], animations: { () -> Void in
+            self.detailsHeight.constant = ForecastCell.height
+            self.detailsView.alpha = ForecastCell.alpha
+            self.layoutIfNeeded()
+            }, completion: nil)
+        
+        isExpanded = !isExpanded
     }
 }
 

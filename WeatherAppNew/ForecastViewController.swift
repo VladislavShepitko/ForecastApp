@@ -11,7 +11,6 @@ import UIKit
 class ForecastViewController: UIViewController {
     
     @IBOutlet weak var forecast: UICollectionView!
-
     
     private var viewModel:WeatherViewModel?
     private var weatherService = WeatherServiceWrapper.shared
@@ -19,10 +18,9 @@ class ForecastViewController: UIViewController {
     //MARK:- view controller functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        showMenu()
         if let layout = self.forecast.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionHeadersPinToVisibleBounds = true
-            //it doesn't working
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         }
         
         
@@ -55,6 +53,13 @@ class ForecastViewController: UIViewController {
             })
         }
         print("model updated")*/
+    }
+    
+    
+    func showMenu(){
+        if revealViewController() != nil {
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -91,9 +96,14 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         return 12
     }
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        var view = UICollectionReusableView()
+        let view = UICollectionReusableView()
         if kind == UICollectionElementKindSectionHeader{
-            view = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier", forIndexPath: indexPath)
+            let view = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier", forIndexPath: indexPath) as! ForecastHeader
+            
+            if revealViewController() != nil {
+                view.menuButton.addTarget(self.revealViewController(), action: "revealToggle:", forControlEvents: .TouchUpInside)
+            }
+            return view
         }
         return view
     }
@@ -108,14 +118,14 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
 extension ForecastViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.forecast.frame.width, height: self.forecast.frame.height)
+        return CGSize(width: self.forecast.frame.width, height: self.forecast.frame.height - 100)
     }
-    
+    /*
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return minimumLineSpacingForSection
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return minimumInteritemSpacingForSection
-    }
+    }*/
 }
 
