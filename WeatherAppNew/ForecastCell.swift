@@ -17,7 +17,7 @@ class ForecastCell: UICollectionViewCell {
     
     static var height:CGFloat = 0
     static var alpha:CGFloat = 0
-    private var isExpanded = true
+    private var isExpanded = false
     @IBOutlet weak var detailsView: UIView!
     @IBOutlet weak var detailsHeight: NSLayoutConstraint!
     

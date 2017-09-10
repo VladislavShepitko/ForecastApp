@@ -15,4 +15,8 @@ class ForecastHeader: UICollectionReusableView {
     @IBOutlet weak var cityView: UILabel!
     @IBOutlet weak var locationIcon: UIImageView!
     @IBOutlet weak var dateView: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
 }
