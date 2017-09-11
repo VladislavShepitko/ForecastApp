@@ -104,12 +104,12 @@ class Settings : Mappable {
     class var byDefault:Settings {
         return Settings()
     }
-    var notification:Notification!
-    var language:Language!
-    var tempUnits:Units!
-    var windSpeedUnits:WindSpeedUnits!
+    var notification:Notification
+    var language:Language
+    var tempUnits:Units
+    var windSpeedUnits:WindSpeedUnits
     var citis:[City] = []
-    var lastUpdate:NSDate!
+    var lastUpdate:NSDate
     
     init(){
         notification =  .Off
@@ -120,7 +120,8 @@ class Settings : Mappable {
     }
     
     // MARK: Mappable
-    required init?(_ map: Map) {
+    required convenience init?(_ map: Map) {
+        self.init()
         // subClasses must call the constructor of the base class
         // super.init(map)
         

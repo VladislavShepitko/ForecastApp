@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WeatherAPIServiceInfo
 /*
 var notification:NotificationWrapper!
 var language:Language!
@@ -22,7 +23,7 @@ class SettingsViewModel: NSObject {
     var notificationTo: Observable<NSDate?>
     
     var language: Observable<Language>
-    var tempUnits:Observable<TempUnits>
+    var tempUnits:Observable<Units>
     var windSpeedUnits:Observable<WindSpeedUnits>
     
     
@@ -30,15 +31,15 @@ class SettingsViewModel: NSObject {
         notification = Observable<Bool>(value: false)
         notificationFrom = Observable<NSDate?>(value:nil)
         notificationTo = Observable<NSDate?>(value:nil)
-        language = Observable<Language>(value: .ENG)
-        tempUnits = Observable<TempUnits>(value: .Celsius)
+        language = Observable<Language>(value: .English)
+        tempUnits = Observable<Units>(value: .Celsius)
         windSpeedUnits = Observable<WindSpeedUnits>(value: .KilomertPerHour)
         
         super.init()
     }
     
     func setModel(model: Settings){
-        switch model.notification.notification{
+        switch model.notification {
         case .On(let from, let to):
             self.notification.value = true
             self.notificationFrom.value = from
