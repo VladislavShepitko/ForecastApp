@@ -11,31 +11,30 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="earth" translatesAutoresizingMaskIntoConstraints="NO" id="9KR-gT-4pI">
-                    <rect key="frame" x="134" y="34" width="32" height="32"/>
+                    <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
                 </imageView>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zhC-Wz-8PZ">
-                    <rect key="frame" x="0.0" y="595" width="600" height="5"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="5" id="5Ka-hd-oBF"/>
-                    </constraints>
-                </view>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="satellite" translatesAutoresizingMaskIntoConstraints="NO" id="EUW-6c-hle">
-                    <rect key="frame" x="174" y="26" width="14" height="14"/>
+                    <rect key="frame" x="0.0" y="0.0" width="14" height="14"/>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last updated: 15:26" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAY-Gh-k6d">
+                    <rect key="frame" x="90" y="108" width="120" height="17"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="zhC-Wz-8PZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="G9H-Rq-adx"/>
-                <constraint firstAttribute="bottom" secondItem="zhC-Wz-8PZ" secondAttribute="bottom" id="LGk-lV-keR"/>
-                <constraint firstAttribute="trailing" secondItem="zhC-Wz-8PZ" secondAttribute="trailing" id="d8J-di-dOs"/>
+                <constraint firstItem="bAY-Gh-k6d" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TZD-Av-Cgk"/>
+                <constraint firstAttribute="bottom" secondItem="bAY-Gh-k6d" secondAttribute="bottom" constant="-25" id="eL5-zB-VDe"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="earthView" destination="9KR-gT-4pI" id="8bQ-OS-k9N"/>
                 <outlet property="satelliteView" destination="EUW-6c-hle" id="PzY-ov-fbu"/>
+                <outlet property="timeView" destination="bAY-Gh-k6d" id="TGU-Xv-KWp"/>
             </connections>
-            <point key="canvasLocation" x="361" y="355"/>
+            <point key="canvasLocation" x="376" y="342"/>
         </view>
     </objects>
     <resources>

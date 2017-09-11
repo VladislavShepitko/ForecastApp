@@ -8,6 +8,13 @@
 
 import UIKit
 
+func delay(delay:Double, completion:()-> Void)
+{
+    let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)));
+    dispatch_after(popTime, dispatch_get_main_queue()) { () -> Void in
+        completion()
+    }
+}
 
 extension NSDate {
     func toSinceTime() -> String{

@@ -26,12 +26,6 @@ final class SaveService {
     //settings
     private (set) var settings:Settings!
     
-    
-    //cache for forecasts
-    
-    
-    
-    
     private init(){
         settings = Settings.byDefault
     }

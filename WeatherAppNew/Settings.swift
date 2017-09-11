@@ -17,13 +17,12 @@ enum Notification {
 //wrapper need becouse mapper doesn't work with enums with diffrent args
 class NotificationWrapper: Mappable {
     private var isOn:Bool = false
-    private var from:NSDate = NSDate()
-    private var to:NSDate = NSDate()
+    private var from:NSDate? = NSDate()
+    private var to:NSDate? = NSDate()
     
-    var notification:Notification? {
+    var notification:Notification {
         didSet{
-            if let notification = notification {
-                switch notification {
+              switch notification {
                 case .On(let _from, let _to):
                     isOn = true
                     from = _from
@@ -31,9 +30,10 @@ class NotificationWrapper: Mappable {
                     break
                 case .Off:
                     isOn = false
+                    from = nil
+                    to = nil
                     break
                 }
-            }
         }
     }
     
@@ -41,7 +41,7 @@ class NotificationWrapper: Mappable {
         self.notification = notification
     }
     required init?(_ map: Map) {
-        
+        self.notification = .Off
     }
     
     func mapping(map: Map) {

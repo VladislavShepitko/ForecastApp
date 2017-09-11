@@ -19,4 +19,17 @@ class ForecastHeader: UICollectionReusableView {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    func updateTodayView(text:String){
+        let todayConstraint = todayView.getConstraint(with: "todayLeading")
+        
+        todayConstraint?.constant = todayView.frame.width
+        todayView.alpha = 0
+        UIView.animateWithDuration(0.5) { [unowned self, weak todayConstraint] in
+            self.todayView.text = text
+            todayConstraint?.constant = 0
+            self.todayView.alpha = 1
+        }
+        
+    }
 }

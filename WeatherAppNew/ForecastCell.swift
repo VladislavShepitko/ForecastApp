@@ -87,8 +87,6 @@ class ForecastCell: UICollectionViewCell {
         if sender.numberOfTouches() == 2 {
             return
         }
-        print("double tap")
-        
         ForecastCell.height = isExpanded ? 0: 150
         ForecastCell.alpha = isExpanded ? 0: 1
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: [], animations: { () -> Void in
