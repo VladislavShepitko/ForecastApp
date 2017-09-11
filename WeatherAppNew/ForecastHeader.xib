@@ -25,7 +25,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9 SEPTEMBER" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9V-xg-Tus">
-                    <rect key="frame" x="484" y="79" width="106" height="19"/>
+                    <rect key="frame" x="484" y="69" width="106" height="19"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TODAY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKT-ra-e5v">
-                    <rect key="frame" x="20" y="79" width="51" height="19"/>
+                    <rect key="frame" x="20" y="69" width="51" height="19"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -49,7 +49,7 @@
                 <constraint firstItem="eG1-uc-CXg" firstAttribute="centerY" secondItem="9zM-CB-fKS" secondAttribute="centerY" id="2Ee-Bd-UGf"/>
                 <constraint firstItem="xKT-ra-e5v" firstAttribute="leading" secondItem="0lu-od-EgX" secondAttribute="leading" identifier="todayLeading" id="CZL-by-6MF"/>
                 <constraint firstItem="9zM-CB-fKS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="J8P-Xe-Mts"/>
-                <constraint firstItem="xKT-ra-e5v" firstAttribute="top" secondItem="0lu-od-EgX" secondAttribute="bottom" constant="30" id="aEa-zS-1Ee"/>
+                <constraint firstItem="xKT-ra-e5v" firstAttribute="top" secondItem="0lu-od-EgX" secondAttribute="bottom" constant="20" id="aEa-zS-1Ee"/>
                 <constraint firstItem="f9V-xg-Tus" firstAttribute="centerY" secondItem="xKT-ra-e5v" secondAttribute="centerY" id="dGu-uo-wc1"/>
                 <constraint firstItem="9zM-CB-fKS" firstAttribute="leading" secondItem="eG1-uc-CXg" secondAttribute="trailing" constant="8" id="jkG-Aa-zur"/>
                 <constraint firstItem="0lu-od-EgX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="25" id="pth-a9-klx"/>

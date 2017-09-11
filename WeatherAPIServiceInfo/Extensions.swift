@@ -19,9 +19,9 @@ extension NSDate {
 }
 
 extension Forecast {
-    class func forecastJSON(json:JSON) -> Forecast{
+    static func forecastJSON(json:JSON) -> Forecast?{
         let mainJSON = json["main"]
-        
+        /*
         let time = NSDate(timeIntervalSince1970: json["dt"].doubleValue)
         
         let descriptionJSON = (json["weather"][0])
@@ -32,10 +32,21 @@ extension Forecast {
         let tempMin = (mainJSON["temp_min"]).doubleValue
         let tempMax = (mainJSON["temp_max"]).doubleValue
         
-        return Forecast(icon: icon, description: description, time: time, temp: temp, tempMin: tempMin, tempMax: tempMax)
         
+        let pressure = (mainJSON["pressure"]).doubleValue
+        let humidity = (mainJSON["humidity"]).doubleValue
+        //wind parameters
+        let windJSON = json["wind"]
+        let wSpeed = (windJSON["speed"]).doubleValue
+        let wDeg = (windJSON["speed"]).doubleValue*/
+        /*
+        return Forecast(icon:icon, description: description, temp: temp, time: time,  tempMin: tempMin, tempMax: tempMax, pressure: pressure, humidity: humidity, speed: wSpeed, direction: wDeg)
+        */
+        
+        return nil
     }
 }
+/*
 extension Weather {
      class func weatherFromJSON(json:JSON) -> Weather? {
         var weather:Weather? = nil
@@ -57,4 +68,4 @@ extension Weather {
         
         return weather
     }
-}
+}*/

@@ -8,12 +8,34 @@
 
 import Foundation
 import ObjectMapper
+import WeatherAPIServiceInfo
 
-enum Notification {
+enum Notification : Mappable {
     case On(from:NSDate, to:NSDate)
     case Off
+    
+    init?(_ map: Map) {
+        self = .Off
+        buildWith(map: map)
+    }
+    mutating func mapping(map: Map) {
+        buildWith(map: map)
+    }
+    private func buildWith(map map:Map) -> Notification {
+        var _isOn = false
+        _isOn <- map["isOn"]
+        if _isOn == true {
+            var from:NSDate = NSDate(), to:NSDate = NSDate();
+            
+            from <- (map["from"],DateTransform())
+            to <- (map["to"],DateTransform())
+            return .On(from: from, to: to)
+        }else {
+            return .Off
+        }
+    }
 }
-
+/*
 //wrapper need becouse mapper doesn't work with enums with diffrent args
 class NotificationWrapper: Mappable {
     private var isOn:Bool = false
@@ -58,7 +80,8 @@ class NotificationWrapper: Mappable {
         }
     }
 }
-
+*/
+/*
 enum Language : String {
     case RU
     case ENG
@@ -68,7 +91,7 @@ enum TempUnits : String {
     case Celsius
     case Fahreinheit
 }
-
+*/
 enum WindSpeedUnits:String {
     case MilePerHour
     case KilomertPerHour
@@ -81,16 +104,16 @@ class Settings : Mappable {
     class var byDefault:Settings {
         return Settings()
     }
-    var notification:NotificationWrapper!
+    var notification:Notification!
     var language:Language!
-    var tempUnits:TempUnits!
+    var tempUnits:Units!
     var windSpeedUnits:WindSpeedUnits!
     var citis:[City] = []
     var lastUpdate:NSDate!
     
     init(){
-        notification = NotificationWrapper(notification: .Off)
-        language = .ENG
+        notification =  .Off
+        language = .English
         tempUnits = .Celsius
         windSpeedUnits = .MetersPerSeconds
         lastUpdate = NSDate()
@@ -117,7 +140,7 @@ class Settings : Mappable {
         
         notification <- (map["notification"])
         language <- (map["lang"],EnumTransform<Language>())
-        tempUnits <- (map["temp"],EnumTransform<TempUnits>())
+        tempUnits <- (map["temp"],EnumTransform<Units>())
         windSpeedUnits <- (map["wind"],EnumTransform<WindSpeedUnits>())
         lastUpdate <- (map["lastUpdate"], DateTransform())
         citis <- map["cities"]

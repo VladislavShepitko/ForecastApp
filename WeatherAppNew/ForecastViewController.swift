@@ -87,8 +87,7 @@ class ForecastViewController: UIViewController {
         if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
             cell.alpha = offsetY
         }
-        print("offset:\(offsetY)")
-        self.updateHeader(index:indexPath)
+        self.updateHeader(offsetY + 0.25, forIndex:indexPath)
         
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
@@ -104,14 +103,17 @@ class ForecastViewController: UIViewController {
         
     }
     var dates = ["now","today evening","midnight","tomorrow morning","wensterday","thurstday","suturday","sunday","monday","other day","other day","other day","other day"]
-    func updateHeader(index index:NSIndexPath){
-        let sectionIndex = NSIndexPath(forItem: 0, inSection: 0)
-        if let header = self.forecast.supplementaryViewForElementKind(UICollectionElementKindSectionHeader, atIndexPath: sectionIndex) as? ForecastHeader {
-
-            header.todayView.text = dates[index.item]
-        }
+    
+    lazy var header:ForecastHeader = {
+        return self.forecast.supplementaryViewForElementKind(UICollectionElementKindSectionHeader, atIndexPath: NSIndexPath(forItem: 0, inSection: 0)) as! ForecastHeader
+        }()
+    
+    func updateHeader(progress:CGFloat, forIndex index:NSIndexPath){
+        print("offset:\(progress) for index: \(index.item)")
         
-        
+        header.updateTodayView(progress,data:dates[index.item])
+ 
+    
     }
     
     //MARK:- collectionViewDalegateFlowLayout properties
@@ -119,6 +121,7 @@ class ForecastViewController: UIViewController {
     private let minimumLineSpacingForSection: CGFloat = 100.0
     
 }
+
 extension ForecastViewController : RefreshDelegate
 {
     func startUpdating(refreshControl: RefreshControl) {

@@ -35,6 +35,7 @@ class City: Mappable  {
         coords <- (map["coords"],coordsTransform)
     }
 }
+
 let coordsTransform = TransformOf(fromJSON: { (value:Any?) -> CLLocationCoordinate2D? in
     guard let location = value as? NSDictionary,
         let latitude = location["lat"] as? Double,

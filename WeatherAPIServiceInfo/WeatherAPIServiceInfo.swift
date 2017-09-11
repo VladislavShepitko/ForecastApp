@@ -14,7 +14,7 @@ public protocol WeatherServiceDelegate:class {
 }
 
 public enum WeatherResult{
-    case Success(weatherForCity:Weather?)
+    case Success(weather:Weather?)
     case Failure(ErrorType)
 }
 public enum WeatherError:ErrorType {
@@ -33,9 +33,6 @@ public enum Units:String {
     case Celsius = "metric"
     case Fahreinheit = "imperial"
 }
-
-
-
 
 public class WeatherAPIServiceInfo: NSObject {
     
@@ -65,32 +62,16 @@ public class WeatherAPIServiceInfo: NSObject {
         }
         if let forecastJSON = json["list"].array {
             //extrat weather for today and for yesterday
-            for (index, forecastJSONItem) in forecastJSON.enumerate() {
-                
-                let interval = (forecastJSONItem["dt"]).doubleValue
-                let date = NSDate(timeIntervalSince1970: interval)
-                
-                if date.isToday() {
-                    if index == 0 {
-                        weather = Weather.weatherFromJSON(forecastJSONItem)
-                        print("today")
-                    }else {
-                        let forecastObject = Forecast.forecastJSON(forecastJSONItem)
-                        weather?.forecast.append(forecastObject)
-                        print("today forecast ")
-                    }
-                }else {
-                    let forecastObject = Forecast.forecastJSON(forecastJSONItem)
-                    weather?.forecast.append(forecastObject)
-                    print("forecast for other day")
-                }
+            weather = Weather(withCityID: WeatherAPIServiceInfo.cityID)
+            for forecastJSONItem in forecastJSON {
+                let forecast = Forecast(json: forecastJSONItem)
+                weather?.forecast?.append(forecast)
             }
         }else {
             //can't conver JSON
             return .Failure(WeatherError.JSONConvertError)
-        }
-        weather?.cityId = WeatherAPIServiceInfo.cityID
-        return .Success(weatherForCity:weather)
+        } 
+        return .Success(weather:weather)
         
     }
     
