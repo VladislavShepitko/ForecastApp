@@ -46,7 +46,6 @@ public class WeatherAPIServiceInfo: NSObject {
     
     public static let APP_KEY = "19e47aa5161a4692b93fdc510cf800ff"
     public static let BASE_URL = "http://api.openweathermap.org/data/2.5/"
-    public static var cityID:Int = -1
     
     public weak var delegate:WeatherServiceDelegate?
     
@@ -56,13 +55,25 @@ public class WeatherAPIServiceInfo: NSObject {
         var weather:Weather? = nil
         
         let json = JSON(data: data)
-        
+        print(json)
         if json["cod"].intValue != 200 {
             return .Failure(WeatherError.BadRequestError)
         }
+        /*
+        "city":{
+        "id":524901,
+        "name":"Moscow",
+        "coord":{
+        "lat":55.7522,
+        "lon":37.6156
+        },
+        "country":"none"
+        }
+        */
+        let cityID = (json["city"]["id"]).intValue
         if let forecastJSON = json["list"].array {
             //extrat weather for today and for yesterday
-            weather = Weather(withCityID: WeatherAPIServiceInfo.cityID)
+            weather = Weather(withCityID: cityID)
             for forecastJSONItem in forecastJSON {
                 let forecast = Forecast(json: forecastJSONItem)
                 weather?.forecast?.append(forecast)
@@ -142,14 +153,13 @@ extension WeatherAPIServiceInfo {
         updateWeather(forURL: url)
     }
     
-    public func updateWeatherForLocation(id:Int, lat:Double, lon:Double){
-        WeatherAPIServiceInfo.cityID = id
+    public func updateWeatherForLocation(lat:Double, lon:Double){
         let params = [
             "lat":"\(lat)",
             "lon":"\(lon)"
         ]
         let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
-        print(url)
+        //print(url)
         updateWeather(forURL: url)
     }
     

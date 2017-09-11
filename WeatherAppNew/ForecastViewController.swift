@@ -48,7 +48,7 @@ class ForecastViewController: UIViewController {
         }
         
         print("view did load")
-        //weatherService.updateWeather()
+        weatherService.updateWeather()
     }
     
     func loadRefreshControl(){

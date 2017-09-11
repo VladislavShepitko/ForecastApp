@@ -42,11 +42,11 @@ class WeatherViewModel: ForecastViewModel {
             self.city.value = city.name
             //self.updateTime?.value = weather.updateTime.toSinceTime()
             self.updateTime.value = WeatherServiceWrapper.shared.updateTime.toSinceTime()
-            self.weatherDescription.value = weather.weatherDescription.capitalizedString
+            /*self.weatherDescription.value = weather.weatherDescription.capitalizedString
             self.pressure.value = "\(weather.pressure) hPa"
             self.humidity.value = "\(weather.humidity) %"
             self.windSpeed.value = "\(weather.speed) KM/H"
-            self.windDirection.value =  weather.direction.toEarthDirection()
+            self.windDirection.value =  weather.direction.toEarthDirection()*/
         }
     }
     
@@ -72,9 +72,10 @@ class ForecastViewModel:NSObject{
     
     func update(weatherForCity city :City){
         if let weather = city.weather {
+            /*
             self.temp.value = "\(Int(floor(weather.temp)))º"
             self.tempMin.value = "\(Int(floor(weather.tempMin)))º"
-            self.tempMax.value = "\(Int(floor(weather.tempMax)))º"
+            self.tempMax.value = "\(Int(floor(weather.tempMax)))º"*/
             //self.icon.value = "\(weather.temp) º"
         }
     }

@@ -76,7 +76,7 @@ final class WeatherServiceWrapper: NSObject {
                 let coords = city.coords
                 let id = city.id
                 print("send request for city:\(id)")
-                self.weatherAPI.updateWeatherForLocation(id, lat: coords.latitude, lon: coords.longitude)
+                self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
             })
         }
         
@@ -99,10 +99,11 @@ final class WeatherServiceWrapper: NSObject {
 extension WeatherServiceWrapper: WeatherServiceDelegate {
     func fetchWeather(result: WeatherResult) {
         switch result{
-        case .Success(let weather):
-            let cityID = weather?.cityId
+        case .Success(let weather ):
+            let cityID = weather?.cityID
+            
             print("updated weather for city:\(cityID)")
-            let filtered = Array(self.cities.filter(){ $0.id == cityID })
+            /*let filtered = Array(self.cities.filter(){ $0.id == cityID })
             print(filtered)
             guard let selectedCity = filtered.first else {
                 //throw becouse citi in not in array
@@ -121,6 +122,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
                 weatherModel?.update(weatherForCity: city)
                 self.updatedCities = 0
             }
+            */
             //update update time
             break
         case .Failure(let error):

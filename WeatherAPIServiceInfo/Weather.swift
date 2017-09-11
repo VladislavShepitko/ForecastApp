@@ -81,8 +81,8 @@ public struct Forecast {
  
 }
 public struct Weather{
-    let cityID:Int
-    var forecast:[Forecast]? = []
+    public let cityID:Int
+    public var forecast:[Forecast]? = []
     init(withCityID id:Int){
         self.cityID = id
     }
