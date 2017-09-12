@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return SingletonWrapper.singleton
     }
     let weatherService = WeatherServiceWrapper.shared
-    //let settings = AppSettings.sharedSettings
     
     var window: UIWindow?
     
@@ -34,15 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(deserializedUser.name)
         }
         */
-        /*
-        {
-        "id": 1283378,
-        "name": "Gorkhā",
-        "country": "NP",
-        "coord": {
-        "lon": 84.633331,
-        "lat": 28
-        }*/
         let city3 = City(id: 1283378, name: "Gorkhā", country: "NP", coords: (84.633331, 28))
         let city2 = City(id: 1270260, name: "State of Haryāna", country: "IN", coords: (76, 29))
         let city1 = City(id: 708546, name: "Holubynka", country: "UA", coords: (44.599998, 33.900002))
@@ -52,6 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         weatherService.cities.append(city1)
         weatherService.cities.append(city2)
         weatherService.cities.append(city3)
+
+        weatherService.settings.load()
         
         return true
     }

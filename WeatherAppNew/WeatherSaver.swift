@@ -8,26 +8,98 @@
 
 import Foundation
 import ObjectMapper
+enum SettingsKeys: String{
+    case Notification
+    case NotificationFromDate
+    case NotificationToDate
+    case Language
+    case Temperature
+    case WindSpeed
+}
 
 final class SaveService {
+    //singleton object
     class var shared:SaveService{
         struct SaveServiceWrapper{
             static let singleton:SaveService = SaveService()
         }
         return SaveServiceWrapper.singleton
     }
+    //Path to settings file in documents diractory
+    private static let file = "settings.json"
+    private static let directory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first!
+    private lazy var path = {
+        return NSURL(fileURLWithPath: directory).URLByAppendingPathComponent(file)
+        }()
+    
     //queue for loading and saving settings
-    private let saveQ = dispatch_queue_create("saveQ",DISPATCH_QUEUE_CONCURRENT)
-    //path to settings files
-    private static let FILE = "settings.json"
-    static let DIRECTORY = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first
-    static let PATH = NSURL(fileURLWithPath: DIRECTORY!).URLByAppendingPathComponent(FILE)
+    private let queue = dispatch_queue_create("com.svapp.saveQ",DISPATCH_QUEUE_SERIAL)
     
     //settings
-    private (set) var settings:Settings!
+    let model:SettingsViewModel
+    
     
     private init(){
-        settings = Settings.byDefault
+        self.model = SettingsViewModel(settings: .byDefault)
+        
+        self.model.notification.subscribe { [weak self] value in
+            self?.updateModel()
+        }
+        self.model.language.subscribe { [weak self] value in
+            self?.updateModel()
+        }
+        self.model.tempUnits.subscribe { [weak self] value in
+            self?.updateModel()
+        }
+        self.model.windSpeedUnits.subscribe { [weak self] value in
+            self?.updateModel()
+        }
+        
+    }
+    
+    func updateModel(){
+        save()
+    }
+    func load(){
+        dispatch_async(queue,{ _ in
+            do {
+                let path = path
+                let settingsJSON = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
+                print("from file: \(settingsJSON)")
+                if let deserializedSettings = Mapper<Settings>().map(settingsJSON){
+                    self.model.updateModel(deserializedSettings)
+                }else {
+                    print("loading error")
+                }
+            } catch {
+                let settingsToSave = Settings.byDefault
+                self.saveSettins(settingsToSave)
+            }
+        })
+    }
+    private func saveSettins(settings:Settings) {
+        if let serializedSettings = Mapper().toJSONString(settings){
+            do {
+                try serializedSettings.writeToURL(path, atomically: true, encoding: NSUTF8StringEncoding)
+            }catch {
+                print("cant write settings")
+            }
+        }
+    }
+    func save(){
+        dispatch_async(queue,{ _ in
+            self.saveSettins(self.model.settings)
+        })
+    }
+    
+    /*
+    
+    //path to settings files
+    
+    
+    
+    private init(){
+        self.model = SettingsViewModel(settings: .byDefault)
     }
     
     func load(){
@@ -37,8 +109,7 @@ final class SaveService {
                 let settingsJSON = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
                 print("from file: \(settingsJSON)")
                 if let deserializedSettings = Mapper<Settings>().map(settingsJSON){
-                    print(deserializedSettings.lastUpdate)
-                    self.settings = deserializedSettings
+                    self.model.updateModel(deserializedSettings)
                 }else {
                     print("loading error")
                 }
@@ -49,7 +120,8 @@ final class SaveService {
             }
         })
     }
-    private func saveSettins(setting:Settings) {
+    
+    private func saveSettins(settings:Settings) {
         if let serializedSettings = Mapper().toJSONString(settings){
             do {
                 try serializedSettings.writeToURL(SaveService.PATH, atomically: true, encoding: NSUTF8StringEncoding)
@@ -59,9 +131,9 @@ final class SaveService {
         }
     }
     func save(){
-        dispatch_async(saveQ,{ _ in
-            self.saveSettins(self.settings)
+        dispatch_async(saveQ,{ _ in            
+            self.saveSettins(self.model.settings)
         })
     }
-        
+    */
 }

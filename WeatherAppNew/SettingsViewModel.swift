@@ -16,16 +16,28 @@ var windSpeedUnits:WindSpeedUnits!
 var citis:[City] = []
 var lastUpdate:NSDate!
 */
+
 class SettingsViewModel: NSObject {
     
-    var notification: Observable<Bool>
-    var notificationFrom: Observable<NSDate?>
-    var notificationTo: Observable<NSDate?>
+    private (set) var notification: Observable<Bool>
+    private (set) var notificationFrom: Observable<NSDate?>
+    private (set) var notificationTo: Observable<NSDate?>
     
-    var language: Observable<Language>
-    var tempUnits:Observable<Units>
-    var windSpeedUnits:Observable<WindSpeedUnits>
+    private (set) var language: Observable<Language>
+    private (set) var tempUnits:Observable<Units>
+    private (set) var windSpeedUnits:Observable<WindSpeedUnits>
     
+    var settings:Settings{
+        let settings = Settings()
+        settings.notification =
+            self.notification.value == true
+            ? .On(from: notificationFrom.value!, to: notificationTo.value!)
+            : .Off
+        settings.language = self.language.value!
+        settings.tempUnits = self.tempUnits.value!
+        settings.windSpeedUnits = self.windSpeedUnits.value!
+        return settings
+    }
     
     override init(){
         notification = Observable<Bool>(value: false)
@@ -37,8 +49,12 @@ class SettingsViewModel: NSObject {
         
         super.init()
     }
+    convenience init(settings:Settings){
+        self.init()
+        updateModel(settings)
+    }
     
-    func setModel(model: Settings){
+    func updateModel(model: Settings){
         switch model.notification {
         case .On(let from, let to):
             self.notification.value = true

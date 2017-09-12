@@ -80,11 +80,16 @@ public struct Forecast {
     }
  
 }
-public struct Weather{
+public struct Weather {
     public let cityID:Int
+    public let cityName:String
+    public let cityCoords:(lat:Double, lon:Double)
+    
     public var forecast:[Forecast]? = []
-    init(withCityID id:Int){
+    init(forCity id:Int, withName name: String, coords:(lat:Double, lon:Double)){
         self.cityID = id
+        self.cityName = name
+        self.cityCoords = coords
     }
 }
  

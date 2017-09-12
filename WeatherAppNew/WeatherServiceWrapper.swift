@@ -25,9 +25,9 @@ final class WeatherServiceWrapper: NSObject {
         return SingletonWrapper.singleton
     }
     
-    private var isInterentAvailable:Bool = false
+    //private var isInterentAvailable:Bool = false
     private var currentCityIndex:Int = 0
-    private var updatedCities:Int = 0
+    //private var updatedCities:Int = 0
     
     var error:Observable<String?>
     var updateTime:NSDate!
@@ -37,13 +37,18 @@ final class WeatherServiceWrapper: NSObject {
             print("set model to \(weatherModel)")
         }
     }
-    var settingsService = SaveService.shared
+    var settings = SaveService.shared
     //cities for forecast
-    var cities:[City] = []
+    //var cities:[City] = []
+    
+    
+    var citiesCache:NSCache?
+    //get weather from cache where city id equals weather's city id
+    //test
+    
     
     //private queue for send requests
     private var weatherAPI:WeatherAPIServiceInfo = WeatherAPIServiceInfo()
-    
     //private queue for send async resuests for weather
     private let weatherQ: dispatch_queue_t = dispatch_queue_create("weatherQueue", DISPATCH_QUEUE_SERIAL)
     
@@ -76,7 +81,8 @@ final class WeatherServiceWrapper: NSObject {
                 let coords = city.coords
                 let id = city.id
                 print("send request for city:\(id)")
-                self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
+                //self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
+                self.weatherAPI.updateWeather(forCityID: id)
             })
         }
         
@@ -88,7 +94,6 @@ final class WeatherServiceWrapper: NSObject {
     */
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
-        
         let city = self.cities[self.currentCityIndex]
         weatherModel?.update(weatherForCity: city)
     }
@@ -100,13 +105,22 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
     func fetchWeather(result: WeatherResult) {
         switch result{
         case .Success(let weather ):
+            //cache update weather for city with id or add new item to cache
+            struct UpdatedCities{
+                static var count:Int = 0
+            }
+            let cityID = weather?.cityID
+            print("updated weather for city:\(cityID)")
+            
+            //var needUpdate =
+            
+            /*
             let cityID = weather?.cityID
             
-            print("updated weather for city:\(cityID)")
-            /*let filtered = Array(self.cities.filter(){ $0.id == cityID })
-            print(filtered)
+            //print("updated weather for city:\(cityID)")
+            let filtered = Array(self.cities.filter(){ $0.id == cityID })
             guard let selectedCity = filtered.first else {
-                //throw becouse citi in not in array
+                //throw becouse city in not in array
                 print("city hasn't in array")
                 break
             }
@@ -121,14 +135,13 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
                 let city = self.cities[self.currentCityIndex]
                 weatherModel?.update(weatherForCity: city)
                 self.updatedCities = 0
-            }
-            */
+            }*/
             //update update time
             break
         case .Failure(let error):
             print("weather not updated: some errors")
             if error is ConnectionError {
-                self.error.value = "Make sure your device is connected to the internet."
+                self.error.value = "Make sure that your device is connected to the internet."
             }else if error is WeatherError {
                 let wError = error as! WeatherError
                 switch wError {
@@ -137,6 +150,9 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
                     break
                 case .BadRequestError:
                     self.error.value = "Oh no, something bad happend"
+                    break
+                case .WeatherForCityDoesntFound:
+                    self.error.value = "Cant fetch weather. Weather doesn't found"
                     break
                 }
             }

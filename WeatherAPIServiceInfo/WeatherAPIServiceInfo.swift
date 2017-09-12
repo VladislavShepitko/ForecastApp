@@ -20,6 +20,7 @@ public enum WeatherResult{
 public enum WeatherError:ErrorType {
     case JSONConvertError
     case BadRequestError
+    case WeatherForCityDoesntFound
 }
 
 
@@ -55,7 +56,6 @@ public class WeatherAPIServiceInfo: NSObject {
         var weather:Weather? = nil
         
         let json = JSON(data: data)
-        print(json)
         if json["cod"].intValue != 200 {
             return .Failure(WeatherError.BadRequestError)
         }
@@ -70,14 +70,23 @@ public class WeatherAPIServiceInfo: NSObject {
         "country":"none"
         }
         */
-        let cityID = (json["city"]["id"]).intValue
+        guard let cityID = (json["city"]["id"]).int,
+        let cityName = (json["city"]["name"]).string,
+        let cityLat = (json["city"]["coord"]["lat"]).double,
+        let cityLon = (json["city"]["coord"]["lon"]).double else {
+            return .Failure(WeatherError.WeatherForCityDoesntFound)
+        }
+        
+        let c = json["city"]
+        print("updated weather for city: \(c)")
+        
         if let forecastJSON = json["list"].array {
-            //extrat weather for today and for yesterday
-            weather = Weather(withCityID: cityID)
+            weather = Weather(forCity: cityID, withName: cityName, coords: (lat: cityLat, lon: cityLon))
             for forecastJSONItem in forecastJSON {
                 let forecast = Forecast(json: forecastJSONItem)
                 weather?.forecast?.append(forecast)
             }
+            
         }else {
             //can't conver JSON
             return .Failure(WeatherError.JSONConvertError)
@@ -97,8 +106,6 @@ public class WeatherAPIServiceInfo: NSObject {
         guard let delegate = self.delegate else {
             return
         }
-        
-        
         let request = NSURLRequest(URL: url)
         let task = sharedSesion.dataTaskWithRequest(request) { [unowned self](data, response, error) -> Void in
             let result = self.processRecentWeatherResult(data: data, error: error)
@@ -131,25 +138,12 @@ public class WeatherAPIServiceInfo: NSObject {
 }
 
 extension WeatherAPIServiceInfo {
-    
-    public func updateWeather(forCity city:String){
-        if let cityName = city.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet()){
-            let params = [
-                "q":cityName
-            ]
-            
-            let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
-            print(url)
-            updateWeather(forURL: url)
-        }
-    }
-    
     public func updateWeather(forCityID id:Int){
         let params = [
             "id":String(id)
         ]
         let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
-        print(url)
+        //print(url)
         updateWeather(forURL: url)
     }
     
