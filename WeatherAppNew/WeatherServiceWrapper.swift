@@ -76,13 +76,17 @@ final class WeatherServiceWrapper: NSObject {
             break
         }
         
-        for city in  cities {
+        for city in  self.settings.model.cities {
             dispatch_async(weatherQ, { () -> Void in
+                
+                /*
                 let coords = city.coords
                 let id = city.id
                 print("send request for city:\(id)")
                 //self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
                 self.weatherAPI.updateWeather(forCityID: id)
+                */
+                
             })
         }
         
@@ -94,8 +98,8 @@ final class WeatherServiceWrapper: NSObject {
     */
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
-        let city = self.cities[self.currentCityIndex]
-        weatherModel?.update(weatherForCity: city)
+        //let city = self.cities[self.currentCityIndex]
+        //weatherModel?.update(weatherForCity: city)
     }
     
 }

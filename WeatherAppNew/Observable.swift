@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 let queue = dispatch_queue_create("obseverQ", DISPATCH_QUEUE_CONCURRENT)
 
 class Action<T> {
@@ -64,7 +64,7 @@ class Observable<T> {
     }*/
     
 }
-/*
+*/
 class Observable<T> {
     typealias Observer = (T? -> Void)?
     private var observer:Observer
@@ -85,4 +85,4 @@ class Observable<T> {
     }
     
 }
-*/
+ 

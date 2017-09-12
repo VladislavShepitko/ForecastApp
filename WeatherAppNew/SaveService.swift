@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+
 enum SettingsKeys: String{
     case Notification
     case NotificationFromDate
@@ -54,6 +55,9 @@ final class SaveService {
         self.model.windSpeedUnits.subscribe { [weak self] value in
             self?.updateModel()
         }
+        self.model.cities.subscribe { [weak self] value in
+            self?.updateModel()
+        }
         
     }
     
@@ -63,8 +67,7 @@ final class SaveService {
     func load(){
         dispatch_async(queue,{ _ in
             do {
-                let path = path
-                let settingsJSON = try NSString(contentsOfURL: path, encoding: NSUTF8StringEncoding) as String
+                let settingsJSON = try NSString(contentsOfURL: self.path, encoding: NSUTF8StringEncoding) as String
                 print("from file: \(settingsJSON)")
                 if let deserializedSettings = Mapper<Settings>().map(settingsJSON){
                     self.model.updateModel(deserializedSettings)

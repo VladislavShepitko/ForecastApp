@@ -8,14 +8,7 @@
 
 import UIKit
 import WeatherAPIServiceInfo
-/*
-var notification:NotificationWrapper!
-var language:Language!
-var tempUnits:TempUnits!
-var windSpeedUnits:WindSpeedUnits!
-var citis:[City] = []
-var lastUpdate:NSDate!
-*/
+
 
 class SettingsViewModel: NSObject {
     
@@ -26,6 +19,7 @@ class SettingsViewModel: NSObject {
     private (set) var language: Observable<Language>
     private (set) var tempUnits:Observable<Units>
     private (set) var windSpeedUnits:Observable<WindSpeedUnits>
+    private (set) var cities:Observable<[City]>
     
     var settings:Settings{
         let settings = Settings()
@@ -46,7 +40,7 @@ class SettingsViewModel: NSObject {
         language = Observable<Language>(value: .English)
         tempUnits = Observable<Units>(value: .Celsius)
         windSpeedUnits = Observable<WindSpeedUnits>(value: .KilomertPerHour)
-        
+        cities = Observable<[City]>(value: [])
         super.init()
     }
     convenience init(settings:Settings){
@@ -70,5 +64,6 @@ class SettingsViewModel: NSObject {
         self.language.value = model.language
         self.tempUnits.value = model.tempUnits
         self.windSpeedUnits.value = model.windSpeedUnits
+        self.cities.value = model.citis
     }
 }
