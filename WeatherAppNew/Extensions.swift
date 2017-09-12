@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 func delay(delay:Double, completion:()-> Void)
 {
     let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)));

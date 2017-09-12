@@ -32,14 +32,12 @@ final class WeatherServiceWrapper: NSObject {
     var error:Observable<String?>
     var updateTime:NSDate!
     //make this observable
-    var weatherModel:WeatherViewModel? {
+    var viewModel:WeatherViewModel? {
         didSet{
-            print("set model to \(weatherModel)")
+            print("set model to \(viewModel)")
         }
     }
     var settings = SaveService.shared
-    //cities for forecast
-    //var cities:[City] = []
     
     
     var citiesCache:NSCache?
@@ -55,7 +53,7 @@ final class WeatherServiceWrapper: NSObject {
     private override init(){
         self.error = Observable<String?>(value: "")
         super.init()
-        weatherModel = WeatherViewModel()
+        viewModel = WeatherViewModel()
         weatherAPI.delegate = self
     }
     
@@ -75,20 +73,20 @@ final class WeatherServiceWrapper: NSObject {
         default:
             break
         }
+            for city in self.settings.model.cities {
+                dispatch_async(weatherQ, { () -> Void in
+                    //this is mean that city hasn't name and other stuff
+                    if city.id == -1 && city.coords != nil{
+                        //here search by coords
+                        let coords = city.coords!
+                        self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
+                    }else {
+                        //by id
+                        self.weatherAPI.updateWeather(forCityID: city.id)
+                    }
+                })
+            }
         
-        for city in  self.settings.model.cities {
-            dispatch_async(weatherQ, { () -> Void in
-                
-                /*
-                let coords = city.coords
-                let id = city.id
-                print("send request for city:\(id)")
-                //self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
-                self.weatherAPI.updateWeather(forCityID: id)
-                */
-                
-            })
-        }
         
     }
     
@@ -98,8 +96,8 @@ final class WeatherServiceWrapper: NSObject {
     */
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
-        //let city = self.cities[self.currentCityIndex]
-        //weatherModel?.update(weatherForCity: city)
+        let city = self.settings.model.cities[self.currentCityIndex]
+        viewModel?.update(weatherForCity: city)
     }
     
 }
@@ -113,36 +111,42 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             struct UpdatedCities{
                 static var count:Int = 0
             }
-            let cityID = weather?.cityID
+            let cities = self.settings.model.cities
+            let cityID = (weather?.cityID)!
+            let cityCoords = (weather?.cityCoords)!
+            
             print("updated weather for city:\(cityID)")
-            
-            //var needUpdate =
-            
-            /*
-            let cityID = weather?.cityID
-            
-            //print("updated weather for city:\(cityID)")
-            let filtered = Array(self.cities.filter(){ $0.id == cityID })
-            guard let selectedCity = filtered.first else {
-                //throw becouse city in not in array
-                print("city hasn't in array")
-                break
+            //find city and update weather for
+            let filteredByID = Array(cities.filter(){ print("\($0.id)"); return $0.id == cityID })
+            if let cityToUpdate = filteredByID.first {
+                cityToUpdate.weather = weather
+            }else {
+                //then try to filter with coords
+                
+                print("try to find with coords")
+                let filteredByCoords = Array(cities.filter(){ $0.coords == cityCoords })
+                if let cityToUpdateWithCoords = filteredByCoords.first {
+                    //here update need city
+                    cityToUpdateWithCoords.id = cityID
+                    cityToUpdateWithCoords.coords = cityCoords
+                    cityToUpdateWithCoords.name = (weather?.cityName)!
+                }else {
+                    print("citi not found")
+                }
+                
             }
-            selectedCity.weather = weather
             
-            //or just update weather in db????
-            self.updatedCities++
-            if self.updatedCities == self.cities.count {
-                print("finish updating")
-                //updating is finished
+            UpdatedCities.count++
+            //finish updating
+            if UpdatedCities.count == cities.count {
                 self.updateTime = NSDate()
-                let city = self.cities[self.currentCityIndex]
-                weatherModel?.update(weatherForCity: city)
-                self.updatedCities = 0
-            }*/
-            //update update time
+                let city = cities[self.currentCityIndex]
+                viewModel?.update(weatherForCity: city)
+                UpdatedCities.count = 0
+            }
             break
         case .Failure(let error):
+            
             print("weather not updated: some errors")
             if error is ConnectionError {
                 self.error.value = "Make sure that your device is connected to the internet."
@@ -165,3 +169,19 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
         
     }
 }
+
+extension CLLocationCoordinate2D : Equatable { }
+public func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    if lhs.latitude == rhs.latitude &&
+        lhs.longitude == rhs.longitude {
+    return true
+    }
+    else {
+        return false
+    }
+}
+
+
+
+
+

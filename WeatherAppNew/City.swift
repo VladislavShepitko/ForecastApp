@@ -13,16 +13,17 @@ import ObjectMapper
 
 class City: Mappable  {
     var name:String = ""
-    var id:Int = 0
+    var id:Int = -1
     var country:String = ""
-    var coords:CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var coords:CLLocationCoordinate2D?
     var weather:Weather?
+    var isCurrentLocation:Bool = false
     
-    init(id:Int, name:String, country:String, coords:(Double,Double)){
+    init(id:Int, name:String, country:String, coords:(lat:Double,lon:Double)){
         self.name = name
         self.id = id
         self.country = country
-        self.coords = CLLocationCoordinate2D(latitude: coords.0, longitude: coords.1)
+        self.coords = CLLocationCoordinate2D(latitude: coords.lat, longitude: coords.lon)
     }
     
     required init?(_ map: Map) { 

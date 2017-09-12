@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import CoreLocation
 
 public struct Forecast {
     
@@ -80,13 +81,15 @@ public struct Forecast {
     }
  
 }
+
 public struct Weather {
+    
     public let cityID:Int
     public let cityName:String
-    public let cityCoords:(lat:Double, lon:Double)
+    public let cityCoords:CLLocationCoordinate2D
     
     public var forecast:[Forecast]? = []
-    init(forCity id:Int, withName name: String, coords:(lat:Double, lon:Double)){
+    init(forCity id:Int, withName name: String, coords:CLLocationCoordinate2D){
         self.cityID = id
         self.cityName = name
         self.cityCoords = coords

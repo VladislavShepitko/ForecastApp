@@ -36,7 +36,7 @@ class ForecastViewController: UIViewController {
         loadRefreshControl()
         
         //setup viewmodel
-        updateModel(weatherService.weatherModel)
+        //updateModel(weatherService.weatherModel)
         //handle service errors
         weatherService.error.subscribe {[unowned self] error in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -85,7 +85,11 @@ class ForecastViewController: UIViewController {
         //if offsetY >= 0.9 {offsetY = 1}
         let indexPath = NSIndexPath(forItem: index, inSection: 0)
         if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
-            cell.alpha = offsetY
+            var alpha = offsetY
+            if offsetY == 0 {
+                alpha = 1
+            }
+            cell.alpha = alpha
         }
         self.updateHeader(offsetY + 0.25, forIndex:indexPath)
         
@@ -190,10 +194,10 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
 
 extension ForecastViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.forecast.frame.width, height: self.forecast.frame.height - 100)
+        return CGSize(width: self.forecast.frame.width, height: self.forecast.frame.height - minimumLineSpacingForSection)
     }
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: 100)
+        return CGSize(width: self.view.frame.width, height: minimumLineSpacingForSection)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {

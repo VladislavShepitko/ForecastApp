@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import CoreLocation
 
 public protocol WeatherServiceDelegate:class {
     func fetchWeather(result:WeatherResult)
@@ -81,7 +82,8 @@ public class WeatherAPIServiceInfo: NSObject {
         print("updated weather for city: \(c)")
         
         if let forecastJSON = json["list"].array {
-            weather = Weather(forCity: cityID, withName: cityName, coords: (lat: cityLat, lon: cityLon))
+            let coords = CLLocationCoordinate2D(latitude: cityLat, longitude: cityLon)
+            weather = Weather(forCity: cityID, withName: cityName, coords: coords)
             for forecastJSONItem in forecastJSON {
                 let forecast = Forecast(json: forecastJSONItem)
                 weather?.forecast?.append(forecast)

@@ -19,7 +19,7 @@ class SettingsViewModel: NSObject {
     private (set) var language: Observable<Language>
     private (set) var tempUnits:Observable<Units>
     private (set) var windSpeedUnits:Observable<WindSpeedUnits>
-    private (set) var cities:Observable<[City]>
+    var cities:[City]
     
     var settings:Settings{
         let settings = Settings()
@@ -40,7 +40,7 @@ class SettingsViewModel: NSObject {
         language = Observable<Language>(value: .English)
         tempUnits = Observable<Units>(value: .Celsius)
         windSpeedUnits = Observable<WindSpeedUnits>(value: .KilomertPerHour)
-        cities = Observable<[City]>(value: [])
+        cities = [City]()
         super.init()
     }
     convenience init(settings:Settings){
@@ -64,6 +64,6 @@ class SettingsViewModel: NSObject {
         self.language.value = model.language
         self.tempUnits.value = model.tempUnits
         self.windSpeedUnits.value = model.windSpeedUnits
-        self.cities.value = model.citis
+        self.cities = model.cities
     }
 }

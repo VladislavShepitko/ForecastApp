@@ -7,6 +7,7 @@
 //
 
 import UIKit
+/*
 public enum CacheExpiry{
     case never
     case seconds(NSTimeInterval)
@@ -46,7 +47,7 @@ class Cache<T : NSCoding > : NSObject {
         }
         super.init()
     }
-}
+}*/
 /*
 import Foundation
 

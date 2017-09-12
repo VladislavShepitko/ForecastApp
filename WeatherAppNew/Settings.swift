@@ -52,7 +52,7 @@ class Settings : Mappable {
     var language:Language
     var tempUnits:Units
     var windSpeedUnits:WindSpeedUnits
-    var citis:[City] = []
+    var cities:[City] = []
     var lastUpdate:NSDate
     
     init(){
@@ -85,7 +85,7 @@ class Settings : Mappable {
         tempUnits <- (map["temp"],EnumTransform<Units>())
         windSpeedUnits <- (map["wind"],EnumTransform<WindSpeedUnits>())
         lastUpdate <- (map["lastUpdate"], DateTransform())
-        citis <- map["cities"]
+        cities <- map["cities"]
         
     }
     
