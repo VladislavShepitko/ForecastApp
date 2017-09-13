@@ -36,7 +36,8 @@ class ForecastViewController: UIViewController {
         loadRefreshControl()
         
         //setup viewmodel
-        //updateModel(weatherService.weatherModel)
+        updateModel(weatherService.viewModel)
+        
         //handle service errors
         weatherService.error.subscribe {[unowned self] error in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -60,6 +61,7 @@ class ForecastViewController: UIViewController {
     
     func updateModel(newModel:WeatherViewModel?){
         self.viewModel = newModel
+        print("model is updated")
         /*viewModel?.city.subscribe { value in
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.cityView.text = value

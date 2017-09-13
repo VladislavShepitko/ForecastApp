@@ -9,36 +9,35 @@
 import UIKit
 import WeatherAPIServiceInfo
 
-class WeatherViewModel: ForecastViewModel {
-    var city:Observable<String>
-    var updateTime:Observable<String>
-    
-    var weatherDescription:Observable<String>
-    var pressure:Observable<String>
-    var humidity:Observable<String>
-    var windSpeed:Observable<String>
-    var windDirection:Observable<String>
-    
-    var forecastForToday:Observable<[ForecastViewModel]>
+class WeatherViewModel: NSObject {
+    private (set) var cityName:Observable<String>
+    private (set) var updateTime:String
+    private (set) var isCurrentLocation:Bool
+    private (set) var forecastForToday:[ForecastViewModel]
     
     override init() {
-        self.city = Observable<String>(value: "")
-        self.updateTime = Observable<String>(value: "")
-        self.weatherDescription = Observable<String>(value: "")
-        
-        self.pressure = Observable<String>(value: "")
-        self.humidity = Observable<String>(value: "")
-        self.windSpeed = Observable<String>(value: "")
-        self.windDirection = Observable<String>(value: "")
-        
-        self.forecastForToday = Observable<[ForecastViewModel]>(value: [])
-        
+        self.cityName = Observable<String>(value: "")
+        self.updateTime = ""
+        self.isCurrentLocation = false
+        self.forecastForToday = [ForecastViewModel]()
+            
         super.init()
     }
     
-    override func update(weatherForCity city:City){
-        super.update(weatherForCity: city)
+    func update(weatherForCity city:City, withForecastType type:ForecastFor){
         if let weather = city.weather {
+            self.cityName.value = weather.cityName
+            //need some preparations
+            //self.isCurrentLocation =
+            self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
+            for /*forecastItem*/_ in weather.forecast! {
+                
+            }
+            //here depend on what forecast we want fetch every hour, or for day
+            //weather.forecast
+        }
+        /*
+        let weather = city.weather {
             self.city.value = city.name
             //self.updateTime?.value = weather.updateTime.toSinceTime()
             self.updateTime.value = WeatherServiceWrapper.shared.updateTime.toSinceTime()
@@ -47,37 +46,46 @@ class WeatherViewModel: ForecastViewModel {
             self.humidity.value = "\(weather.humidity) %"
             self.windSpeed.value = "\(weather.speed) KM/H"
             self.windDirection.value =  weather.direction.toEarthDirection()*/
-        }
+        }*/
     }
     
 }
 
 
-class ForecastViewModel:NSObject{
-    var time:Observable<String>?
-    var temp:Observable<String>
-    var tempMin:Observable<String>
-    var tempMax:Observable<String>
-    var icon:Observable<UIImage!>
+class ForecastViewModel:NSObject {
+    private (set) var time:String
+    private (set) var temp:String
+    private (set) var tempMin:String
+    private (set) var tempMax:String
+    private (set) var icon:UIImage?
+    
+    
+    
+    private (set) var today:String
+    private (set) var date:String
     
     override init() {
         
-        self.temp = Observable<String>(value: "")
-        self.time = Observable<String>(value: "")
-        self.tempMin = Observable<String>(value: "")
-        self.tempMax = Observable<String>(value: "")
-        self.icon = Observable<UIImage!>(value: nil)
+        self.temp = ""
+        self.time = ""
+        self.tempMin = ""
+        self.tempMax = ""
+        self.icon = nil
+        
+        self.today = ""
+        self.date = ""
+        
         super.init()
     }
     
-    func update(weatherForCity city :City){
-        if let weather = city.weather {
+    func update(forecast:Forecast){
+        //if let weather = city.weather {
             /*
             self.temp.value = "\(Int(floor(weather.temp)))º"
             self.tempMin.value = "\(Int(floor(weather.tempMin)))º"
             self.tempMax.value = "\(Int(floor(weather.tempMax)))º"*/
             //self.icon.value = "\(weather.temp) º"
-        }
+        //}
     }
     
 }

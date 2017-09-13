@@ -16,6 +16,10 @@ public enum ConnectionError:ErrorType {
     case InternetIsNotAvailable
 }
 
+public enum ForecastFor{
+    case Hours
+    case Days
+}
 
 final class WeatherServiceWrapper: NSObject {
     class var shared:WeatherServiceWrapper {
@@ -29,18 +33,16 @@ final class WeatherServiceWrapper: NSObject {
     private var currentCityIndex:Int = 0
     //private var updatedCities:Int = 0
     
-    var error:Observable<String?>
-    var updateTime:NSDate!
+    private (set) var error:Observable<String?>
+    private (set) var updateTime = NSDate()
+    
     //make this observable
-    var viewModel:WeatherViewModel? {
-        didSet{
-            print("set model to \(viewModel)")
-        }
-    }
-    var settings = SaveService.shared
+    private (set) var viewModel:WeatherViewModel
+    private (set) var settings = SaveService.shared
     
     
-    var citiesCache:NSCache?
+    var forecastType:ForecastFor = .Hours
+    //var citiesCache:NSCache?
     //get weather from cache where city id equals weather's city id
     //test
     
@@ -51,9 +53,9 @@ final class WeatherServiceWrapper: NSObject {
     private let weatherQ: dispatch_queue_t = dispatch_queue_create("weatherQueue", DISPATCH_QUEUE_SERIAL)
     
     private override init(){
+        viewModel = WeatherViewModel()
         self.error = Observable<String?>(value: "")
         super.init()
-        viewModel = WeatherViewModel()
         weatherAPI.delegate = self
     }
     
@@ -97,7 +99,7 @@ final class WeatherServiceWrapper: NSObject {
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
         let city = self.settings.model.cities[self.currentCityIndex]
-        viewModel?.update(weatherForCity: city)
+        viewModel.update(weatherForCity: city, withForecastType: self.forecastType)
     }
     
 }
@@ -141,7 +143,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             if UpdatedCities.count == cities.count {
                 self.updateTime = NSDate()
                 let city = cities[self.currentCityIndex]
-                viewModel?.update(weatherForCity: city)
+                viewModel.update(weatherForCity: city, withForecastType: self.forecastType)
                 UpdatedCities.count = 0
             }
             break
