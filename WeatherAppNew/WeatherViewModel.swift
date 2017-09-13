@@ -35,6 +35,7 @@ class WeatherViewModel: NSObject {
             }
             //here depend on what forecast we want fetch every hour, or for day
             //weather.forecast
+            
         }
         /*
         let weather = city.weather {
@@ -63,6 +64,7 @@ class ForecastViewModel:NSObject {
     
     private (set) var today:String
     private (set) var date:String
+    
     
     override init() {
         

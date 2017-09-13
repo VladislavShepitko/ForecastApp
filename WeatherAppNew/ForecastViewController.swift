@@ -61,19 +61,13 @@ class ForecastViewController: UIViewController {
     
     func updateModel(newModel:WeatherViewModel?){
         self.viewModel = newModel
+        //subsctibe on model change notification
+        self.viewModel?.cityName.subscribe({ value in
+            dispatch_async(dispatch_get_main_queue(), { _ in
+                self.forecast.reloadData()
+            })
+        })
         print("model is updated")
-        /*viewModel?.city.subscribe { value in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        self.cityView.text = value
-        })
-        
-        }
-        viewModel?.updateTime.subscribe { value in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        self.timeView.text = value
-        })
-        }
-        print("model updated")*/
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -93,7 +87,7 @@ class ForecastViewController: UIViewController {
             }
             cell.alpha = alpha
         }
-        self.updateHeader(offsetY + 0.25, forIndex:indexPath)
+        //self.updateHeader(offsetY + 0.25, forIndex:indexPath)
         
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
@@ -108,19 +102,15 @@ class ForecastViewController: UIViewController {
         }
         
     }
-    var dates = ["now","today evening","midnight","tomorrow morning","wensterday","thurstday","suturday","sunday","monday","other day","other day","other day","other day"]
-    
     lazy var header:ForecastHeader = {
         return self.forecast.supplementaryViewForElementKind(UICollectionElementKindSectionHeader, atIndexPath: NSIndexPath(forItem: 0, inSection: 0)) as! ForecastHeader
         }()
-    
+    /*
     func updateHeader(progress:CGFloat, forIndex index:NSIndexPath){
         print("offset:\(progress) for index: \(index.item)")
-        
         header.updateTodayView(progress,data:dates[index.item])
- 
     
-    }
+    }*/
     
     //MARK:- collectionViewDalegateFlowLayout properties
     private let minimumInteritemSpacingForSection: CGFloat = 0.0
@@ -161,8 +151,9 @@ extension ForecastViewController {
 extension ForecastViewController : UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return (self.viewModel?.forecastForToday.count)!
     }
+    
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if let forecastCell = cell as? ForecastCell{
             forecastCell.detailsHeight.constant = ForecastCell.height
@@ -174,19 +165,28 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         let view = UICollectionReusableView()
         if kind == UICollectionElementKindSectionHeader{
             let view = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier", forIndexPath: indexPath) as! ForecastHeader
-            
-            
-            if revealViewController() != nil {
+             if revealViewController() != nil {
                 view.menuButton.addTarget(self.revealViewController(), action: "revealToggle:", forControlEvents: .TouchUpInside)
             }
             return view
         }
         return view
     }
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath) as! ForecastCell
         
-        //cell.alpha = 1
+        //update header
+        let model = self.viewModel!
+        let forecastData = model.forecastForToday[indexPath.item]
+        header.cityView.text = model.cityName.value
+        header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "002-location"): nil
+        header.todayView.text = forecastData.today
+        header.dateView.text = forecastData.date
+        
+        //update View
+        
+        
         
         return cell
     }
