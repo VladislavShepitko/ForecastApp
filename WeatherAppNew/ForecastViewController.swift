@@ -36,7 +36,20 @@ class ForecastViewController: UIViewController {
         loadRefreshControl()
         
         //setup viewmodel
-        updateModel(weatherService.viewModel)
+        weatherService.viewModel.subscribe { [unowned self] model in
+            self.viewModel = model!
+            dispatch_async(dispatch_get_main_queue(), { _ in
+                self.forecast.reloadData()
+            })
+        }
+        //self.viewModel = newModel
+        //subsctibe on model change notification
+        self.viewModel?.cityName.subscribe({ value in
+            dispatch_async(dispatch_get_main_queue(), { _ in
+                self.forecast.reloadData()
+            })
+        })
+        print("model is updated")
         
         //handle service errors
         weatherService.error.subscribe {[unowned self] error in
@@ -57,17 +70,6 @@ class ForecastViewController: UIViewController {
         self.refreshControl = NSBundle.mainBundle().loadNibNamed(String(RefreshControl.self), owner: self, options: nil).first as! RefreshControl
         self.refreshControl.delegate = self
         self.forecast.addSubview(refreshControl)
-    }
-    
-    func updateModel(newModel:WeatherViewModel?){
-        self.viewModel = newModel
-        //subsctibe on model change notification
-        self.viewModel?.cityName.subscribe({ value in
-            dispatch_async(dispatch_get_main_queue(), { _ in
-                self.forecast.reloadData()
-            })
-        })
-        print("model is updated")
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -185,7 +187,7 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         header.dateView.text = forecastData.date
         
         //update View
-        
+        cell.model = forecastData
         
         
         return cell

@@ -65,6 +65,7 @@ class Observable<T> {
     
 }
 */
+
 class Observable<T> {
     typealias Observer = (T? -> Void)?
     private var observer:Observer

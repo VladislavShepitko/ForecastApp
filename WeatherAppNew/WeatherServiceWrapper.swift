@@ -37,7 +37,8 @@ final class WeatherServiceWrapper: NSObject {
     private (set) var updateTime = NSDate()
     
     //make this observable
-    private (set) var viewModel:WeatherViewModel
+    private (set) var viewModel:Observable<WeatherViewModel?>
+    
     private (set) var settings = SaveService.shared
     
     
@@ -53,7 +54,7 @@ final class WeatherServiceWrapper: NSObject {
     private let weatherQ: dispatch_queue_t = dispatch_queue_create("weatherQueue", DISPATCH_QUEUE_SERIAL)
     
     private override init(){
-        viewModel = WeatherViewModel()
+        viewModel = Observable<WeatherViewModel?>(value: nil)
         self.error = Observable<String?>(value: "")
         super.init()
         weatherAPI.delegate = self
@@ -75,19 +76,19 @@ final class WeatherServiceWrapper: NSObject {
         default:
             break
         }
-            for city in self.settings.model.cities {
-                dispatch_async(weatherQ, { () -> Void in
-                    //this is mean that city hasn't name and other stuff
-                    if city.id == -1 && city.coords != nil{
-                        //here search by coords
-                        let coords = city.coords!
-                        self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
-                    }else {
-                        //by id
-                        self.weatherAPI.updateWeather(forCityID: city.id)
-                    }
-                })
-            }
+        for city in self.settings.model.cities {
+            dispatch_async(weatherQ, { () -> Void in
+                //this is mean that city hasn't name and other stuff
+                if city.id == -1 && city.coords != nil{
+                    //here search by coords
+                    let coords = city.coords!
+                    self.weatherAPI.updateWeatherForLocation(coords.latitude, lon: coords.longitude)
+                }else {
+                    //by id
+                    self.weatherAPI.updateWeather(forCityID: city.id)
+                }
+            })
+        }
         
         
     }
@@ -99,7 +100,7 @@ final class WeatherServiceWrapper: NSObject {
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
         let city = self.settings.model.cities[self.currentCityIndex]
-        viewModel.update(weatherForCity: city, withForecastType: self.forecastType)
+        viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
     }
     
 }
@@ -143,7 +144,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             if UpdatedCities.count == cities.count {
                 self.updateTime = NSDate()
                 let city = cities[self.currentCityIndex]
-                viewModel.update(weatherForCity: city, withForecastType: self.forecastType)
+                viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
                 UpdatedCities.count = 0
             }
             break
@@ -174,13 +175,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
 
 extension CLLocationCoordinate2D : Equatable { }
 public func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-    if lhs.latitude == rhs.latitude &&
-        lhs.longitude == rhs.longitude {
-    return true
-    }
-    else {
-        return false
-    }
+    return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude ? true : false
 }
 
 

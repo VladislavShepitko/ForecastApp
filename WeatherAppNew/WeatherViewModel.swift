@@ -23,35 +23,27 @@ class WeatherViewModel: NSObject {
             
         super.init()
     }
-    
-    func update(weatherForCity city:City, withForecastType type:ForecastFor){
+    convenience init?(weatherForCity city:City, withForecastType type:ForecastFor){
+        self.init()
         if let weather = city.weather {
-            self.cityName.value = weather.cityName
             //need some preparations
-            //self.isCurrentLocation =
+            self.isCurrentLocation = true
             self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
-            for /*forecastItem*/_ in weather.forecast! {
-                
+            forecastForToday = []
+            for model in weather.forecast! {
+                let forecast = ForecastViewModel()
+                forecast.update(model)
+                self.forecastForToday.append(forecast)
             }
             //here depend on what forecast we want fetch every hour, or for day
-            //weather.forecast
             
+            //here notificate subscribers that model is updated
+            self.cityName.value = weather.cityName
+        }else{
+            return nil
         }
-        /*
-        let weather = city.weather {
-            self.city.value = city.name
-            //self.updateTime?.value = weather.updateTime.toSinceTime()
-            self.updateTime.value = WeatherServiceWrapper.shared.updateTime.toSinceTime()
-            /*self.weatherDescription.value = weather.weatherDescription.capitalizedString
-            self.pressure.value = "\(weather.pressure) hPa"
-            self.humidity.value = "\(weather.humidity) %"
-            self.windSpeed.value = "\(weather.speed) KM/H"
-            self.windDirection.value =  weather.direction.toEarthDirection()*/
-        }*/
-    }
-    
+    }    
 }
-
 
 class ForecastViewModel:NSObject {
     private (set) var time:String
@@ -60,8 +52,15 @@ class ForecastViewModel:NSObject {
     private (set) var tempMax:String
     private (set) var icon:UIImage?
     
+    private (set) var weatherDescription:String
+    private (set) var pressure:String
+    private (set) var humidity:String
+    private (set) var wSpeed:String
+    private (set) var wDirection:String
+    private (set) var clouds:String
+    private (set) var snow:String
     
-    
+    //NOT UPDATED!!!
     private (set) var today:String
     private (set) var date:String
     
@@ -73,28 +72,43 @@ class ForecastViewModel:NSObject {
         self.tempMin = ""
         self.tempMax = ""
         self.icon = nil
-        
         self.today = ""
         self.date = ""
+        self.weatherDescription = ""
+        self.pressure = ""
+        self.humidity = ""
+        self.wSpeed = ""
+        self.wDirection = ""
+        self.clouds = ""
+        self.snow = ""
         
         super.init()
     }
     
     func update(forecast:Forecast){
-        //if let weather = city.weather {
-            /*
-            self.temp.value = "\(Int(floor(weather.temp)))º"
-            self.tempMin.value = "\(Int(floor(weather.tempMin)))º"
-            self.tempMax.value = "\(Int(floor(weather.tempMax)))º"*/
-            //self.icon.value = "\(weather.temp) º"
-        //}
+        var tempMeasureIcon = ""
+        switch WeatherServiceWrapper.shared.settings.model.tempUnits.value!{
+        case .Celsius:
+            tempMeasureIcon = "℃"
+            break
+        case .Fahreinheit:
+            tempMeasureIcon = "℉"
+            break
+        }
+        self.temp = "\(Int(floor(forecast.temp)))\(tempMeasureIcon)"
+        self.tempMin = "\(Int(floor(forecast.tempMin)))"
+        self.tempMax = "\(Int(floor(forecast.tempMax)))"
+        //self.icon = download icon
+        self.weatherDescription = forecast.description
+        self.pressure = "\(round(forecast.pressure))"
+        self.humidity = "\(round(forecast.humidity))"
+        self.wSpeed = "\(round(forecast.speed))"
+        self.wDirection = "\(forecast.direction.toEarthDirection())"
+        self.clouds = "\(Int(floor(forecast.clouds)))"
+        self.snow = "\(Int(floor(forecast.snow)))"
+        
     }
-    
+    deinit{
+        print("delete data for: \(self.description): date: \(self.date)")
+    }
 }
-
-
-
-
-
-
-

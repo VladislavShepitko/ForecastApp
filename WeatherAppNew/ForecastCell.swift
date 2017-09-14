@@ -18,6 +18,7 @@ class ForecastCell: UICollectionViewCell {
     static var height:CGFloat = 0
     static var alpha:CGFloat = 0
     private var isExpanded = false
+    
     @IBOutlet weak var detailsView: UIView!
     @IBOutlet weak var detailsHeight: NSLayoutConstraint!
     
@@ -25,50 +26,23 @@ class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var windSpeedView: UILabel!
     @IBOutlet weak var windDirectionView: UILabel!
     
-    var model:WeatherViewModel? = nil {
+    var model:ForecastViewModel? = nil {
         didSet{
-            model?.temp.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tempView.text = value
+            if let model = model{
+                dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+                    self.tempView.text = model.temp
+                    self.tempMinView.text = model.tempMin
+                    self.tempMaxView.text = model.tempMax
+                    self.weatherDescriptionView.text = model.weatherDescription
+                    self.weatherIconView.image = model.icon
+                    
+                    self.humidityView.text = model.humidity
+                    self.windSpeedView.text = model.wSpeed
+                    self.windDirectionView.text = model.wDirection
+                    //need update measure units
+                    //and snow
                 })
-                })
-            model?.tempMin.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tempMinView.text = value
-                })
-                })
-            model?.tempMax.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tempMaxView.text = value
-                })
-                })
-            model?.weatherDescription.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.weatherDescriptionView.text = value
-                })
-                })
-            
-            model?.icon.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.weatherIconView.image = value
-                })
-                })
-            model?.humidity.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.humidityView.text = value
-                })
-                })
-            model?.windDirection.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.windDirectionView.text = value
-                })
-                })
-            model?.windSpeed.subscribe({[unowned self] value in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.windSpeedView.text = value
-                })
-                })
-            
+            }
         }
     }
     override func awakeFromNib() {
@@ -84,9 +58,6 @@ class ForecastCell: UICollectionViewCell {
     }
     
     func onTap(sender:UITapGestureRecognizer){
-        if sender.numberOfTouches() == 2 {
-            return
-        }
         ForecastCell.height = isExpanded ? 0: 150
         ForecastCell.alpha = isExpanded ? 0: 1
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: [], animations: { () -> Void in
@@ -94,7 +65,6 @@ class ForecastCell: UICollectionViewCell {
             self.detailsView.alpha = ForecastCell.alpha
             self.layoutIfNeeded()
             }, completion: nil)
-        
         isExpanded = !isExpanded
     }
 }
