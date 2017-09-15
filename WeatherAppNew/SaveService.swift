@@ -29,10 +29,10 @@ final class SaveService {
  
     //settings
     let model:SettingsViewModel
-    //var cities:[City] = [City]()
+    var cities:[City] = [City]()
  
     func addCity(city:City){
-        self.model.cities.append(city)
+        self.cities.append(city)
     }
     
     
@@ -86,7 +86,7 @@ final class SaveService {
     func save(){
         dispatch_async(queue,{ _ in
             let settings = self.model.settings
-            //settings.cities = self.cities
+            settings.cities = self.cities
             self.saveSettins(settings)
         })
     }

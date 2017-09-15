@@ -24,6 +24,10 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Pe-icon-7-weather.svg</string>
+		<string>Pe-icon-7-weather.woff</string>
+		<string>Pe-icon-7-weather.ttf</string>
+		<string>Pe-icon-7-weather.eot</string>
 		<string>Climacons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -47,20 +51,20 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>example.com</key>
-            <dict>
-                <key>NSExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-            </dict>
-        </dict>
-    </dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>example.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>

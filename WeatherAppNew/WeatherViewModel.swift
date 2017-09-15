@@ -14,13 +14,17 @@ class WeatherViewModel: NSObject {
     private (set) var updateTime:String
     private (set) var isCurrentLocation:Bool
     private (set) var forecastForToday:[ForecastViewModel]
+    private (set) var tempMin:String
+    private (set) var tempMax:String
     
     override init() {
         self.cityName = Observable<String>(value: "")
         self.updateTime = ""
         self.isCurrentLocation = false
+        self.tempMin = ""
+        self.tempMax = "" 
         self.forecastForToday = [ForecastViewModel]()
-            
+        
         super.init()
     }
     convenience init?(weatherForCity city:City, withForecastType type:ForecastFor){
@@ -30,11 +34,27 @@ class WeatherViewModel: NSObject {
             self.isCurrentLocation = true
             self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
             forecastForToday = []
+            
             for model in weather.forecast! {
                 let forecast = ForecastViewModel()
                 forecast.update(model)
                 self.forecastForToday.append(forecast)
             }
+            var max = weather.forecast![0].tempMin
+            let _ = weather.forecast!.map({
+                if $0.tempMax > max{
+                    max = $0.tempMax
+                }
+            })
+            var min = max
+            let _ = weather.forecast!.map({
+                if $0.tempMin < min{
+                    min = $0.tempMin
+                }
+            })
+            self.tempMin = "\(Int(floor(min)))"
+            self.tempMax = "\(Int(floor(max)))"
+            
             //here depend on what forecast we want fetch every hour, or for day
             
             //here notificate subscribers that model is updated
@@ -42,14 +62,12 @@ class WeatherViewModel: NSObject {
         }else{
             return nil
         }
-    }    
+    }
+    
 }
 
 class ForecastViewModel:NSObject {
-    private (set) var time:String
     private (set) var temp:String
-    private (set) var tempMin:String
-    private (set) var tempMax:String
     private (set) var icon:UIImage?
     
     private (set) var weatherDescription:String
@@ -68,9 +86,6 @@ class ForecastViewModel:NSObject {
     override init() {
         
         self.temp = ""
-        self.time = ""
-        self.tempMin = ""
-        self.tempMax = ""
         self.icon = nil
         self.today = ""
         self.date = ""
@@ -96,10 +111,8 @@ class ForecastViewModel:NSObject {
             break
         }
         self.temp = "\(Int(floor(forecast.temp)))\(tempMeasureIcon)"
-        self.tempMin = "\(Int(floor(forecast.tempMin)))"
-        self.tempMax = "\(Int(floor(forecast.tempMax)))"
-        //self.icon = download icon
-        self.weatherDescription = forecast.description
+        var desc = forecast.description
+        self.weatherDescription = desc.capitalizedString
         self.pressure = "\(round(forecast.pressure))"
         self.humidity = "\(round(forecast.humidity))"
         self.wSpeed = "\(round(forecast.speed))"
@@ -107,7 +120,16 @@ class ForecastViewModel:NSObject {
         self.clouds = "\(Int(floor(forecast.clouds)))"
         self.snow = "\(Int(floor(forecast.snow)))"
         
+        let forecastDate = getDate(forecast.time)
+        self.date = forecastDate.date
+        self.today =  forecastDate.today
     }
+    func getDate(date:NSDate)->(today:String, date:String){
+        let date = ("NOW","9 SEPTEMBER")
+        
+        return date
+    }
+    
     deinit{
         print("delete data for: \(self.description): date: \(self.date)")
     }

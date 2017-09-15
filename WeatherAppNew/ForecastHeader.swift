@@ -21,6 +21,6 @@ class ForecastHeader: UICollectionReusableView {
     }
     
     func updateTodayView(progress:CGFloat, data text:String){
-        self.todayView.text = text
+        //self.todayView.text = text
     }
 }

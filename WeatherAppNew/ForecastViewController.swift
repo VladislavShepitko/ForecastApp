@@ -38,18 +38,17 @@ class ForecastViewController: UIViewController {
         //setup viewmodel
         weatherService.viewModel.subscribe { [unowned self] model in
             self.viewModel = model!
-            dispatch_async(dispatch_get_main_queue(), { _ in
-                self.forecast.reloadData()
-            })
+            if let _ = self.viewModel{
+                dispatch_async(dispatch_get_main_queue(), { _ in
+                    self.forecast.reloadData()
+                    print("model is updated")
+                })
+            }else {
+                dispatch_async(dispatch_get_main_queue(), { _ in
+                    self.showErrorView()
+                })
+            }
         }
-        //self.viewModel = newModel
-        //subsctibe on model change notification
-        self.viewModel?.cityName.subscribe({ value in
-            dispatch_async(dispatch_get_main_queue(), { _ in
-                self.forecast.reloadData()
-            })
-        })
-        print("model is updated")
         
         //handle service errors
         weatherService.error.subscribe {[unowned self] error in
@@ -61,8 +60,9 @@ class ForecastViewController: UIViewController {
             })
         }
         
-        print("view did load")
-        weatherService.updateWeather()
+    }
+    func showErrorView(){
+        print("error")
     }
     
     func loadRefreshControl(){
@@ -104,15 +104,8 @@ class ForecastViewController: UIViewController {
         }
         
     }
-    lazy var header:ForecastHeader = {
-        return self.forecast.supplementaryViewForElementKind(UICollectionElementKindSectionHeader, atIndexPath: NSIndexPath(forItem: 0, inSection: 0)) as! ForecastHeader
-        }()
-    /*
-    func updateHeader(progress:CGFloat, forIndex index:NSIndexPath){
-        print("offset:\(progress) for index: \(index.item)")
-        header.updateTodayView(progress,data:dates[index.item])
-    
-    }*/
+    private weak var header:ForecastHeader?
+ 
     
     //MARK:- collectionViewDalegateFlowLayout properties
     private let minimumInteritemSpacingForSection: CGFloat = 0.0
@@ -137,6 +130,8 @@ extension ForecastViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        print("viewWillAppear")
+        weatherService.updateWeather()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -153,7 +148,11 @@ extension ForecastViewController {
 extension ForecastViewController : UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (self.viewModel?.forecastForToday.count)!
+        if let model = self.viewModel{
+            return model.forecastForToday.count
+        } else {
+            return 0
+        }
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
@@ -167,28 +166,31 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         let view = UICollectionReusableView()
         if kind == UICollectionElementKindSectionHeader{
             let view = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier", forIndexPath: indexPath) as! ForecastHeader
-             if revealViewController() != nil {
+            if revealViewController() != nil {
                 view.menuButton.addTarget(self.revealViewController(), action: "revealToggle:", forControlEvents: .TouchUpInside)
             }
+            self.header = view
             return view
         }
         return view
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath) as! ForecastCell
-        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath) as! ForecastCell        
         //update header
         let model = self.viewModel!
         let forecastData = model.forecastForToday[indexPath.item]
-        header.cityView.text = model.cityName.value
-        header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "002-location"): nil
-        header.todayView.text = forecastData.today
-        header.dateView.text = forecastData.date
         
+        if let header = self.header {
+            header.cityView.text = model.cityName.value
+            header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "002-location"): nil
+            header.todayView.text = forecastData.today
+            header.dateView.text = forecastData.date
+        }
         //update View
         cell.model = forecastData
-        
+        cell.tempMinView.text = model.tempMin
+        cell.tempMaxView.text = model.tempMax
         
         return cell
     }

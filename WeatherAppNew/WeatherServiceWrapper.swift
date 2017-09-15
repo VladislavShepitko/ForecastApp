@@ -76,7 +76,7 @@ final class WeatherServiceWrapper: NSObject {
         default:
             break
         }
-        for city in self.settings.model.cities {
+        for city in self.settings.cities {
             dispatch_async(weatherQ, { () -> Void in
                 //this is mean that city hasn't name and other stuff
                 if city.id == -1 && city.coords != nil{
@@ -114,13 +114,13 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             struct UpdatedCities{
                 static var count:Int = 0
             }
-            let cities = self.settings.model.cities
+            let cities = self.settings.cities
             let cityID = (weather?.cityID)!
             let cityCoords = (weather?.cityCoords)!
             
             print("updated weather for city:\(cityID)")
             //find city and update weather for
-            let filteredByID = Array(cities.filter(){ print("\($0.id)"); return $0.id == cityID })
+            let filteredByID = Array(cities.filter(){return $0.id == cityID })
             if let cityToUpdate = filteredByID.first {
                 cityToUpdate.weather = weather
             }else {

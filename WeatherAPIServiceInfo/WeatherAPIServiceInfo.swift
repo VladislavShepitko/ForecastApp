@@ -78,8 +78,8 @@ public class WeatherAPIServiceInfo: NSObject {
             return .Failure(WeatherError.WeatherForCityDoesntFound)
         }
         
-        let c = json["city"]
-        print("updated weather for city: \(c)")
+        //let c = json["city"]
+        //print("updated weather for city: \(c)")
         
         if let forecastJSON = json["list"].array {
             let coords = CLLocationCoordinate2D(latitude: cityLat, longitude: cityLon)

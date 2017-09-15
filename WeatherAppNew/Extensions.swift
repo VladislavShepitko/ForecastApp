@@ -22,6 +22,11 @@ extension NSDate {
         let dateFormatter = NSDateFormatter()
         return  dateFormatter.timeSince(self, numericDates: true)
     }
+    func dayOfTheWeek() -> String? {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.stringFromDate(self)
+    }
 }
 
 extension NSDateFormatter {
@@ -33,6 +38,7 @@ extension NSDateFormatter {
     
     - Returns: A string with formatted `date`.
     */
+    
     func timeSince(from: NSDate, numericDates: Bool = false) -> String {
         let calendar = NSCalendar.currentCalendar()
         let now = NSDate()
