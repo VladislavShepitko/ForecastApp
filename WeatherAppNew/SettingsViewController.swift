@@ -7,15 +7,33 @@
 //
 
 import UIKit
+enum SettingsID:String{
+    case NotificationCell
+    
+    case NotificationFromTitleCell
+    case NotificationFromCell
+    
+    case NotificationToTitleCell
+    case NotificationToCell
+    
+    case TemperatureTitleCell
+    case TemperatureCell
+    
+    case WindTitleCell
+    case WindCell
+    
+    case LanguageTitleCell
+    case LanguageCell
+}
+
 
 class SettingsViewController: UITableViewController {
     
-    private var viewModel:SettingsViewModel?
+    private weak var viewModel:SettingsViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //dict[""] = 25
-        
+        self.viewModel = WeatherServiceWrapper.shared.settings.model
     }
     
 

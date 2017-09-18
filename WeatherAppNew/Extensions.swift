@@ -22,6 +22,10 @@ extension NSDate {
         let dateFormatter = NSDateFormatter()
         return  dateFormatter.timeSince(self, numericDates: true)
     }
+    func dayNumberOfWeek() -> Int? {
+        return NSCalendar.currentCalendar().components( NSCalendarUnit.Weekday, fromDate: self).weekday
+        //return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
     func dayOfTheWeek() -> String? {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEEE"

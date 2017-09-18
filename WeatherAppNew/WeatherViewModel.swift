@@ -10,55 +10,74 @@ import UIKit
 import WeatherAPIServiceInfo
 
 class WeatherViewModel: NSObject {
-    private (set) var cityName:Observable<String>
+    private (set) var cityName:String
     private (set) var updateTime:String
     private (set) var isCurrentLocation:Bool
     private (set) var forecastForToday:[ForecastViewModel]
-    private (set) var tempMin:String
-    private (set) var tempMax:String
     
     override init() {
-        self.cityName = Observable<String>(value: "")
+        self.cityName = ""
         self.updateTime = ""
         self.isCurrentLocation = false
-        self.tempMin = ""
-        self.tempMax = "" 
         self.forecastForToday = [ForecastViewModel]()
-        
         super.init()
     }
+    
     convenience init?(weatherForCity city:City, withForecastType type:ForecastFor){
         self.init()
         if let weather = city.weather {
             //need some preparations
             self.isCurrentLocation = true
-            self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
-            forecastForToday = []
             
-            for model in weather.forecast! {
-                let forecast = ForecastViewModel()
-                forecast.update(model)
-                self.forecastForToday.append(forecast)
+            self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
+            
+            forecastForToday.removeAll()
+            
+            if type == .Hours{
+                for model in weather.forecast! {
+                    let forecast = ForecastViewModel()
+                    forecast.update(model)
+                    self.forecastForToday.append(forecast)
+                }
+            }else {
+                var forecastForWeather = weather.forecast![0]
+                var times = 0
+                for var i = 1; i < weather.forecast!.count; i++ {
+                    let current = weather.forecast![i]
+                    if forecastForWeather.time.dayNumberOfWeek() == current.time.dayNumberOfWeek() {
+                        print("same day")
+                        //addforecast to array
+                        times++
+                    }else {
+                        //all divide dy times
+                        let forecastForDay = ForecastViewModel()
+                        print("add day to array")
+                        self.forecastForToday.append(forecastForDay)
+                        //day change
+                        forecastForWeather = current
+                        times = 0
+                    }
+                }
+                
             }
+            
+            /*
             var max = weather.forecast![0].tempMin
             let _ = weather.forecast!.map({
-                if $0.tempMax > max{
-                    max = $0.tempMax
-                }
+            if $0.tempMax > max{
+            max = $0.tempMax
+            }
             })
             var min = max
             let _ = weather.forecast!.map({
-                if $0.tempMin < min{
-                    min = $0.tempMin
-                }
+            if $0.tempMin < min{
+            min = $0.tempMin
+            }
             })
-            self.tempMin = "\(Int(floor(min)))"
-            self.tempMax = "\(Int(floor(max)))"
+            */
             
-            //here depend on what forecast we want fetch every hour, or for day
             
-            //here notificate subscribers that model is updated
-            self.cityName.value = weather.cityName
+            self.cityName = weather.cityName
         }else{
             return nil
         }
@@ -68,7 +87,10 @@ class WeatherViewModel: NSObject {
 
 class ForecastViewModel:NSObject {
     private (set) var temp:String
-    private (set) var icon:UIImage?
+    private (set) var tempMin:String
+    private (set) var tempMax:String
+    
+    private (set) var icon:String
     
     private (set) var weatherDescription:String
     private (set) var pressure:String
@@ -78,42 +100,27 @@ class ForecastViewModel:NSObject {
     private (set) var clouds:String
     private (set) var snow:String
     
-    //NOT UPDATED!!!
+    
     private (set) var today:String
     private (set) var date:String
     
     
     override init() {
-        
-        self.temp = ""
-        self.icon = nil
-        self.today = ""
-        self.date = ""
-        self.weatherDescription = ""
-        self.pressure = ""
-        self.humidity = ""
-        self.wSpeed = ""
-        self.wDirection = ""
-        self.clouds = ""
-        self.snow = ""
-        
+        self.temp = ""; self.icon = "";self.today = ""
+        self.date = ""; self.weatherDescription = ""; self.pressure = ""
+        self.humidity = ""; self.wSpeed = ""; self.wDirection = ""
+        self.clouds = ""; self.snow = ""; self.tempMin = ""; self.tempMax = ""
         super.init()
     }
     
     func update(forecast:Forecast){
-        var tempMeasureIcon = ""
-        switch WeatherServiceWrapper.shared.settings.model.tempUnits.value!{
-        case .Celsius:
-            tempMeasureIcon = "℃"
-            break
-        case .Fahreinheit:
-            tempMeasureIcon = "℉"
-            break
-        }
-        self.temp = "\(Int(floor(forecast.temp)))\(tempMeasureIcon)"
+        self.temp = "\(Int(floor(forecast.temp)))º"
+        self.tempMin = "\(Int(floor(forecast.tempMin)))"
+        self.tempMax = "\(Int(floor(forecast.tempMax)))"
         var desc = forecast.description
+        self.icon = self.iconFromDescription(desc)
         self.weatherDescription = desc.capitalizedString
-        self.pressure = "\(round(forecast.pressure))"
+        self.pressure = "\(Int(round(forecast.pressure)))"
         self.humidity = "\(round(forecast.humidity))"
         self.wSpeed = "\(round(forecast.speed))"
         self.wDirection = "\(forecast.direction.toEarthDirection())"
@@ -123,6 +130,34 @@ class ForecastViewModel:NSObject {
         let forecastDate = getDate(forecast.time)
         self.date = forecastDate.date
         self.today =  forecastDate.today
+    }
+    
+    func iconFromDescription(description:String) -> String{
+        var iconName = "Sun"
+        let lowCaseDescription = description.lowercaseString
+        if lowCaseDescription.containsString("clear"){
+            iconName = Climacons.Sun.rawValue
+        }else if lowCaseDescription.containsString("clouds"){
+            iconName = Climacons.Cloud.rawValue
+        }else if lowCaseDescription.containsString("drizzle") ||
+            lowCaseDescription.containsString("rain") ||
+            lowCaseDescription.containsString("thunderstorm"){
+                iconName = Climacons.Rain.rawValue
+        }else if lowCaseDescription.containsString("snow") ||
+            lowCaseDescription.containsString("ice") ||
+            lowCaseDescription.containsString("hail") {
+                iconName = Climacons.Snow.rawValue
+        }else if lowCaseDescription.containsString("fog") ||
+            lowCaseDescription.containsString("overcast") ||
+            lowCaseDescription.containsString("dust") ||
+            lowCaseDescription.containsString("ash") ||
+            lowCaseDescription.containsString("mist") ||
+            lowCaseDescription.containsString("haze") ||
+            lowCaseDescription.containsString("spray") ||
+            lowCaseDescription.containsString("squall"){
+                iconName = Climacons.Haze.rawValue
+        }
+        return iconName
     }
     func getDate(date:NSDate)->(today:String, date:String){
         let date = ("NOW","9 SEPTEMBER")

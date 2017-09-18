@@ -35,6 +35,7 @@
 		87695E7E1F629A4A006C689D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87695E7D1F629A4A006C689D /* Settings.swift */; settings = {ASSET_TAGS = (); }; };
 		8789BB6D1F5FEF2E0004D878 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8789BB6C1F5FEF2E0004D878 /* City.swift */; settings = {ASSET_TAGS = (); }; };
 		8789BB6F1F5FF40A0004D878 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8789BB6E1F5FF40A0004D878 /* Observable.swift */; settings = {ASSET_TAGS = (); }; };
+		8789EA7E1F6D1A7800A8C72F /* ClimaconsFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8789EA7D1F6D1A7800A8C72F /* ClimaconsFont.swift */; settings = {ASSET_TAGS = (); }; };
 		878C51501F64226C002BBE7D /* ForecastHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 878C514F1F64226C002BBE7D /* ForecastHeader.xib */; settings = {ASSET_TAGS = (); }; };
 		878C51521F646499002BBE7D /* RefreshControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 878C51511F646499002BBE7D /* RefreshControl.xib */; settings = {ASSET_TAGS = (); }; };
 		87A25B0A1F46FDAA0051CE21 /* city.list.json in Resources */ = {isa = PBXBuildFile; fileRef = 87A25B091F46FDAA0051CE21 /* city.list.json */; settings = {ASSET_TAGS = (); }; };
@@ -126,6 +127,7 @@
 		87695E7D1F629A4A006C689D /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		8789BB6C1F5FEF2E0004D878 /* City.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		8789BB6E1F5FF40A0004D878 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		8789EA7D1F6D1A7800A8C72F /* ClimaconsFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClimaconsFont.swift; sourceTree = "<group>"; };
 		878C514F1F64226C002BBE7D /* ForecastHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForecastHeader.xib; sourceTree = "<group>"; };
 		878C51511F646499002BBE7D /* RefreshControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RefreshControl.xib; sourceTree = "<group>"; };
 		87A25B091F46FDAA0051CE21 /* city.list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = city.list.json; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				87A25B091F46FDAA0051CE21 /* city.list.json */,
 				87FF836C1F39F30B00440158 /* Climacons.ttf */,
 				8766AB281F3486D900AABF22 /* Assets.xcassets */,
+				8789EA7D1F6D1A7800A8C72F /* ClimaconsFont.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -626,6 +629,7 @@
 				8766AB401F349FF900AABF22 /* SettingsViewController.swift in Sources */,
 				8766AB221F3486D900AABF22 /* AppDelegate.swift in Sources */,
 				87AEB02D1F6351B700C32DC5 /* SWRevealViewController.m in Sources */,
+				8789EA7E1F6D1A7800A8C72F /* ClimaconsFont.swift in Sources */,
 				87615F081F63E353003046B8 /* ForecastFlowLayout.swift in Sources */,
 				8789BB6D1F5FEF2E0004D878 /* City.swift in Sources */,
 				8757265D1F4793C0003724BB /* AddCityViewController.swift in Sources */,

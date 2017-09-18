@@ -66,16 +66,6 @@ class Settings : Mappable {
     // MARK: Mappable
     required convenience init?(_ map: Map) {
         self.init()
-        // subClasses must call the constructor of the base class
-        // super.init(map)
-        
-        /* EXAMPLE
-        name      = try map.value("name") // throws an error when it fails
-        createdAt = try map.value("createdAt", using: DateTransform()) // throws an error when it fails
-        updatedAt = try? map.value("updatedAt", using: DateTransform()) // optional
-        posts     = (try? map.value("posts")) ?? [] // optional + default value
-        
-        */
     }
     
     func mapping(map: Map) {

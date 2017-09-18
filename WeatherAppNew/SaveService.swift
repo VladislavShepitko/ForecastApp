@@ -29,6 +29,7 @@ final class SaveService {
  
     //settings
     let model:SettingsViewModel
+    
     var cities:[City] = [City]()
  
     func addCity(city:City){

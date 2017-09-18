@@ -89,8 +89,6 @@ final class WeatherServiceWrapper: NSObject {
                 }
             })
         }
-        
-        
     }
     
     /*

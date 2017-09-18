@@ -13,7 +13,7 @@ class ForecastViewController: UIViewController {
     @IBOutlet weak var forecast: UICollectionView!
     
     //model parameters
-    private var viewModel:WeatherViewModel?
+    private weak var viewModel:WeatherViewModel?
     private var weatherService = WeatherServiceWrapper.shared
     
     private var refreshControl:RefreshControl!
@@ -28,7 +28,7 @@ class ForecastViewController: UIViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
-        //register header for  collection view
+        //register header for collection view
         let nib = UINib(nibName: String(ForecastHeader.self), bundle: nil)
         self.forecast.registerNib(nib, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier")
         
@@ -37,17 +37,15 @@ class ForecastViewController: UIViewController {
         
         //setup viewmodel
         weatherService.viewModel.subscribe { [unowned self] model in
-            self.viewModel = model!
-            if let _ = self.viewModel{
-                dispatch_async(dispatch_get_main_queue(), { _ in
+            dispatch_async(dispatch_get_main_queue(), { _ in
+                self.viewModel = model!
+                if let _ = self.viewModel{
                     self.forecast.reloadData()
                     print("model is updated")
-                })
-            }else {
-                dispatch_async(dispatch_get_main_queue(), { _ in
+                }else {
                     self.showErrorView()
-                })
-            }
+                }
+            })
         }
         
         //handle service errors
@@ -89,8 +87,6 @@ class ForecastViewController: UIViewController {
             }
             cell.alpha = alpha
         }
-        //self.updateHeader(offsetY + 0.25, forIndex:indexPath)
-        
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);
@@ -116,6 +112,7 @@ class ForecastViewController: UIViewController {
 extension ForecastViewController : RefreshDelegate
 {
     func startUpdating(refreshControl: RefreshControl) {
+        weatherService.updateWeather()
         
         let delayInSeconds = 4.0;
         delay(delayInSeconds) { [unowned self] in
@@ -182,15 +179,13 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         let forecastData = model.forecastForToday[indexPath.item]
         
         if let header = self.header {
-            header.cityView.text = model.cityName.value
+            header.cityView.text = model.cityName
             header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "002-location"): nil
             header.todayView.text = forecastData.today
             header.dateView.text = forecastData.date
         }
         //update View
         cell.model = forecastData
-        cell.tempMinView.text = model.tempMin
-        cell.tempMaxView.text = model.tempMax
         
         return cell
     }

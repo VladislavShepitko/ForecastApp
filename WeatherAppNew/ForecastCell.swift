@@ -13,7 +13,7 @@ class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var tempMinView: UILabel!
     @IBOutlet weak var tempMaxView: UILabel!
     @IBOutlet weak var weatherDescriptionView: UILabel!
-    @IBOutlet weak var weatherIconView: UIImageView!
+    @IBOutlet weak var weatherIconView: UILabel!
     
     static var height:CGFloat = 0
     static var alpha:CGFloat = 0
@@ -39,14 +39,19 @@ class ForecastCell: UICollectionViewCell {
             if let model = model{
                 dispatch_async(dispatch_get_main_queue(), { [unowned self] in
                     self.tempView.text = model.temp
+                    
+                    self.tempMinView.text = model.tempMin
+                    self.tempMaxView.text = model.tempMax
+                    
                     self.weatherDescriptionView.text = model.weatherDescription
-                    self.weatherIconView.image = model.icon
+                    self.weatherIconView.text = model.icon
                     
                     self.humidityView.text = model.humidity
                     self.humidityUnitsView.text = "%"
                     
                     self.windSpeedView.text = model.wSpeed
                     self.windDirectionView.text = model.wDirection
+                    
                     //need update measure units
                     self.pressureView.text = model.pressure
                     self.pessureUnitsView.text = "HPA"
@@ -62,9 +67,22 @@ class ForecastCell: UICollectionViewCell {
         super.awakeFromNib()
         let gestureRecogn = UITapGestureRecognizer(target: self, action: "onTap:")
         gestureRecogn.numberOfTapsRequired = 2 
-        self.detailsWrapperView.addGestureRecognizer(gestureRecogn)
+        //self.detailsWrapperView.addGestureRecognizer(gestureRecogn)
         self.addGestureRecognizer(gestureRecogn)
-        //self.detailsHeight.constant = 0
+    }
+    
+    func showMenu(){
+        let popupView:UIView = {
+            let popup = UIView()
+            let imgView = UIImageView(image: UIImage(named: "papers.co-nr55-cloudy-mountain-nature-4-wallpaper")!)
+            imgView.contentMode = 
+            
+            popup.addSubview(imgView)
+            
+            return popup
+            }()
+        
+        self.addSubview(popupView)
     }
     
     override func layoutSubviews() {

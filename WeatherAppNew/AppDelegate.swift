@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         weatherService.settings.load()
-
+        
         let city3 = City(id: 1283378, name: "Gorkhā", country: "NP", coords: (84.633331, 28))
         let city2 = City(id: 1270260, name: "State of Haryāna", country: "IN", coords: (76, 29))
         let city1 = City(id: 708546, name: "Holubynka", country: "UA", coords: (44.599998, 33.900002))
@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillResignActive(application: UIApplication) {
+        
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
