@@ -14,32 +14,36 @@ struct WeatherViewModel {
     private (set) var updateTime:String
     private (set) var isCurrentLocation:Bool
     private (set) var forecastForToday:[ForecastViewModel]
-    
+    private (set) var chartData:[String:Double]
     init() {
         self.cityName = ""
         self.updateTime = ""
         self.isCurrentLocation = false
         self.forecastForToday = [ForecastViewModel]()
+        self.chartData = [:]
     }
     
     init?(weatherForCity city:City, withForecastType type:ForecastFor){
         self.init()
         if let weather = city.weather {
             //need some preparations
-            self.isCurrentLocation = true
-            self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
+            isCurrentLocation = true
+            updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
             forecastForToday.removeAll()
-            
+            chartData.removeAll()
             if type == .Hours{
                 for model in weather.forecast! {
                     var forecast = ForecastViewModel()
                     forecast.update(model)
+                    
+                    self.chartData["\(forecast.today + forecast.date)"] = floor(model.temp)
                     self.forecastForToday.append(forecast)
                 }
             }else {
                 for model in weather.forecast! {
                     var forecast = ForecastViewModel()
                     forecast.update(model)
+                    self.chartData["\(forecast.today + forecast.date)"] = floor(model.temp)
                     self.forecastForToday.append(forecast)
                 }
             }

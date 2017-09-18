@@ -42,7 +42,11 @@ class ForecastViewController: UIViewController {
         weatherService.viewModel.subscribe { [unowned self] model in
             dispatch_async(dispatch_get_main_queue(), { _ in
                 self.viewModel = model!
-                if let _ = self.viewModel{
+                if let ownModel = self.viewModel{
+                    let dataPoints = Array(ownModel.chartData.keys)
+                    let temps = Array(ownModel.chartData.values)
+                    
+                    self.updateChart(dataPoints, values: temps)
                     self.forecast.reloadData()
                     print("model is updated")
                 }else {
@@ -62,6 +66,54 @@ class ForecastViewController: UIViewController {
         }
         
     }
+    func updateChart(dataPoints:[String], values:[Double]){
+        var dataEntries = [ChartDataEntry]()
+        for i in 0..<dataPoints.count {
+            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+            dataEntries.append(dataEntry)
+        }
+        let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
+        let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
+       // self.forecast
+        self.forecastChartView.data = lineChartData
+    }
+    /*
+    
+    func setChart(dataPoints: [String], values: [Double]) {
+    
+    var dataEntries: [ChartDataEntry] = []
+    
+    for i in 0..<dataPoints.count {
+    let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+    dataEntries.append(dataEntry)
+    }
+    
+    let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "Units Sold")
+    let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
+    pieChartView.data = pieChartData
+    
+    var colors: [UIColor] = []
+    
+    for i in 0..<dataPoints.count {
+    let red = Double(arc4random_uniform(256))
+    let green = Double(arc4random_uniform(256))
+    let blue = Double(arc4random_uniform(256))
+    
+    let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
+    colors.append(color)
+    }
+    
+    pieChartDataSet.colors = colors
+    
+    
+    let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
+    let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
+    lineChartView.data = lineChartData
+    
+    }
+    
+    }
+    */
     func showErrorView(){
         print("error")
     }
@@ -90,14 +142,7 @@ class ForecastViewController: UIViewController {
                 alpha = 1
             }
             cell.alpha = alpha
-            //print("alpha: \(alpha)")
-            //print("offset: \(offsetY)")
         }
-        
-        
-        
-        
-        
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);
@@ -111,9 +156,8 @@ class ForecastViewController: UIViewController {
         }
         
     }
+    
     private weak var header:ForecastHeader?
-    
-    
     //MARK:- collectionViewDalegateFlowLayout properties
     private let minimumInteritemSpacingForSection: CGFloat = 0.0
     private let minimumLineSpacingForSection: CGFloat = 100.0

@@ -12,6 +12,7 @@
 		871BB6FE1F48D19900F29993 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871BB6FD1F48D19900F29993 /* TodayViewController.swift */; };
 		871BB7011F48D19900F29993 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 871BB6FF1F48D19900F29993 /* MainInterface.storyboard */; };
 		871BB7051F48D19900F29993 /* WeatherWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 871BB6F81F48D19900F29993 /* WeatherWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		87227B1D1F70838400C582BC /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 87227B181F70797D00C582BC /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8750150C1F5DDEEE00202062 /* WeatherServiceWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8750150B1F5DDEEE00202062 /* WeatherServiceWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		8750150E1F5DE12F00202062 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8750150D1F5DE12F00202062 /* WeatherViewModel.swift */; settings = {ASSET_TAGS = (); }; };
 		87507AE91F558BEE00CC4234 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87507AE81F558BEE00CC4234 /* Main.storyboard */; settings = {ASSET_TAGS = (); }; };
@@ -72,6 +73,13 @@
 			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
 			remoteInfo = ChartsTV;
 		};
+		87227B1E1F70838400C582BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87227B121F70797C00C582BC /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
+			remoteInfo = Charts;
+		};
 		8753B8251F423BB400443903 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8766AB161F3486D900AABF22 /* Project object */;
@@ -100,6 +108,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				8753B8281F423BB400443903 /* WeatherAPIServiceInfo.framework in Embed Frameworks */,
+				87227B1D1F70838400C582BC /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -429,6 +438,7 @@
 			dependencies = (
 				8753B8261F423BB400443903 /* PBXTargetDependency */,
 				871BB7041F48D19900F29993 /* PBXTargetDependency */,
+				87227B1F1F70838400C582BC /* PBXTargetDependency */,
 			);
 			name = WeatherAppNew;
 			productName = WeatherAppNew;
@@ -696,6 +706,11 @@
 			isa = PBXTargetDependency;
 			target = 871BB6F71F48D19900F29993 /* WeatherWidget */;
 			targetProxy = 871BB7031F48D19900F29993 /* PBXContainerItemProxy */;
+		};
+		87227B1F1F70838400C582BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Charts;
+			targetProxy = 87227B1E1F70838400C582BC /* PBXContainerItemProxy */;
 		};
 		8753B8261F423BB400443903 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
