@@ -13,9 +13,8 @@ class ForecastViewController: UIViewController {
     @IBOutlet weak var forecast: UICollectionView!
     
     //model parameters
-    private weak var viewModel:WeatherViewModel?
-    private var weatherService = WeatherServiceWrapper.shared
-    
+    private var viewModel:WeatherViewModel?
+    private var weatherService = WeatherServiceWrapper.shared    
     private var refreshControl:RefreshControl!
     
     
@@ -71,22 +70,32 @@ class ForecastViewController: UIViewController {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        //this is magic
-        var offsetY = scrollView.contentOffset.y / (self.forecast.bounds.height)
         
-        let index:Int = Int(offsetY)
-        offsetY = -(CGFloat(index) - offsetY)
-        offsetY = (1 - min( max(offsetY, 0.0), self.forecast.bounds.height)) - 0.25
-        
-        //if offsetY >= 0.9 {offsetY = 1}
-        let indexPath = NSIndexPath(forItem: index, inSection: 0)
-        if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
-            var alpha = offsetY
-            if offsetY == 0 {
-                alpha = 1
-            }
-            cell.alpha = alpha
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
+            //this is magic
+            var offsetY = scrollView.contentOffset.y / (self.forecast.bounds.height)
+            
+            let index:Int = Int(offsetY)
+            offsetY = -(CGFloat(index) - offsetY)
+            offsetY = (1 - min( max(offsetY, 0.0), self.forecast.bounds.height)) - 0.25
+            
+            //if offsetY >= 0.9 {offsetY = 1}
+            let indexPath = NSIndexPath(forItem: index, inSection: 0)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
+                    var alpha = offsetY
+                    if (offsetY + 0.25) == 1 {
+                        alpha = 1
+                    }
+                    cell.alpha = alpha
+                    //print("alpha: \(alpha)")
+                    //print("offset: \(offsetY)")
+                }
+            })
+            
         }
+        
+        
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);

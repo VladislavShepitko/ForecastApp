@@ -58,6 +58,7 @@ final class WeatherServiceWrapper: NSObject {
         self.error = Observable<String?>(value: "")
         super.init()
         weatherAPI.delegate = self
+        self.forecastType = .Days
     }
     
     //MARK:- update weather

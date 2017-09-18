@@ -60,17 +60,6 @@ public class WeatherAPIServiceInfo: NSObject {
         if json["cod"].intValue != 200 {
             return .Failure(WeatherError.BadRequestError)
         }
-        /*
-        "city":{
-        "id":524901,
-        "name":"Moscow",
-        "coord":{
-        "lat":55.7522,
-        "lon":37.6156
-        },
-        "country":"none"
-        }
-        */
         guard let cityID = (json["city"]["id"]).int,
         let cityName = (json["city"]["name"]).string,
         let cityLat = (json["city"]["coord"]["lat"]).double,

@@ -70,26 +70,39 @@ class ForecastCell: UICollectionViewCell {
         //self.detailsWrapperView.addGestureRecognizer(gestureRecogn)
         self.addGestureRecognizer(gestureRecogn)
     }
-    
+    /*
     func showMenu(){
-        let popupView:UIView = {
-            let popup = UIView()
-            let imgView = UIImageView(image: UIImage(named: "papers.co-nr55-cloudy-mountain-nature-4-wallpaper")!)
-            imgView.contentMode = 
-            
-            popup.addSubview(imgView)
-            
-            return popup
-            }()
+        let popupView = UIView()
         
-        self.addSubview(popupView)
-    }
+        let imgView = UIImageView(image: UIImage(named: "papers.co-nr55-cloudy-mountain-nature-4-wallpaper")!)
+        imgView.contentMode = .ScaleAspectFill
+        imgView.frame = UIScreen.mainScreen().bounds
+        popupView.frame = UIScreen.mainScreen().bounds
+        popupView.addSubview(imgView)
+        
+        self.superview?.addSubview(popupView)
+        //popupView.backgroundColor = UIColor.redColor()
+        
+        popupView.alpha = 0
+        UIView.animateWithDuration(0.5, animations: { [weak popupView] in
+                popupView?.alpha = 1
+            }) { _ in
+                
+                UIView.animateWithDuration(0.5, animations: { [weak popupView] in
+                    popupView?.alpha = 0
+                    }, completion: { _ in
+                        
+                })
+        }
+        
+    }*/
     
     override func layoutSubviews() {
         super.layoutSubviews()
     }
     
     func onTap(sender:UITapGestureRecognizer){
+        
         ForecastCell.height = isExpanded ? 0: 150
         ForecastCell.alpha = isExpanded ? 0: 1
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: [], animations: { () -> Void in

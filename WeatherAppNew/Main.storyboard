@@ -520,7 +520,7 @@
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gkt-4P-pR2" userLabel="Item">
                                                                             <rect key="frame" x="180" y="0.0" width="180" height="75"/>
                                                                             <subviews>
-                                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="9D680F75-0F99-444D-9627-64E4E032E200" translatesAutoresizingMaskIntoConstraints="NO" id="dS4-1E-Mcm" userLabel="Icon">
+                                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FCBDDB6D-460F-4CD6-9EDE-8ED563F999F6" translatesAutoresizingMaskIntoConstraints="NO" id="dS4-1E-Mcm" userLabel="Icon">
                                                                                     <rect key="frame" x="43" y="22" width="32" height="32"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="32" id="DUM-47-3dC"/>
@@ -840,7 +840,7 @@
         <image name="004-upload" width="32" height="32"/>
         <image name="005-cancel" width="24" height="24"/>
         <image name="017-cloudy" width="32" height="32"/>
-        <image name="9D680F75-0F99-444D-9627-64E4E032E200" width="32" height="32">
+        <image name="FCBDDB6D-460F-4CD6-9EDE-8ED563F999F6" width="32" height="32">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

@@ -9,74 +9,40 @@
 import UIKit
 import WeatherAPIServiceInfo
 
-class WeatherViewModel: NSObject {
+struct WeatherViewModel {
     private (set) var cityName:String
     private (set) var updateTime:String
     private (set) var isCurrentLocation:Bool
     private (set) var forecastForToday:[ForecastViewModel]
     
-    override init() {
+    init() {
         self.cityName = ""
         self.updateTime = ""
         self.isCurrentLocation = false
         self.forecastForToday = [ForecastViewModel]()
-        super.init()
     }
     
-    convenience init?(weatherForCity city:City, withForecastType type:ForecastFor){
+    init?(weatherForCity city:City, withForecastType type:ForecastFor){
         self.init()
         if let weather = city.weather {
             //need some preparations
             self.isCurrentLocation = true
-            
             self.updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
-            
             forecastForToday.removeAll()
             
             if type == .Hours{
                 for model in weather.forecast! {
-                    let forecast = ForecastViewModel()
+                    var forecast = ForecastViewModel()
                     forecast.update(model)
                     self.forecastForToday.append(forecast)
                 }
             }else {
-                var forecastForWeather = weather.forecast![0]
-                var times = 0
-                for var i = 1; i < weather.forecast!.count; i++ {
-                    let current = weather.forecast![i]
-                    if forecastForWeather.time.dayNumberOfWeek() == current.time.dayNumberOfWeek() {
-                        print("same day")
-                        //addforecast to array
-                        times++
-                    }else {
-                        //all divide dy times
-                        let forecastForDay = ForecastViewModel()
-                        print("add day to array")
-                        self.forecastForToday.append(forecastForDay)
-                        //day change
-                        forecastForWeather = current
-                        times = 0
-                    }
+                for model in weather.forecast! {
+                    var forecast = ForecastViewModel()
+                    forecast.update(model)
+                    self.forecastForToday.append(forecast)
                 }
-                
             }
-            
-            /*
-            var max = weather.forecast![0].tempMin
-            let _ = weather.forecast!.map({
-            if $0.tempMax > max{
-            max = $0.tempMax
-            }
-            })
-            var min = max
-            let _ = weather.forecast!.map({
-            if $0.tempMin < min{
-            min = $0.tempMin
-            }
-            })
-            */
-            
-            
             self.cityName = weather.cityName
         }else{
             return nil
@@ -85,13 +51,11 @@ class WeatherViewModel: NSObject {
     
 }
 
-class ForecastViewModel:NSObject {
+struct ForecastViewModel {
     private (set) var temp:String
     private (set) var tempMin:String
     private (set) var tempMax:String
-    
     private (set) var icon:String
-    
     private (set) var weatherDescription:String
     private (set) var pressure:String
     private (set) var humidity:String
@@ -100,20 +64,17 @@ class ForecastViewModel:NSObject {
     private (set) var clouds:String
     private (set) var snow:String
     
-    
     private (set) var today:String
     private (set) var date:String
     
-    
-    override init() {
+    init() {
         self.temp = ""; self.icon = "";self.today = ""
         self.date = ""; self.weatherDescription = ""; self.pressure = ""
         self.humidity = ""; self.wSpeed = ""; self.wDirection = ""
         self.clouds = ""; self.snow = ""; self.tempMin = ""; self.tempMax = ""
-        super.init()
     }
     
-    func update(forecast:Forecast){
+    mutating func update(forecast:Forecast){
         self.temp = "\(Int(floor(forecast.temp)))º"
         self.tempMin = "\(Int(floor(forecast.tempMin)))"
         self.tempMax = "\(Int(floor(forecast.tempMax)))"
@@ -160,12 +121,19 @@ class ForecastViewModel:NSObject {
         return iconName
     }
     func getDate(date:NSDate)->(today:String, date:String){
-        let date = ("NOW","9 SEPTEMBER")
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "hh:mm a"
+        let time = formatter.stringFromDate(date)
         
-        return date
-    }
-    
-    deinit{
-        print("delete data for: \(self.description): date: \(self.date)")
+        var dateString = ((date.dayOfTheWeek())!).uppercaseString
+        if NSCalendar.currentCalendar().isDateInToday(date){
+            dateString = "TODAY"
+        }else if NSCalendar.currentCalendar().isDateInTomorrow(date){
+            dateString = "TOMORROW"
+        }
+        
+        let str = (time,dateString)
+        
+        return str
     }
 }
