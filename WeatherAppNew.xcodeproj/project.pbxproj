@@ -58,6 +58,20 @@
 			remoteGlobalIDString = 871BB6F71F48D19900F29993;
 			remoteInfo = WeatherWidget;
 		};
+		87227B171F70797D00C582BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87227B121F70797C00C582BC /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
+			remoteInfo = Charts;
+		};
+		87227B191F70797D00C582BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87227B121F70797C00C582BC /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = ChartsTV;
+		};
 		8753B8251F423BB400443903 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8766AB161F3486D900AABF22 /* Project object */;
@@ -102,6 +116,8 @@
 		871BB6FD1F48D19900F29993 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		871BB7001F48D19900F29993 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		871BB7021F48D19900F29993 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87227B0F1F7075BC00C582BC /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = "Pods/../build/Debug-iphoneos/Charts/Charts.framework"; sourceTree = "<group>"; };
+		87227B121F70797C00C582BC /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Charts/Charts.xcodeproj; sourceTree = "<group>"; };
 		8750150B1F5DDEEE00202062 /* WeatherServiceWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherServiceWrapper.swift; sourceTree = "<group>"; };
 		8750150D1F5DE12F00202062 /* WeatherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		87507AE81F558BEE00CC4234 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -180,6 +196,7 @@
 		871BB6F91F48D19900F29993 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				87227B0F1F7075BC00C582BC /* Charts.framework */,
 				871BB6FA1F48D19900F29993 /* NotificationCenter.framework */,
 				4D2DEEA24C640181FB077503 /* Pods_WeatherAPIServiceInfo.framework */,
 				AB7A7FC238B13A9486E34FE8 /* Pods_WeatherAppNew.framework */,
@@ -196,6 +213,15 @@
 				871BB7021F48D19900F29993 /* Info.plist */,
 			);
 			path = WeatherWidget;
+			sourceTree = "<group>";
+		};
+		87227B131F70797C00C582BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				87227B181F70797D00C582BC /* Charts.framework */,
+				87227B1A1F70797D00C582BC /* ChartsTV.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		8753B8211F423BB400443903 /* WeatherAPIServiceInfo */ = {
@@ -224,6 +250,7 @@
 		8766AB151F3486D900AABF22 = {
 			isa = PBXGroup;
 			children = (
+				87227B121F70797C00C582BC /* Charts.xcodeproj */,
 				8766AB201F3486D900AABF22 /* WeatherAppNew */,
 				8753B8211F423BB400443903 /* WeatherAPIServiceInfo */,
 				871BB6FC1F48D19900F29993 /* WeatherWidget */,
@@ -443,6 +470,12 @@
 			mainGroup = 8766AB151F3486D900AABF22;
 			productRefGroup = 8766AB1F1F3486D900AABF22 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 87227B131F70797C00C582BC /* Products */;
+					ProjectRef = 87227B121F70797C00C582BC /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8766AB1D1F3486D900AABF22 /* WeatherAppNew */,
@@ -451,6 +484,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		87227B181F70797D00C582BC /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 87227B171F70797D00C582BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		87227B1A1F70797D00C582BC /* ChartsTV.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ChartsTV.framework;
+			remoteRef = 87227B191F70797D00C582BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		871BB6F61F48D19900F29993 /* Resources */ = {
@@ -835,6 +885,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Charts",
+				);
 				INFOPLIST_FILE = WeatherAppNew/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -852,6 +906,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Charts",
+				);
 				INFOPLIST_FILE = WeatherAppNew/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

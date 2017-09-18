@@ -7,14 +7,18 @@
 //
 
 import UIKit
+import Charts
 
 class ForecastViewController: UIViewController {
     
     @IBOutlet weak var forecast: UICollectionView!
+    @IBOutlet weak var forecastChartView: LineChartView!
+    @IBOutlet weak var cityBackgroundView: UIImageView!
+    
     
     //model parameters
     private var viewModel:WeatherViewModel?
-    private var weatherService = WeatherServiceWrapper.shared    
+    private var weatherService = WeatherServiceWrapper.shared
     private var refreshControl:RefreshControl!
     
     
@@ -71,29 +75,27 @@ class ForecastViewController: UIViewController {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
-            //this is magic
-            var offsetY = scrollView.contentOffset.y / (self.forecast.bounds.height)
-            
-            let index:Int = Int(offsetY)
-            offsetY = -(CGFloat(index) - offsetY)
-            offsetY = (1 - min( max(offsetY, 0.0), self.forecast.bounds.height)) - 0.25
-            
-            //if offsetY >= 0.9 {offsetY = 1}
-            let indexPath = NSIndexPath(forItem: index, inSection: 0)
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
-                    var alpha = offsetY
-                    if (offsetY + 0.25) == 1 {
-                        alpha = 1
-                    }
-                    cell.alpha = alpha
-                    //print("alpha: \(alpha)")
-                    //print("offset: \(offsetY)")
-                }
-            })
-            
+        //this is magic
+        var offsetY = scrollView.contentOffset.y / (self.forecast.bounds.height)
+        
+        let index:Int = Int(offsetY)
+        offsetY = -(CGFloat(index) - offsetY)
+        offsetY = (1 - min( max(offsetY, 0.0), self.forecast.bounds.height)) - 0.25
+        
+        //if offsetY >= 0.9 {offsetY = 1}
+        let indexPath = NSIndexPath(forItem: index, inSection: 0)
+        if let cell = self.forecast.cellForItemAtIndexPath(indexPath) {
+            var alpha = offsetY
+            if (offsetY + 0.25) == 1 {
+                alpha = 1
+            }
+            cell.alpha = alpha
+            //print("alpha: \(alpha)")
+            //print("offset: \(offsetY)")
         }
+        
+        
+        
         
         
         //update refresh control
@@ -110,7 +112,7 @@ class ForecastViewController: UIViewController {
         
     }
     private weak var header:ForecastHeader?
- 
+    
     
     //MARK:- collectionViewDalegateFlowLayout properties
     private let minimumInteritemSpacingForSection: CGFloat = 0.0
@@ -182,7 +184,7 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath) as! ForecastCell        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ForecastCell", forIndexPath: indexPath) as! ForecastCell
         //update header
         let model = self.viewModel!
         let forecastData = model.forecastForToday[indexPath.item]
