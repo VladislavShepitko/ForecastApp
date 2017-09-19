@@ -16,8 +16,9 @@ class RefreshControl: UIRefreshControl {
     
     private var isAnimating:Bool = false
     private let maxHeight:CGFloat = 60
-    private let offsetfromEarth:CGFloat = 5
+    private let offsetfromEarth:CGFloat = 2
     private var prevH:CGFloat = 0
+    
     private lazy var maxDistance:CGFloat = {
         return self.earthHalfSize.width + self.satelliteHalfSize.width + self.offsetfromEarth
         }()
@@ -52,6 +53,9 @@ class RefreshControl: UIRefreshControl {
             delegate.startUpdating(self)
         }
     }
+    func animateUpdate(){
+        self.updateProgress(200)
+    }
     func updateProgress( pullDistance:CGFloat){
         
         var refreshBounds = self.bounds
@@ -65,12 +69,12 @@ class RefreshControl: UIRefreshControl {
         
         //chack if offsetY = -0
         offsetY = offsetY < 0 ? offsetY * -1 : offsetY
-        /*
-        print("pull distance:\(pullDistance)")
+        
+        //print("pull distance:\(pullDistance)")
         if offsetY == 0 {
             self.endRefreshing()
             //return
-        }*/
+        }
         if dir < 0 && pullDistance < maxHeight && self.refreshing {
             //print("up")
             offsetY = maxHeight
@@ -115,12 +119,6 @@ class RefreshControl: UIRefreshControl {
             satelliteY = SattellitePosOnOrbit.y
         }
         //print("sattellite on orbit: \(satelliteOnOrbit)")
-        
-        /*
-        // When the compass and spinner overlap, keep them together
-        if (fabsf(Float(compassX - spinnerX)) < 1.0) {
-        self.isRefreshIconsOverlap = true;
-        }*/
         
         //set earth image to center of view based on pull distance
         var earthFrame = self.earthView.frame
@@ -205,7 +203,7 @@ class RefreshControl: UIRefreshControl {
         UIView.animateWithDuration(0.2) { [unowned self] in
             self.satelliteView.alpha = 0
         }
-        //self.satelliteView.layer.removeAllAnimations()
+        self.satelliteView.layer.removeAllAnimations()
         let delayInSeconds = 1.0
         delay(delayInSeconds) { [unowned self] in
             self.resetAnimation()

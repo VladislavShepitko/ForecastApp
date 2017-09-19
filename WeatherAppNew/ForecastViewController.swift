@@ -66,7 +66,7 @@ class ForecastViewController: UIViewController {
         }
         
     }
-    func updateChart(dataPoints:[String], values:[Double]){
+    func updateChart(dataPoints:[String], values:[Double]){/*
         var dataEntries = [ChartDataEntry]()
         for i in 0..<dataPoints.count {
             let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
@@ -75,7 +75,8 @@ class ForecastViewController: UIViewController {
         let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
         let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
        // self.forecast
-        self.forecastChartView.data = lineChartData
+        self.forecastChartView.data = lineChartData*/
+         
     }
     /*
     
