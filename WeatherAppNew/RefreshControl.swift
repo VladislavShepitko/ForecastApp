@@ -47,15 +47,13 @@ class RefreshControl: UIRefreshControl {
     }
     
     func refresh(){
-        //print("update")
+        print("update")
         self.satelliteView.alpha = 0
         if let delegate = self.delegate{
             delegate.startUpdating(self)
         }
     }
-    func animateUpdate(){
-        self.updateProgress(200)
-    }
+    
     func updateProgress( pullDistance:CGFloat){
         
         var refreshBounds = self.bounds
@@ -71,10 +69,10 @@ class RefreshControl: UIRefreshControl {
         offsetY = offsetY < 0 ? offsetY * -1 : offsetY
         
         //print("pull distance:\(pullDistance)")
-        if offsetY == 0 {
+        /*if offsetY == 0 {
             self.endRefreshing()
             //return
-        }
+        }*/
         if dir < 0 && pullDistance < maxHeight && self.refreshing {
             //print("up")
             offsetY = maxHeight
@@ -150,8 +148,8 @@ class RefreshControl: UIRefreshControl {
         //print("radius: \(radius); ratio: \(pullRatio); dispance: \(offsetY);")
     }
     
-    func animateRefreshView(){
-        //print("start animation")
+    private func animateRefreshView(){
+        print("start animation")
         self.isAnimating = true;
         
         //from http://ronnqvi.st/translate-rotate-translate/#fnref:matrixMultiplication
@@ -188,9 +186,17 @@ class RefreshControl: UIRefreshControl {
         
         let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.toValue = CGFloat(M_PI * 2)
-        animation.duration = 2.0
+        animation.duration = 1.7
         animation.delegate = self
+        animation.removedOnCompletion = true
         self.satelliteView.layer.addAnimation(animation, forKey: "satelliteAnimation")
+    }
+    
+    func stopRefreshing(){
+        self.satelliteView.layer.removeAllAnimations()
+        self.satelliteView.alpha = 0
+        self.resetAnimation()
+        self.endRefreshing()
     }
     
     func stopRefreshing(finishTime:String){
@@ -198,19 +204,16 @@ class RefreshControl: UIRefreshControl {
             UIView.animateWithDuration(0.2, animations: { [unowned self] in
                 self.timeView.text = "Updated: \(finishTime)"
             })
-            
         }
-        UIView.animateWithDuration(0.2) { [unowned self] in
+        /*UIView.animateWithDuration(0.1) { [unowned self] in
             self.satelliteView.alpha = 0
-        }
-        self.satelliteView.layer.removeAllAnimations()
-        let delayInSeconds = 1.0
-        delay(delayInSeconds) { [unowned self] in
-            self.resetAnimation()
-            self.endRefreshing()
-        }
+        }*/
+        self.stopRefreshing()
+        
     }
+    
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        print("stop animation")
         if (self.refreshing) {
             self.animateRefreshView()
         }else {
@@ -218,10 +221,19 @@ class RefreshControl: UIRefreshControl {
         }
     }
     
-    func resetAnimation(){
+    private func resetAnimation(){
+        print("reset state")
         self.isAnimating = false;
         self.satelliteOnOrbit = false;
-        //print("stop animating")
     }
     
+}
+extension UIRefreshControl {
+    func refreshManually() {
+        if let scrollView = superview as? UIScrollView {
+            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - frame.height), animated: false)
+        }
+        beginRefreshing()
+        self.sendActionsForControlEvents(.ValueChanged)
+    }
 }

@@ -32,18 +32,18 @@ final class WeatherServiceWrapper: NSObject {
     //private var isInterentAvailable:Bool = false
     private var currentCityIndex:Int = 0
     //private var updatedCities:Int = 0
-    
+    private (set) var completionHandler:(()->Void)?
     private (set) var error:Observable<String?>
     private (set) var updateTime = NSDate()
     
     //make this observable
     private (set) var viewModel:Observable<WeatherViewModel?>
-    
     private (set) var settings = SaveService.shared
     
     
     var forecastType:ForecastFor = .Hours
     //var citiesCache:NSCache?
+    
     //get weather from cache where city id equals weather's city id
     //test
     
@@ -67,7 +67,8 @@ final class WeatherServiceWrapper: NSObject {
     Update weather for all cities? send async request to server,
     handle number of requests in time
     */
-    func updateWeather(){
+    func updateWeather(completion:(()->Void)? = nil) {
+        self.completionHandler = completion
         //check internet connection
         let status = Reach().connectionStatus()
         switch status {
@@ -123,8 +124,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             if let cityToUpdate = filteredByID.first {
                 cityToUpdate.weather = weather
             }else {
-                //then try to filter with coords
-                
+                //then try to filter with coords 
                 print("try to find with coords")
                 let filteredByCoords = Array(cities.filter(){ $0.coords == cityCoords })
                 if let cityToUpdateWithCoords = filteredByCoords.first {
@@ -142,6 +142,9 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             //finish updating
             if UpdatedCities.count == cities.count {
                 self.updateTime = NSDate()
+                if let completion = self.completionHandler{
+                    completion()
+                }
                 let city = cities[self.currentCityIndex]
                 viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
                 UpdatedCities.count = 0

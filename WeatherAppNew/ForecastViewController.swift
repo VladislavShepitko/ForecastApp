@@ -127,8 +127,8 @@ class ForecastViewController: UIViewController {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
         //this is magic
+        
         var offsetY = scrollView.contentOffset.y / (self.forecast.bounds.height)
         
         let index:Int = Int(offsetY)
@@ -144,15 +144,14 @@ class ForecastViewController: UIViewController {
             }
             cell.alpha = alpha
         }
+        
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);
             self.refreshControl.updateProgress(pullDistance)
         }else {
             if self.refreshControl.refreshing {
-                UIView.animateWithDuration(0.2, animations: {[unowned self] () -> Void in
-                    self.refreshControl.endRefreshing()
-                    })
+                self.refreshControl.stopRefreshing()                
             }
         }
         
@@ -168,23 +167,28 @@ class ForecastViewController: UIViewController {
 extension ForecastViewController : RefreshDelegate
 {
     func startUpdating(refreshControl: RefreshControl) {
-        weatherService.updateWeather()
-        
-        let delayInSeconds = 4.0;
-        delay(delayInSeconds) { [unowned self] in
-            self.refreshControl.stopRefreshing("Just now")
-        }
+        weatherService.updateWeather(){[unowned refreshControl/*, unowned self*/] in
+            refreshControl.stopRefreshing()
+        }        
+    }
+    
+    private func animateRefreshControl(){
+        self.refreshControl.refreshManually()
         
     }
+    
 }
 
 extension ForecastViewController {
-    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.animateRefreshControl()
+    }
+    //when view will appear we start update weather
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        print("viewWillAppear")
-        weatherService.updateWeather()
+        self.weatherService.updateWeather()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)

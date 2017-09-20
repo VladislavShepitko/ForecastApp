@@ -49,7 +49,6 @@ class Settings : Mappable {
         return Settings()
     }
     var notification:Notification
-    var language:Language
     var tempUnits:Units
     var windSpeedUnits:WindSpeedUnits
     var cities:[City] = []
@@ -57,7 +56,6 @@ class Settings : Mappable {
     
     init(){
         notification =  .Off
-        language = .English
         tempUnits = .Celsius
         windSpeedUnits = .MetersPerSeconds
         lastUpdate = NSDate()
@@ -71,7 +69,6 @@ class Settings : Mappable {
     func mapping(map: Map) {
         //from: https://stackoverflow.com/questions/34612790/how-to-assign-rawvalue-of-enum-to-variable-with-objectmapper
         notification <- (map["notification"])
-        language <- (map["lang"],EnumTransform<Language>())
         tempUnits <- (map["temp"],EnumTransform<Units>())
         windSpeedUnits <- (map["wind"],EnumTransform<WindSpeedUnits>())
         lastUpdate <- (map["lastUpdate"], DateTransform())

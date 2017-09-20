@@ -22,21 +22,11 @@
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ak-lu-tI7">
-                    <rect key="frame" x="0.0" y="121" width="300" height="1"/>
-                    <color key="backgroundColor" red="0.10572522095959591" green="0.10572522095959591" blue="0.10572522095959591" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="1" id="sSJ-3D-vgq"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" red="0.7186119002525253" green="0.7186119002525253" blue="0.7186119002525253" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="4Ak-lu-tI7" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="1kh-YV-Fcs"/>
                 <constraint firstItem="bAY-Gh-k6d" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TZD-Av-Cgk"/>
                 <constraint firstAttribute="bottom" secondItem="bAY-Gh-k6d" secondAttribute="bottom" constant="-20" id="eL5-zB-VDe"/>
-                <constraint firstItem="4Ak-lu-tI7" firstAttribute="bottom" secondItem="bAY-Gh-k6d" secondAttribute="bottom" constant="2" id="fgA-6T-fhp"/>
-                <constraint firstItem="4Ak-lu-tI7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="s63-Ae-gc2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

@@ -16,7 +16,6 @@ class SettingsViewModel: NSObject {
     private (set) var notificationFrom: Observable<NSDate?>
     private (set) var notificationTo: Observable<NSDate?>
     
-    private (set) var language: Observable<Language>
     private (set) var tempUnits:Observable<Units>
     private (set) var windSpeedUnits:Observable<WindSpeedUnits>
     var cities:[City]
@@ -27,7 +26,6 @@ class SettingsViewModel: NSObject {
             self.notification.value == true
             ? .On(from: notificationFrom.value!, to: notificationTo.value!)
             : .Off
-        settings.language = self.language.value!
         settings.tempUnits = self.tempUnits.value!
         settings.windSpeedUnits = self.windSpeedUnits.value!
         return settings
@@ -37,7 +35,6 @@ class SettingsViewModel: NSObject {
         notification = Observable<Bool>(value: false)
         notificationFrom = Observable<NSDate?>(value:nil)
         notificationTo = Observable<NSDate?>(value:nil)
-        language = Observable<Language>(value: .English)
         tempUnits = Observable<Units>(value: .Celsius)
         windSpeedUnits = Observable<WindSpeedUnits>(value: .KilomertPerHour)
         cities = [City]()
@@ -61,7 +58,6 @@ class SettingsViewModel: NSObject {
             self.notificationTo.value = nil
             break
         }
-        self.language.value = model.language
         self.tempUnits.value = model.tempUnits
         self.windSpeedUnits.value = model.windSpeedUnits
         self.cities = model.cities

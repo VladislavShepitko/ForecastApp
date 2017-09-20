@@ -43,9 +43,6 @@ final class SaveService {
         self.model.notification.subscribe { [weak self] value in
             self?.updateModel()
         }
-        self.model.language.subscribe { [weak self] value in
-            self?.updateModel()
-        }
         self.model.tempUnits.subscribe { [weak self] value in
             self?.updateModel()
         }
