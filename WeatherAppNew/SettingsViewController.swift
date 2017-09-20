@@ -29,11 +29,11 @@ enum SettingsID:String{
 
 class SettingsViewController: UITableViewController {
     
-    private weak var viewModel:SettingsViewModel?
+    //private weak var viewModel:SettingsViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel = WeatherServiceWrapper.shared.settings.model
+        //self.viewModel = WeatherServiceWrapper.shared.settings.model
     }
     
 

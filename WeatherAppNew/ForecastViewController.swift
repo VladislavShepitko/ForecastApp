@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import Charts
+//import Charts
 
 class ForecastViewController: UIViewController {
     
     @IBOutlet weak var forecast: UICollectionView!
-    @IBOutlet weak var forecastChartView: LineChartView!
+    //@IBOutlet weak var forecastChartView: LineChartView!
     @IBOutlet weak var cityBackgroundView: UIImageView!
     
     

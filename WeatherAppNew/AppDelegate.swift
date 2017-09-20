@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ObjectMapper
+ 
 
 
 @UIApplicationMain
@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        weatherService.settings.load()
-        
+        //weatherService.settings.load()
+        /*
         let city3 = City(id: 1283378, name: "Gorkhā", country: "NP", coords: (84.633331, 28))
         let city2 = City(id: 1270260, name: "State of Haryāna", country: "IN", coords: (76, 29))
         let city1 = City(id: 708546, name: "Holubynka", country: "UA", coords: (44.599998, 33.900002))
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         weatherService.settings.addCity(city1)
         weatherService.settings.addCity(city2)
         weatherService.settings.addCity(city3)
-        
+        */
         return true
     }
     
@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
-        self.weatherService.settings.save()
+        //self.weatherService.settings.save()
     }
     
     func applicationWillEnterForeground(application: UIApplication) {

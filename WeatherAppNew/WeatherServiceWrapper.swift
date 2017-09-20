@@ -10,7 +10,8 @@ import UIKit
 import WeatherAPIServiceInfo
 import CoreLocation
 import SystemConfiguration
-import ObjectMapper
+
+
 
 public enum ConnectionError:ErrorType {
     case InternetIsNotAvailable
@@ -38,8 +39,8 @@ final class WeatherServiceWrapper: NSObject {
     
     //make this observable
     private (set) var viewModel:Observable<WeatherViewModel?>
-    private (set) var settings = SaveService.shared
-    
+    //private (set) var settings = SaveService.shared
+    var cities = [City]()
     
     var forecastType:ForecastFor = .Hours
     //var citiesCache:NSCache?
@@ -78,7 +79,7 @@ final class WeatherServiceWrapper: NSObject {
         default:
             break
         }
-        for city in self.settings.cities {
+        for city in self.cities {
             dispatch_async(weatherQ, { () -> Void in
                 //this is mean that city hasn't name and other stuff
                 if city.id == -1 && city.coords != nil{
@@ -99,7 +100,7 @@ final class WeatherServiceWrapper: NSObject {
     */
     func fetchWeatherForCity(withID id:Int){
         self.currentCityIndex = id
-        let city = self.settings.model.cities[self.currentCityIndex]
+        let city = self.cities[self.currentCityIndex]
         viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
     }
     
@@ -114,7 +115,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             struct UpdatedCities{
                 static var count:Int = 0
             }
-            let cities = self.settings.cities
+            let cities = self.cities
             let cityID = (weather?.cityID)!
             let cityCoords = (weather?.cityCoords)!
             

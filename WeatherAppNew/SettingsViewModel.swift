@@ -9,12 +9,13 @@
 import UIKit
 import WeatherAPIServiceInfo
 
-
+/*
 class SettingsViewModel: NSObject {
-    
-    private (set) var notification: Observable<Bool>
+    //private (set) var notification: Observable<Notification>
+    /*private (set) var notification: Observable<Bool>
     private (set) var notificationFrom: Observable<NSDate?>
     private (set) var notificationTo: Observable<NSDate?>
+    */
     
     private (set) var tempUnits:Observable<Units>
     private (set) var windSpeedUnits:Observable<WindSpeedUnits>
@@ -22,19 +23,20 @@ class SettingsViewModel: NSObject {
     
     var settings:Settings{
         let settings = Settings()
+        /*
         settings.notification =
             self.notification.value == true
             ? .On(from: notificationFrom.value!, to: notificationTo.value!)
-            : .Off
+            : .Off*/
         settings.tempUnits = self.tempUnits.value!
         settings.windSpeedUnits = self.windSpeedUnits.value!
         return settings
     }
     
     override init(){
-        notification = Observable<Bool>(value: false)
+        /*notification = Observable<Bool>(value: false)
         notificationFrom = Observable<NSDate?>(value:nil)
-        notificationTo = Observable<NSDate?>(value:nil)
+        notificationTo = Observable<NSDate?>(value:nil)*/
         tempUnits = Observable<Units>(value: .Celsius)
         windSpeedUnits = Observable<WindSpeedUnits>(value: .KilomertPerHour)
         cities = [City]()
@@ -46,6 +48,7 @@ class SettingsViewModel: NSObject {
     }
     
     func updateModel(model: Settings){
+        /*
         switch model.notification {
         case .On(let from, let to):
             self.notification.value = true
@@ -57,9 +60,10 @@ class SettingsViewModel: NSObject {
             self.notificationFrom.value = nil
             self.notificationTo.value = nil
             break
-        }
+        }*/
         self.tempUnits.value = model.tempUnits
         self.windSpeedUnits.value = model.windSpeedUnits
         self.cities = model.cities
     }
 }
+*/
