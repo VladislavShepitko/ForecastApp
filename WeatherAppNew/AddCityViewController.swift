@@ -14,10 +14,7 @@ class AddCityViewController: UIViewController {
     @IBOutlet weak var resultView: UITableView!
     
     private var isSearchingForCity:Bool = false
-    //private(set) var cityIsLoaded = false
     private weak var weatherService = WeatherServiceWrapper.shared
-    
-    //private var result:[City] = []
     
     private lazy var citiesService:CitiesService = {
         let service = CitiesService()
@@ -32,17 +29,7 @@ class AddCityViewController: UIViewController {
         if !citiesService.areLoaded {
             self.citiesService.loadSities()
         }
-        /*if !(weatherService!.areCitiesLoaded){
-            weatherService!.loadAllCities { (res) -> Void in
-                if let _ = res {
-                    self.cityIsLoaded = true
-                }
-                print("all cities are loaded")
-            }
-        }*/
         resultView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cityCell")
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -85,7 +72,7 @@ extension AddCityViewController : CitiesServiceDelegate {
     }
     func citiesDidFetched(citiesService:CitiesService?, cities:[City]?, forName name:String)
     {
-        print("for:\(name) result:  \(cities)")
+        //print("for:\(name) result:  \(cities)")
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.resultView.reloadData()
         }
@@ -99,10 +86,13 @@ extension AddCityViewController: UISearchBarDelegate {
         if !searchText.isEmpty && searchText.characters.count >= 2 {
             isSearchingForCity = true
             citiesService.filterCityByName(cityName: searchText)
-         }else if citiesService.filteredCities?.count > 0 {
-            self.citiesService.CleanFiltered()
-            self.resultView.reloadData()
-            isSearchingForCity = false
+         }else if searchText.isEmpty {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                self.citiesService.CleanFiltered()
+                self.resultView.reloadData()
+                self.isSearchingForCity = false
+                self.searchBarView.endEditing(true)
+            }
         }
     }
     

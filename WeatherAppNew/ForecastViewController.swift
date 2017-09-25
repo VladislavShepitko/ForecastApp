@@ -75,6 +75,7 @@ class ForecastViewController: UIViewController {
         /*
         self.refreshControl = NSBundle.mainBundle().loadNibNamed(String(RefreshControl.self), owner: self, options: nil).first as! RefreshControl
         self.refreshControl.delegate = self*/
+        
         refreshControl = PullToRefresh()
         self.forecast.addPullToRefresh(refreshControl) { () -> () in
             self.weatherService.updateWeatherWithLocation()

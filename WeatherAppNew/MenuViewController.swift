@@ -19,7 +19,7 @@ class MenuViewController: UIViewController {
         super.viewDidLoad()
         
         menu.layer.masksToBounds = false
-        menu.layer.shadowOffset = CGSize(width: -1, height: 1)
+        menu.layer.shadowOffset = CGSize(width: -1, height: -1)
         menu.layer.shadowRadius = 1
         menu.layer.shadowOpacity = 0.5
     }
