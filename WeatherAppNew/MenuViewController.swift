@@ -9,25 +9,19 @@
 import UIKit
 
 class MenuViewController: UIViewController {
-<<<<<<< HEAD
+
     let menuItem = "menuCell"
     let preffrences = Preffrences.shared
-=======
-    var menuItem = "menuCell"
->>>>>>> dadada
+
     
     @IBOutlet weak var menu: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-<<<<<<< HEAD
-        
+
         menu.layer.masksToBounds = false
         menu.layer.shadowOffset = CGSize(width: -1, height: 1)
         menu.layer.shadowRadius = 1
         menu.layer.shadowOpacity = 0.5
-=======
-        // Do any additional setup after loading the view, typically from a nib.
->>>>>>> dadada
     }
     
     override func didReceiveMemoryWarning() {
@@ -39,7 +33,6 @@ class MenuViewController: UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-<<<<<<< HEAD
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.menu.reloadData()
@@ -73,15 +66,11 @@ class MenuViewController: UIViewController {
         }
         performSegueWithIdentifier("addCitySegue", sender: self)        
     }
-=======
-    
->>>>>>> dadada
 }
 
 extension MenuViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(menuItem, forIndexPath: indexPath)
-<<<<<<< HEAD
         let city = preffrences.cities[indexPath.item]
         
         cell.imageView?.image = city.isCurrentLocation ? UIImage(named: "location")! : UIImage(named: "locationMark")! 
@@ -98,15 +87,13 @@ extension MenuViewController: UITableViewDataSource, UITableViewDelegate {
         if revealViewController() != nil {
             WeatherServiceWrapper.shared.fetchWeatherForCity(withID: indexPath.item)
             self.revealViewController().revealToggle(true)
-        }
-=======
+        }/*
         cell.imageView?.image = UIImage(named: "002-location")!
         cell.imageView?.contentMode = .ScaleAspectFit
-        cell.textLabel?.text = "menu item"
-        return cell
+        cell.textLabel?.text = "menu item"*/
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
->>>>>>> dadada
     }
 }
