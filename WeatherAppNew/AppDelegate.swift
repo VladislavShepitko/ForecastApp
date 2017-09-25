@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return SingletonWrapper.singleton
     }
     let weatherService = WeatherServiceWrapper.shared
-    
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -31,10 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let city = City(id: 519188, name: "Novinki", country: "RU", coords: (55.683334, 37.666668))
         
-        weatherService.settings.addCity(city)
-        weatherService.settings.addCity(city1)
-        weatherService.settings.addCity(city2)
-        weatherService.settings.addCity(city3)
+        Preffrences.shared.cities = [city, city1,city2,city3]*/
+        print(Preffrences.shared.cities)
+        print("")
+        /*
+        let units = preffrences.tempUnits
+        print("units: \(units)")
+        print(preffrences.cities)
         */
         return true
     }

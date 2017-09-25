@@ -9,53 +9,58 @@
 import UIKit
 import WeatherAPIServiceInfo
 
-struct WeatherViewModel {
+
+class WeatherViewModel {
     private (set) var cityName:String
-    private (set) var updateTime:String
+    var updateTime:String{
+        get {
+            return Preffrences.shared.lastUpdate!.toSinceTime()
+        }
+    }
     private (set) var isCurrentLocation:Bool
     private (set) var forecastForToday:[ForecastViewModel]
-    private (set) var chartData:[String:Double]
+    private (set) var errorMessgage:String?
+    
     init() {
         self.cityName = ""
-        self.updateTime = ""
         self.isCurrentLocation = false
         self.forecastForToday = [ForecastViewModel]()
-        self.chartData = [:]
     }
     
-    init?(weatherForCity city:City, withForecastType type:ForecastFor){
+    convenience init?(weatherForCity city:City, withForecastType type:Preffrences.ForecastFor){
         self.init()
-        if let weather = city.weather {
+        if let forecastList = city.forecast {
             //need some preparations
-            isCurrentLocation = true
-            updateTime = WeatherServiceWrapper.shared.updateTime.toSinceTime()
+            //isCurrentLocation = true
             forecastForToday.removeAll()
-            chartData.removeAll()
             if type == .Hours{
-                for model in weather.forecast! {
+                for model in forecastList {
                     var forecast = ForecastViewModel()
                     forecast.update(model)
-                    
-                    self.chartData["\(forecast.today + forecast.date)"] = floor(model.temp)
                     self.forecastForToday.append(forecast)
                 }
             }else {
-                for model in weather.forecast! {
+                for model in forecastList {
                     var forecast = ForecastViewModel()
                     forecast.update(model)
-                    self.chartData["\(forecast.today + forecast.date)"] = floor(model.temp)
                     self.forecastForToday.append(forecast)
                 }
             }
-            self.cityName = weather.cityName
+            self.cityName = city.name
         }else{
             return nil
         }
     }
     
+    convenience init(errorMessage:String){
+        self.init()
+        self.errorMessgage = errorMessage
+    }
+    
 }
 
 struct ForecastViewModel {
+    
     private (set) var temp:String
     private (set) var tempMin:String
     private (set) var tempMax:String
@@ -82,7 +87,7 @@ struct ForecastViewModel {
         self.temp = "\(Int(floor(forecast.temp)))º"
         self.tempMin = "\(Int(floor(forecast.tempMin)))"
         self.tempMax = "\(Int(floor(forecast.tempMax)))"
-        var desc = forecast.description
+        var desc = forecast.descr
         self.icon = self.iconFromDescription(desc)
         self.weatherDescription = desc.capitalizedString
         self.pressure = "\(Int(round(forecast.pressure)))"

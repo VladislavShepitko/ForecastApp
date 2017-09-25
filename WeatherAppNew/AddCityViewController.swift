@@ -9,25 +9,29 @@
 import UIKit
 
 class AddCityViewController: UIViewController {
-    /*
-    var searchBarView:UISearchBar = {
-        let sb = UISearchBar()
-        return sb
-        }()
-    var resultView:UITableView = {
-        let tb = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
-        return tb
-        }()
+ 
+    @IBOutlet weak var searchBarView: UISearchBar!
+    @IBOutlet weak var resultView: UITableView!
     
     private var isSearchingForCity:Bool = false
-    private(set) var cityIsLoaded = false
-    //private weak var weatherService = AppDelegate.sharedApplication.weatherService
+    //private(set) var cityIsLoaded = false
+    private weak var weatherService = WeatherServiceWrapper.shared
     
-    private var result:[City] = []
+    //private var result:[City] = []
+    
+    private lazy var citiesService:CitiesService = {
+        let service = CitiesService()
+        service.delegate = self
+        return service
+        }()
     
     override func viewDidLoad() {
-        addUIElements()
+        //addUIElements()
         super.viewDidLoad()
+        
+        if !citiesService.areLoaded {
+            self.citiesService.loadSities()
+        }
         /*if !(weatherService!.areCitiesLoaded){
             weatherService!.loadAllCities { (res) -> Void in
                 if let _ = res {
@@ -36,24 +40,32 @@ class AddCityViewController: UIViewController {
                 print("all cities are loaded")
             }
         }*/
-        searchBarView.delegate = self
-        resultView.delegate = self
-        resultView.dataSource = self
         resultView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cityCell")
         
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+       // weatherService?.allCities = nil
+    }
+    
+    @IBAction func dissmisVC(){
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+extension AddCityViewController{
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardAppear:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
-    func addUIElements(){
-        self.view.backgroundColor = UIColor.whiteColor()
-        
-        self.view.addSubview(searchBarView)
-        self.view.addSubview(resultView)
-        
-        self.view.addConstraintsWithFormat("V:|-70-[v0(30)][v1]|", views: searchBarView, resultView)
-        self.view.addConstraintsWithFormat("H:|[v0]|", views: searchBarView)
-        self.view.addConstraintsWithFormat("H:|[v0]|", views: resultView)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+    
     func handleKeyboardAppear(notification:NSNotification){
         if let userInfo = notification.userInfo {
             if let endFrame = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
@@ -64,42 +76,42 @@ class AddCityViewController: UIViewController {
             }
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-       // weatherService?.allCities = nil
-    }
-    deinit{
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }*/
 }
+
+extension AddCityViewController : CitiesServiceDelegate {
+    func citiesDidLoad(citiesService:CitiesService?, cities:[City]?)
+    {
+        print("cities are loaded")
+    }
+    func citiesDidFetched(citiesService:CitiesService?, cities:[City]?, forName name:String)
+    {
+        print("for:\(name) result:  \(cities)")
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.resultView.reloadData()
+        }
+    }
+}
+
+
 extension AddCityViewController: UISearchBarDelegate {
-    /*func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
     {
         if !searchText.isEmpty && searchText.characters.count >= 2 {
             isSearchingForCity = true
-            /*weatherService?.filterCitiestForRequest(forName: searchText, completion: { (res) -> Void in
-                if let result = res {
-                    self.result = result
-                }else {
-                    self.result = []
-                }
-                self.resultView.reloadData()
-            })*/
-            
-        }else if self.result.count > 0 {
-            self.result = []
+            citiesService.filterCityByName(cityName: searchText)
+         }else if citiesService.filteredCities?.count > 0 {
+            self.citiesService.CleanFiltered()
             self.resultView.reloadData()
-            //isSearchingForCity = false
+            isSearchingForCity = false
         }
     }
-    */
+    
 }
-/*
+
 extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete{
-            //weatherService?.removeCity(withIndex: indexPath.row)
+            Preffrences.shared.cities.removeAtIndex(indexPath.row)
             self.resultView.reloadData()
         }
     }
@@ -108,11 +120,14 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if isSearchingForCity {
-            let resultCity = result[indexPath.row]
+            let resultCity = citiesService.filteredCities?[indexPath.row]
             searchBarView.resignFirstResponder()
             
-            //weatherService?.addCity(resultCity)
-            navigationController?.popToRootViewControllerAnimated(true)
+            Preffrences.shared.cities.append(resultCity!)
+            self.isSearchingForCity = false
+            self.citiesService.CleanFiltered()
+            self.resultView.reloadData()
+            //navigationController?.popToRootViewControllerAnimated(true)
             print("close all")
         }
     }
@@ -120,15 +135,14 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cityCell", forIndexPath: indexPath)
         if !isSearchingForCity {
-            //cell.textLabel?.text = weatherService?.cities[indexPath.row].name
+            cell.textLabel?.text = Preffrences.shared.cities[indexPath.row].name
         }else {
-            cell.textLabel?.text = result[indexPath.row].name
+            cell.textLabel?.text = citiesService.filteredCities?[indexPath.row].name
         }
         
         return cell
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0//!isSearchingForCity ? (weatherService?.cities.count)! :result.count
+        return !isSearchingForCity ? Preffrences.shared.cities.count : citiesService.filteredCities?.count ?? 0
     }
 }
-*/

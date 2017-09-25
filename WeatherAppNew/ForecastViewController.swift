@@ -7,20 +7,20 @@
 //
 
 import UIKit
-//import Charts
+import CoreLocation
+import PullToRefresh
 
 class ForecastViewController: UIViewController {
     
     @IBOutlet weak var forecast: UICollectionView!
-    //@IBOutlet weak var forecastChartView: LineChartView!
     @IBOutlet weak var cityBackgroundView: UIImageView!
     
     
     //model parameters
-    private var viewModel:WeatherViewModel?
+    private weak var viewModel:WeatherViewModel?
     private var weatherService = WeatherServiceWrapper.shared
-    private var refreshControl:RefreshControl!
-    
+    private var refreshControl:PullToRefresh!
+    private var atFirstTime = true
     
     //MARK:- view controller functions
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class ForecastViewController: UIViewController {
         //register header for collection view
         let nib = UINib(nibName: String(ForecastHeader.self), bundle: nil)
         self.forecast.registerNib(nib, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderIdentifier")
-        
+    
         //customize refresh control
         loadRefreshControl()
         
@@ -42,11 +42,10 @@ class ForecastViewController: UIViewController {
         weatherService.viewModel.subscribe { [unowned self] model in
             dispatch_async(dispatch_get_main_queue(), { _ in
                 self.viewModel = model!
-                if let ownModel = self.viewModel{
-                    let dataPoints = Array(ownModel.chartData.keys)
-                    let temps = Array(ownModel.chartData.values)
+                if let _ = self.viewModel{
                     
-                    self.updateChart(dataPoints, values: temps)
+                    //self.refreshControl.endRefreshing()
+                    self.forecast.endRefreshing(at: .Top)
                     self.forecast.reloadData()
                     print("model is updated")
                 }else {
@@ -61,69 +60,25 @@ class ForecastViewController: UIViewController {
                 let vc = UIAlertController(title: "Error", message: error!, preferredStyle: .Alert)
                 let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil)
                 vc.addAction(closeAction)
+                self.forecast.endRefreshing(at: .Top)
                 self.presentViewController(vc, animated: true, completion: nil)
             })
         }
         
     }
-    func updateChart(dataPoints:[String], values:[Double]){/*
-        var dataEntries = [ChartDataEntry]()
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
-            dataEntries.append(dataEntry)
-        }
-        let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
-        let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
-       // self.forecast
-        self.forecastChartView.data = lineChartData*/
-         
-    }
-    /*
-    
-    func setChart(dataPoints: [String], values: [Double]) {
-    
-    var dataEntries: [ChartDataEntry] = []
-    
-    for i in 0..<dataPoints.count {
-    let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
-    dataEntries.append(dataEntry)
-    }
-    
-    let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "Units Sold")
-    let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
-    pieChartView.data = pieChartData
-    
-    var colors: [UIColor] = []
-    
-    for i in 0..<dataPoints.count {
-    let red = Double(arc4random_uniform(256))
-    let green = Double(arc4random_uniform(256))
-    let blue = Double(arc4random_uniform(256))
-    
-    let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
-    colors.append(color)
-    }
-    
-    pieChartDataSet.colors = colors
-    
-    
-    let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
-    let lineChartData = LineChartData(xVals: dataPoints, dataSet: lineChartDataSet)
-    lineChartView.data = lineChartData
-    
-    }
-    
-    }
-    */
     func showErrorView(){
         print("error")
     }
     
     func loadRefreshControl(){
         //init refresh control
+        /*
         self.refreshControl = NSBundle.mainBundle().loadNibNamed(String(RefreshControl.self), owner: self, options: nil).first as! RefreshControl
-        self.refreshControl.delegate = self
-        self.forecast.addSubview(refreshControl)
+        self.refreshControl.delegate = self*/
+        refreshControl = PullToRefresh()
+        self.forecast.addPullToRefresh(refreshControl) { () -> () in
+            self.weatherService.updateWeatherWithLocation()
+        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -144,7 +99,7 @@ class ForecastViewController: UIViewController {
             }
             cell.alpha = alpha
         }
-        
+        /*
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);
@@ -154,7 +109,7 @@ class ForecastViewController: UIViewController {
                 self.refreshControl.stopRefreshing()                
             }
         }
-        
+        */
     }
     
     private weak var header:ForecastHeader?
@@ -163,43 +118,51 @@ class ForecastViewController: UIViewController {
     private let minimumLineSpacingForSection: CGFloat = 100.0
     
 }
-
+/*
 extension ForecastViewController : RefreshDelegate
 {
+    
     func startUpdating(refreshControl: RefreshControl) {
-        weatherService.updateWeather(){[unowned refreshControl/*, unowned self*/] in
-            refreshControl.stopRefreshing()
-        }        
+        refreshControl.updateText(viewModel?.updateTime ?? "")
+        /*weatherService.updateWeather(){[unowned refreshControl, unowned self] in
+            refreshControl.stopRefreshing(self.viewModel?.updateTime ?? "")
+        }*/
+        //weatherService.updateWeatherWithLocation()
     }
     
     private func animateRefreshControl(){
         self.refreshControl.refreshManually()
-        
+        weatherService.updateWeatherWithLocation()
     }
     
 }
-
+*/
 extension ForecastViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        self.animateRefreshControl()
+        updateRefreshControl()
     }
+    
+    func updateRefreshControl(){
+        if atFirstTime || Preffrences.shared.needUpdate {
+            forecast.startRefreshing(at: .Top)
+            self.atFirstTime = false
+            Preffrences.shared.needUpdate = false
+        }
+    }
+    
     //when view will appear we start update weather
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.weatherService.updateWeather()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        self.forecast.removePullToRefresh(refreshControl)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.forecast.collectionViewLayout.invalidateLayout()
-    }
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        self.forecast.collectionViewLayout.invalidateLayout()
-    }
+    } 
 }
 
 extension ForecastViewController : UICollectionViewDataSource, UICollectionViewDelegate {
@@ -240,7 +203,7 @@ extension ForecastViewController : UICollectionViewDataSource, UICollectionViewD
         
         if let header = self.header {
             header.cityView.text = model.cityName
-            header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "002-location"): nil
+            header.locationIcon.image = model.isCurrentLocation ? UIImage(named: "location"): nil
             header.todayView.text = forecastData.today
             header.dateView.text = forecastData.date
         }

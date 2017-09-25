@@ -17,11 +17,6 @@ public enum ConnectionError:ErrorType {
     case InternetIsNotAvailable
 }
 
-public enum ForecastFor{
-    case Hours
-    case Days
-}
-
 final class WeatherServiceWrapper: NSObject {
     class var shared:WeatherServiceWrapper {
         struct SingletonWrapper{
@@ -31,24 +26,18 @@ final class WeatherServiceWrapper: NSObject {
     }
     
     //private var isInterentAvailable:Bool = false
-    private var currentCityIndex:Int = 0
+    //private var currentCityIndex:Int = 0
     //private var updatedCities:Int = 0
     private (set) var completionHandler:(()->Void)?
     private (set) var error:Observable<String?>
-    private (set) var updateTime = NSDate()
+    //private (set) var updateTime = NSDate()
     
     //make this observable
     private (set) var viewModel:Observable<WeatherViewModel?>
-    //private (set) var settings = SaveService.shared
-    var cities = [City]()
     
-    var forecastType:ForecastFor = .Hours
-    //var citiesCache:NSCache?
+    private weak var preffrences = Preffrences.shared
     
-    //get weather from cache where city id equals weather's city id
-    //test
-    
-    
+    private let locationService:LocationService = LocationService()
     //private queue for send requests
     private var weatherAPI:WeatherAPIServiceInfo = WeatherAPIServiceInfo()
     //private queue for send async resuests for weather
@@ -59,15 +48,22 @@ final class WeatherServiceWrapper: NSObject {
         self.error = Observable<String?>(value: "")
         super.init()
         weatherAPI.delegate = self
-        self.forecastType = .Days
+        
+        locationService.delegate = self
+        //loadFromCache()
     }
-    
+    func loadFromCache(){
+        fetchWeatherForCity(withID: 0)
+    }
     //MARK:- update weather
     
     /*
     Update weather for all cities? send async request to server,
     handle number of requests in time
     */
+    func updateWeatherWithLocation(){
+        self.locationService.fetchCurrentLocation()
+    }
     func updateWeather(completion:(()->Void)? = nil) {
         self.completionHandler = completion
         //check internet connection
@@ -79,7 +75,7 @@ final class WeatherServiceWrapper: NSObject {
         default:
             break
         }
-        for city in self.cities {
+        for city in self.preffrences!.cities {
             dispatch_async(weatherQ, { () -> Void in
                 //this is mean that city hasn't name and other stuff
                 if city.id == -1 && city.coords != nil{
@@ -98,56 +94,78 @@ final class WeatherServiceWrapper: NSObject {
     use this method when you just want to get downloaded weather from store,
     and dont need to send request to server
     */
-    func fetchWeatherForCity(withID id:Int){
-        self.currentCityIndex = id
-        let city = self.cities[self.currentCityIndex]
-        viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
+    func fetchWeatherForCity(withID id:Int) {
+        self.preffrences?.currentCityIndex = id
+        let city = self.preffrences!.cities[self.preffrences!.currentCityIndex]
+        viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.preffrences!.forecastType)
     }
     
 }
-
+extension WeatherServiceWrapper: LocationServiceDelegate {
+    func locationDidUpdate(service: LocationService, location: CLLocation) {
+        
+        if let current = self.preffrences?.cities.filter({ $0.isCurrentLocation == true}).first {
+            current.coords = location.coordinate
+        }else {
+            
+            let currentLocation = City(withLocation: location.coordinate)
+            currentLocation.name = "Current location"
+            currentLocation.isCurrentLocation = true
+            if var temp = self.preffrences?.cities {
+                temp.append(currentLocation)
+                self.preffrences?.cities.removeAll()
+                var cities = [City]()
+                for index in (temp.count - 1).stride(through: 0, by: -1) {
+                    cities.append(temp[index])
+                }
+                self.preffrences?.cities = cities
+            }
+        }
+        updateWeather()
+    }
+}
 
 extension WeatherServiceWrapper: WeatherServiceDelegate {
     func fetchWeather(result: WeatherResult) {
         switch result{
-        case .Success(let weather ):
+        case .Success(let forecast,( let cityID, let cityName, let cityCoords)):
             //cache update weather for city with id or add new item to cache
             struct UpdatedCities{
                 static var count:Int = 0
             }
-            let cities = self.cities
-            let cityID = (weather?.cityID)!
-            let cityCoords = (weather?.cityCoords)!
+            let cities = self.preffrences!.cities
             
             print("updated weather for city:\(cityID)")
             //find city and update weather for
             let filteredByID = Array(cities.filter(){return $0.id == cityID })
             if let cityToUpdate = filteredByID.first {
-                cityToUpdate.weather = weather
+                
+                cityToUpdate.forecast = forecast
             }else {
-                //then try to filter with coords 
-                print("try to find with coords")
-                let filteredByCoords = Array(cities.filter(){ $0.coords == cityCoords })
+                //then try to filter with coords
+                print("update current location")
+                let filteredByCoords = Array(cities.filter(){ $0.isCurrentLocation })
                 if let cityToUpdateWithCoords = filteredByCoords.first {
                     //here update need city
                     cityToUpdateWithCoords.id = cityID
                     cityToUpdateWithCoords.coords = cityCoords
-                    cityToUpdateWithCoords.name = (weather?.cityName)!
+                    cityToUpdateWithCoords.name = cityName
                 }else {
                     print("citi not found")
                 }
-                
             }
             
             UpdatedCities.count++
             //finish updating
             if UpdatedCities.count == cities.count {
-                self.updateTime = NSDate()
+                self.preffrences?.lastUpdate = NSDate()
                 if let completion = self.completionHandler{
                     completion()
                 }
-                let city = cities[self.currentCityIndex]
-                viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.forecastType)
+                let id = self.preffrences!.currentCityIndex
+                print("id : \(id)")
+                let city = cities[id]
+                viewModel.value = WeatherViewModel(weatherForCity: city, withForecastType: self.preffrences!.forecastType)
                 UpdatedCities.count = 0
             }
             break
@@ -166,7 +184,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
                     self.error.value = "Oh no, something bad happend"
                     break
                 case .WeatherForCityDoesntFound:
-                    self.error.value = "Cant fetch weather. Weather doesn't found"
+                    self.error.value = "Can't fetch weather. Weather doesn't found"
                     break
                 }
             }
@@ -180,8 +198,4 @@ extension CLLocationCoordinate2D : Equatable { }
 public func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
     return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude ? true : false
 }
-
-
-
-
 

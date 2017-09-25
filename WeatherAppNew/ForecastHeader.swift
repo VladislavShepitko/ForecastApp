@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ForecastHeader: UICollectionReusableView {
     
     @IBOutlet weak var menuButton: UIButton!
@@ -18,9 +19,19 @@ class ForecastHeader: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        menuButton.tintColor = UIColor.blackColor()
+        menuButton.imageView!.image = menuButton.imageView!.image?.imageWithRenderingMode(.AlwaysTemplate)
+        menuButton.addTarget(self, action: "showMenu", forControlEvents: .TouchUpInside)
     }
     
     func updateTodayView(progress:CGFloat, data text:String){
         //self.todayView.text = text
+    }
+    func showMenu(){
+        /*guard let vc = (self.n where
+        vc.revealViewController() != nil else {
+            return
+        }*/
+        
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-enum SettingsID:String{
+enum SettingsID:String {
     case NotificationCell
     
     case NotificationFromTitleCell
@@ -45,18 +45,34 @@ class SettingsViewController: UITableViewController {
     @IBAction func dissmisVC(){
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    /*
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        super.tableView(tableView, didSelectRowAtIndexPath: indexPath)
-        
+    func cleanCache(){
+        let action = UIAlertController(title: "", message: "Do you really want to claen cache?", preferredStyle: .Alert)
+        let yesAction = UIAlertAction(title: "YES", style: .Default) { _ in
+            Preffrences.shared.cleanCache()
+        }
+        let noAction = UIAlertAction(title: "NO", style: .Cancel, handler: nil)
+        action.addAction(yesAction)
+        action.addAction(noAction)
+        self.presentViewController(action, animated: true, completion: nil)
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if indexPath.section == 2 && indexPath.row == 0 {
+           cleanCache()
+        }
+        
+    }
+    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
         
         return cell
     }*/
-    
+    /*
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }*/
     
 }
 

@@ -172,6 +172,16 @@ extension Double {
         
     }
 }
+/*
+template <typename T>
+T clip(const T& n, const T& lower, const T& upper) {
+return std::max(lower, std::min(n, upper));
+}
+*/
+func clamp<T:Comparable>(inout value:T, minValue:T, maxValue:T){
+    value = max(minValue, min(value,maxValue))
+}
+
 extension UIView {
     func getConstraint(with name:String) -> NSLayoutConstraint?
     {

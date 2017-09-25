@@ -14,8 +14,10 @@ public protocol WeatherServiceDelegate:class {
     func fetchWeather(result:WeatherResult)
 }
 
+public typealias CityData = (cityID:Int, cityName:String, cityCoords:CLLocationCoordinate2D)
+
 public enum WeatherResult{
-    case Success(weather:Weather?)
+    case Success(weather:[Forecast],CityData)
     case Failure(ErrorType)
 }
 public enum WeatherError:ErrorType {
@@ -54,7 +56,7 @@ public class WeatherAPIServiceInfo: NSObject {
     private static func weatherFromJSON(data:NSData) -> WeatherResult {
         
         print("printing response from server for city")
-        var weather:Weather? = nil
+        var forecast = [Forecast]()
         
         let json = JSON(data: data)
         if json["cod"].intValue != 200 {
@@ -67,22 +69,16 @@ public class WeatherAPIServiceInfo: NSObject {
             return .Failure(WeatherError.WeatherForCityDoesntFound)
         }
         
-        //let c = json["city"]
-        //print("updated weather for city: \(c)")
-        
         if let forecastJSON = json["list"].array {
-            let coords = CLLocationCoordinate2D(latitude: cityLat, longitude: cityLon)
-            weather = Weather(forCity: cityID, withName: cityName, coords: coords)
-            for forecastJSONItem in forecastJSON {
-                let forecast = Forecast(json: forecastJSONItem)
-                weather?.forecast?.append(forecast)
-            }
-            
+             for forecastJSONItem in forecastJSON {
+                forecast.append(Forecast(json: forecastJSONItem))
+            }            
         }else {
             //can't conver JSON
             return .Failure(WeatherError.JSONConvertError)
-        } 
-        return .Success(weather:weather)
+        }
+        let data = CityData(cityID,cityName, CLLocationCoordinate2D(latitude: cityLat, longitude: cityLon))
+        return .Success(weather:forecast,data)
         
     }
     
@@ -104,6 +100,7 @@ public class WeatherAPIServiceInfo: NSObject {
         }
         task.resume()
     }
+    
     
     static func weatherURL(method method:WeatherMethod, params:[String:String]?) -> NSURL {
         let components = NSURLComponents(string: self.BASE_URL + method.rawValue)!
@@ -133,9 +130,8 @@ extension WeatherAPIServiceInfo {
         let params = [
             "id":String(id)
         ]
-        let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
-        //print(url)
-        updateWeather(forURL: url)
+        //updateWeather(forURL: WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.GetWeather, params: params))
+        updateWeather(forURL: WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params))
     }
     
     public func updateWeatherForLocation(lat:Double, lon:Double){
@@ -144,7 +140,7 @@ extension WeatherAPIServiceInfo {
             "lon":"\(lon)"
         ]
         let url = WeatherAPIServiceInfo.weatherURL(method: WeatherMethod.Forecast, params: params)
-        //print(url)
+        print("\(url)")
         updateWeather(forURL: url)
     }
     

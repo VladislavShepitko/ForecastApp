@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import PullToRefresh
 
-@objc protocol RefreshDelegate{
+let refresher = PullToRefresh()
+
+/*@objc protocol RefreshDelegate{
     func startUpdating(refreshControl:RefreshControl)
-}
-
+}*/
+/*
 class RefreshControl: UIRefreshControl {
     
     private var isAnimating:Bool = false
@@ -106,7 +109,7 @@ class RefreshControl: UIRefreshControl {
         }
         
         //when satellite comes to his correct position on earth orbit
-        if fabsf(Float(radius) - Float(maxDistance)) <= 0.1 {
+        if fabsf(Float(radius) - Float(maxDistance)) == 0 {
             satelliteOnOrbit = true
             SattellitePosOnOrbit.x = satelliteX
             SattellitePosOnOrbit.y = satelliteY
@@ -116,7 +119,7 @@ class RefreshControl: UIRefreshControl {
             satelliteX = SattellitePosOnOrbit.x
             satelliteY = SattellitePosOnOrbit.y
         }
-        //print("sattellite on orbit: \(satelliteOnOrbit)")
+        print("sattellite on orbit: \(satelliteOnOrbit) & ref:\(self.refreshing)")
         
         //set earth image to center of view based on pull distance
         var earthFrame = self.earthView.frame
@@ -149,7 +152,7 @@ class RefreshControl: UIRefreshControl {
     }
     
     private func animateRefreshView(){
-        print("start animation")
+        //print("start animation")
         self.isAnimating = true;
         
         //from http://ronnqvi.st/translate-rotate-translate/#fnref:matrixMultiplication
@@ -186,34 +189,36 @@ class RefreshControl: UIRefreshControl {
         
         let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.toValue = CGFloat(M_PI * 2)
-        animation.duration = 1.7
+        animation.duration = 1.3
         animation.delegate = self
         animation.removedOnCompletion = true
         self.satelliteView.layer.addAnimation(animation, forKey: "satelliteAnimation")
     }
     
     func stopRefreshing(){
-        self.satelliteView.layer.removeAllAnimations()
+        //self.satelliteView.layer.removeAllAnimations()
         self.satelliteView.alpha = 0
         self.resetAnimation()
         self.endRefreshing()
     }
-    
+    func updateText(time:String){
+        self.timeView.text = "Updated: \(time)"
+    }
     func stopRefreshing(finishTime:String){
         dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-            UIView.animateWithDuration(0.2, animations: { [unowned self] in
-                self.timeView.text = "Updated: \(finishTime)"
-            })
+            //UIView.animateWithDuration(0.2, animations: { [unowned self] in
+            self.updateText(finishTime)
+            //})
         }
-        /*UIView.animateWithDuration(0.1) { [unowned self] in
+        //UIView.animateWithDuration(0.1) { [unowned self] in
             self.satelliteView.alpha = 0
-        }*/
+        //}
         self.stopRefreshing()
         
     }
     
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-        print("stop animation")
+        //print("stop animation")
         if (self.refreshing) {
             self.animateRefreshView()
         }else {
@@ -231,9 +236,12 @@ class RefreshControl: UIRefreshControl {
 extension UIRefreshControl {
     func refreshManually() {
         if let scrollView = superview as? UIScrollView {
-            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - frame.height), animated: false)
+            //delay(0.5, completion: { [unowned self, unowned scrollView] in
+                scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - (self.frame.height + 5) ), animated: true)
+            //})
         }
+        self.tintColor = UIColor.clearColor()
         beginRefreshing()
         self.sendActionsForControlEvents(.ValueChanged)
     }
-}
+}*/
