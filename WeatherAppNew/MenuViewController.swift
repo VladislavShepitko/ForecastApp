@@ -9,15 +9,15 @@
 import UIKit
 
 class MenuViewController: UIViewController {
-
+    
     let menuItem = "menuCell"
     let preffrences = Preffrences.shared
-
+    
     
     @IBOutlet weak var menu: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         menu.layer.masksToBounds = false
         menu.layer.shadowOffset = CGSize(width: -1, height: 1)
         menu.layer.shadowRadius = 1
@@ -43,11 +43,9 @@ class MenuViewController: UIViewController {
     
     @IBAction func onSettingsTap(sender: AnyObject) {
         performSegueWithIdentifier("showSettingsSeque", sender: self)
-        //delay(0.2) { [unowned self] in
-            if self.revealViewController() != nil {
-                self.revealViewController().revealToggle(true)
-            }
-        //}
+        if self.revealViewController() != nil {
+            self.revealViewController().revealToggle(true)
+        }
         
     }
     @IBAction func onRatingTap(sender: AnyObject) {
@@ -64,7 +62,7 @@ class MenuViewController: UIViewController {
         if revealViewController() != nil {
             self.revealViewController().revealToggle(true)
         }
-        performSegueWithIdentifier("addCitySegue", sender: self)        
+        performSegueWithIdentifier("addCitySegue", sender: self)
     }
 }
 
@@ -73,7 +71,7 @@ extension MenuViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier(menuItem, forIndexPath: indexPath)
         let city = preffrences.cities[indexPath.item]
         
-        cell.imageView?.image = city.isCurrentLocation ? UIImage(named: "location")! : UIImage(named: "locationMark")! 
+        cell.imageView?.image = city.isCurrentLocation ? UIImage(named: "location")! : UIImage(named: "locationMark")!
         cell.imageView?.contentMode = .ScaleAspectFit
         
         cell.textLabel?.text = city.name.uppercaseString
@@ -91,9 +89,5 @@ extension MenuViewController: UITableViewDataSource, UITableViewDelegate {
         cell.imageView?.image = UIImage(named: "002-location")!
         cell.imageView?.contentMode = .ScaleAspectFit
         cell.textLabel?.text = "menu item"*/
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
+    } 
 }
