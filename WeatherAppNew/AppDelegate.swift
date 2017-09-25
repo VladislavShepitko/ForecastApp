@@ -7,55 +7,55 @@
 //
 
 import UIKit
+ 
 
-@available(iOS 9.0, *)
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    static let sharedApplication:AppDelegate = {
-            return UIApplication.sharedApplication().delegate as! AppDelegate
-        }()
-    
+    class var sharedApplicaton:AppDelegate{
+        struct SingletonWrapper{
+            static let singleton = UIApplication.sharedApplication().delegate as! AppDelegate
+        }
+        return SingletonWrapper.singleton
+    }
+    let weatherService = WeatherServiceWrapper.shared
     var window: UIWindow?
-    let weatherVC = WeatherViewController()
-    
-    lazy var navigationVC:MenuNavigationViewController = {
-        let nvc = MenuNavigationViewController(rootViewController: self.weatherVC)
-        return nvc
-        }()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-
-        navigationVC.setNavigationBarHidden(true, animated: false)
-        self.window?.rootViewController = navigationVC
-        self.window?.makeKeyAndVisible()
+        //weatherService.settings.load()
+        /*
+        let city3 = City(id: 1283378, name: "Gorkhā", country: "NP", coords: (84.633331, 28))
+        let city2 = City(id: 1270260, name: "State of Haryāna", country: "IN", coords: (76, 29))
+        let city1 = City(id: 708546, name: "Holubynka", country: "UA", coords: (44.599998, 33.900002))
         
+        let city = City(id: 519188, name: "Novinki", country: "RU", coords: (55.683334, 37.666668))
+        
+        Preffrences.shared.cities = [city, city1,city2,city3]*/
+        print(Preffrences.shared.cities)
+        print("")
+        /*
+        let units = preffrences.tempUnits
+        print("units: \(units)")
+        print(preffrences.cities)
+        */
         return true
     }
     
-    
     func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        //self.weatherService.settings.save()
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
     
     func applicationWillTerminate(application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
     

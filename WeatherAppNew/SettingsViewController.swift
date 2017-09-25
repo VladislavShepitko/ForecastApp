@@ -7,29 +7,72 @@
 //
 
 import UIKit
+enum SettingsID:String {
+    case NotificationCell
+    
+    case NotificationFromTitleCell
+    case NotificationFromCell
+    
+    case NotificationToTitleCell
+    case NotificationToCell
+    
+    case TemperatureTitleCell
+    case TemperatureCell
+    
+    case WindTitleCell
+    case WindCell
+    
+    case LanguageTitleCell
+    case LanguageCell
+}
 
-class SettingsViewController: UIViewController {
 
+class SettingsViewController: UITableViewController {
+    
+    //private weak var viewModel:SettingsViewModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.grayColor()
-        // Do any additional setup after loading the view.
+        //self.viewModel = WeatherServiceWrapper.shared.settings.model
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func dissmisVC(){
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
-    */
-
+    func cleanCache(){
+        let action = UIAlertController(title: "", message: "Do you really want to claen cache?", preferredStyle: .Alert)
+        let yesAction = UIAlertAction(title: "YES", style: .Default) { _ in
+            Preffrences.shared.cleanCache()
+        }
+        let noAction = UIAlertAction(title: "NO", style: .Cancel, handler: nil)
+        action.addAction(yesAction)
+        action.addAction(noAction)
+        self.presentViewController(action, animated: true, completion: nil)
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if indexPath.section == 2 && indexPath.row == 0 {
+           cleanCache()
+        }
+        
+    }
+    /*
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        
+        return cell
+    }*/
+    /*
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }*/
+    
 }
+
