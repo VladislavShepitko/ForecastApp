@@ -34,7 +34,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0lu-od-EgX">
                     <rect key="frame" x="10" y="25" width="30" height="22"/>
                     <state key="normal" image="menu">
-                        <color key="titleColor" patternImage="36DFDA9E-F376-4B2A-A71B-476996A8C042" colorSpace="pattern"/>
+                        <color key="titleColor" patternImage="F4A49E65-B005-4EF9-A764-E580467967C1" colorSpace="pattern"/>
                     </state>
                 </button>
             </subviews>
@@ -63,7 +63,7 @@
         </view>
     </objects>
     <resources>
-        <image name="36DFDA9E-F376-4B2A-A71B-476996A8C042" width="320" height="460">
+        <image name="F4A49E65-B005-4EF9-A764-E580467967C1" width="320" height="460">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
