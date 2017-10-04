@@ -11,10 +11,10 @@ import PullToRefresh
 
 let refresher = PullToRefresh()
 
-/*@objc protocol RefreshDelegate{
+@objc protocol RefreshDelegate{
     func startUpdating(refreshControl:RefreshControl)
-}*/
-/*
+}
+
 class RefreshControl: UIRefreshControl {
     
     private var isAnimating:Bool = false
@@ -119,7 +119,7 @@ class RefreshControl: UIRefreshControl {
             satelliteX = SattellitePosOnOrbit.x
             satelliteY = SattellitePosOnOrbit.y
         }
-        print("sattellite on orbit: \(satelliteOnOrbit) & ref:\(self.refreshing)")
+        //print("sattellite on orbit: \(satelliteOnOrbit) & ref:\(self.refreshing)")
         
         //set earth image to center of view based on pull distance
         var earthFrame = self.earthView.frame
@@ -196,7 +196,7 @@ class RefreshControl: UIRefreshControl {
     }
     
     func stopRefreshing(){
-        //self.satelliteView.layer.removeAllAnimations()
+        
         self.satelliteView.alpha = 0
         self.resetAnimation()
         self.endRefreshing()
@@ -230,6 +230,7 @@ class RefreshControl: UIRefreshControl {
         print("reset state")
         self.isAnimating = false;
         self.satelliteOnOrbit = false;
+        //self.sendActionsForControlEvents(.ValueChanged)
     }
     
 }
@@ -244,4 +245,4 @@ extension UIRefreshControl {
         beginRefreshing()
         self.sendActionsForControlEvents(.ValueChanged)
     }
-}*/
+}

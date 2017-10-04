@@ -45,6 +45,9 @@ class SettingsViewController: UITableViewController {
     @IBAction func dissmisVC(){
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    @IBAction func clearCacheAction(){
+        cleanCache()
+    }
     func cleanCache(){
         let action = UIAlertController(title: "", message: "Do you really want to claen cache?", preferredStyle: .Alert)
         let yesAction = UIAlertAction(title: "YES", style: .Default) { _ in

@@ -19,7 +19,7 @@ class ForecastViewController: UIViewController {
     //model parameters
     private weak var viewModel:WeatherViewModel?
     private var weatherService = WeatherServiceWrapper.shared
-    private var refreshControl:PullToRefresh!
+    private var refreshControl:RefreshControl!
     private var atFirstTime = true
     
     //MARK:- view controller functions
@@ -45,7 +45,7 @@ class ForecastViewController: UIViewController {
                 if let _ = self.viewModel{
                     
                     //self.refreshControl.endRefreshing()
-                    self.forecast.endRefreshing(at: .Top)
+                    self.refreshControl.stopRefreshing(self.viewModel?.updateTime ?? "")
                     self.forecast.reloadData()
                     print("model is updated")
                 }else {
@@ -60,7 +60,7 @@ class ForecastViewController: UIViewController {
                 let vc = UIAlertController(title: "Error", message: error!, preferredStyle: .Alert)
                 let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil)
                 vc.addAction(closeAction)
-                self.forecast.endRefreshing(at: .Top)
+                //self.forecast.endRefreshing(at: .Top)
                 self.presentViewController(vc, animated: true, completion: nil)
             })
         }
@@ -72,14 +72,15 @@ class ForecastViewController: UIViewController {
     
     func loadRefreshControl(){
         //init refresh control
-        /*
-        self.refreshControl = NSBundle.mainBundle().loadNibNamed(String(RefreshControl.self), owner: self, options: nil).first as! RefreshControl
-        self.refreshControl.delegate = self*/
         
+        self.refreshControl = NSBundle.mainBundle().loadNibNamed(String(RefreshControl.self), owner: self, options: nil).first as! RefreshControl
+        self.refreshControl.delegate = self
+        self.forecast.addSubview(self.refreshControl)
+        /*
         refreshControl = PullToRefresh()
         self.forecast.addPullToRefresh(refreshControl) { () -> () in
             self.weatherService.updateWeatherWithLocation()
-        }
+        }*/
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -100,7 +101,7 @@ class ForecastViewController: UIViewController {
             }
             cell.alpha = alpha
         }
-        /*
+        //print("asdasd")
         //update refresh control
         if self.refreshControl.frame.origin.y <= 0 {
             let pullDistance = max(0.0, -self.refreshControl.frame.origin.y);
@@ -110,7 +111,7 @@ class ForecastViewController: UIViewController {
                 self.refreshControl.stopRefreshing()                
             }
         }
-        */
+        
     }
     
     private weak var header:ForecastHeader?
@@ -119,25 +120,26 @@ class ForecastViewController: UIViewController {
     private let minimumLineSpacingForSection: CGFloat = 100.0
     
 }
-/*
+
 extension ForecastViewController : RefreshDelegate
 {
     
     func startUpdating(refreshControl: RefreshControl) {
+        print("star updating")
         refreshControl.updateText(viewModel?.updateTime ?? "")
-        /*weatherService.updateWeather(){[unowned refreshControl, unowned self] in
+        /*weatherService.updateWeather() {[unowned refreshControl, unowned self] in
             refreshControl.stopRefreshing(self.viewModel?.updateTime ?? "")
         }*/
-        //weatherService.updateWeatherWithLocation()
+        weatherService.updateWeatherWithLocation()
     }
     
     private func animateRefreshControl(){
         self.refreshControl.refreshManually()
-        weatherService.updateWeatherWithLocation()
+        //weatherService.updateWeatherWithLocation()
     }
     
 }
-*/
+
 extension ForecastViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -149,6 +151,7 @@ extension ForecastViewController {
             forecast.startRefreshing(at: .Top)
             self.atFirstTime = false
             Preffrences.shared.needUpdate = false
+            animateRefreshControl()
         }
     }
     
@@ -158,7 +161,7 @@ extension ForecastViewController {
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.forecast.removePullToRefresh(refreshControl)
+        //self.forecast.removePullToRefresh(refreshControl)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

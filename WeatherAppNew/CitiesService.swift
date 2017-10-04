@@ -43,17 +43,6 @@ class CitiesService: NSObject {
                 do {
                     
                     let cityData = try NSData(contentsOfURL: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                    //let cityJSON = JSON(data: cityData).arrayValue
-                    /*
-                        {
-                            "id": 519188,
-                            "name": "Novinki",
-                            "country": "RU",
-                            "coord": {
-                                "lon": 37.666668,
-                                "lat": 55.683334
-                            }
-                    },*/
                     let JSONResult = try NSJSONSerialization.JSONObjectWithData(cityData, options: .MutableContainers)
                     if let citiesInJSON = JSONResult as? [NSDictionary] {
                         for JSONData in citiesInJSON {

@@ -42,7 +42,7 @@ class MenuViewController: UIViewController {
     }
     
     @IBAction func onSettingsTap(sender: AnyObject) {
-        performSegueWithIdentifier("showSettingsSeque", sender: self)
+        //performSegueWithIdentifier("showSettingsSeque", sender: self)
         if self.revealViewController() != nil {
             self.revealViewController().revealToggle(true)
         }

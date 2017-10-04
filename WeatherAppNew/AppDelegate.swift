@@ -31,8 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let city = City(id: 519188, name: "Novinki", country: "RU", coords: (55.683334, 37.666668))
         
         Preffrences.shared.cities = [city, city1,city2,city3]*/
-        print(Preffrences.shared.cities)
-        print("")
+        //print(Preffrences.shared.cities)
+        //print("")
         /*
         let units = preffrences.tempUnits
         print("units: \(units)")

@@ -16,6 +16,7 @@ class AddCityViewController: UIViewController {
     private var isSearchingForCity:Bool = false
     private weak var weatherService = WeatherServiceWrapper.shared
     
+    @IBOutlet weak var updateIndicator: UIActivityIndicatorView!
     private lazy var citiesService:CitiesService = {
         let service = CitiesService()
         service.delegate = self
@@ -29,6 +30,7 @@ class AddCityViewController: UIViewController {
         if !citiesService.areLoaded {
             self.citiesService.loadSities()
         }
+        updateIndicator.hidden = true
         resultView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cityCell")
     }
     
@@ -46,11 +48,13 @@ extension AddCityViewController{
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardAppear:", name: UIKeyboardDidShowNotification, object: nil)
+        updateIndicator.startAnimating()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        self.citiesService.CleanAll()
     }
     
     func handleKeyboardAppear(notification:NSNotification){
@@ -69,13 +73,21 @@ extension AddCityViewController : CitiesServiceDelegate {
     func citiesDidLoad(citiesService:CitiesService?, cities:[City]?)
     {
         print("cities are loaded")
+        resetUpdateAnimator()
     }
     func citiesDidFetched(citiesService:CitiesService?, cities:[City]?, forName name:String)
     {
         //print("for:\(name) result:  \(cities)")
+        //stop indicator animatin
+        updateIndicator.stopAnimating()
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.resultView.reloadData()
         }
+    }
+    func resetUpdateAnimator(){
+        
+        updateIndicator.stopAnimating()
+        updateIndicator.hidden = true
     }
 }
 
@@ -86,6 +98,12 @@ extension AddCityViewController: UISearchBarDelegate {
         if !searchText.isEmpty && searchText.characters.count >= 2 {
             isSearchingForCity = true
             citiesService.filterCityByName(cityName: searchText)
+            if !updateIndicator.isAnimating() {
+                updateIndicator.tintColor = UIColor.grayColor()
+                updateIndicator.startAnimating()
+                
+            }
+            //start indicator animation
          }else if searchText.isEmpty {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 self.citiesService.CleanFiltered()
@@ -117,9 +135,10 @@ extension AddCityViewController : UITableViewDataSource, UITableViewDelegate {
             self.isSearchingForCity = false
             self.citiesService.CleanFiltered()
             self.resultView.reloadData()
-            //navigationController?.popToRootViewControllerAnimated(true)
+            resetUpdateAnimator()
             print("close all")
         }
+        self.searchBarView.text = ""
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

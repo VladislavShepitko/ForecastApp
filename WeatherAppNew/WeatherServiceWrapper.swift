@@ -102,26 +102,31 @@ final class WeatherServiceWrapper: NSObject {
     
 }
 extension WeatherServiceWrapper: LocationServiceDelegate {
-    func locationDidUpdate(service: LocationService, location: CLLocation) {
-        
-        if let current = self.preffrences?.cities.filter({ $0.isCurrentLocation == true}).first {
-            current.coords = location.coordinate
-        }else {
-            
-            let currentLocation = City(withLocation: location.coordinate)
-            currentLocation.name = "Current location"
-            currentLocation.isCurrentLocation = true
-            if var temp = self.preffrences?.cities {
-                temp.append(currentLocation)
-                self.preffrences?.cities.removeAll()
-                var cities = [City]()
-                for index in (temp.count - 1).stride(through: 0, by: -1) {
-                    cities.append(temp[index])
+    func locationDidUpdate(service: LocationService, location: CLLocation?) {
+        if let location = location {
+            if let current = self.preffrences?.cities.filter({ $0.isCurrentLocation == true}).first {
+                current.coords = location.coordinate
+            }else {                
+                let currentLocation = City(withLocation: location.coordinate)
+                currentLocation.name = "Current location"
+                currentLocation.isCurrentLocation = true
+                if var temp = self.preffrences?.cities {
+                    temp.append(currentLocation)
+                    self.preffrences?.cities.removeAll()
+                    var cities = [City]()
+                    for index in (temp.count - 1).stride(through: 0, by: -1) {
+                        cities.append(temp[index])
+                    }
+                    self.preffrences?.cities = cities
                 }
-                self.preffrences?.cities = cities
             }
+            
+            updateWeather()
+        }else {
+            delay(2, completion: { [weak self] in
+                self?.updateWeatherWithLocation()
+            })
         }
-        updateWeather()
     }
 }
 
@@ -135,7 +140,7 @@ extension WeatherServiceWrapper: WeatherServiceDelegate {
             }
             let cities = self.preffrences!.cities
             
-            print("updated weather for city:\(cityID)")
+            //print("updated weather for city:\(cityID)")
             //find city and update weather for
             let filteredByID = Array(cities.filter(){return $0.id == cityID })
             if let cityToUpdate = filteredByID.first {
